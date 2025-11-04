@@ -17,7 +17,7 @@ public interface IDevice
     /// <summary>
     /// Device message event handler.
     /// </summary>
-    EventHandler<DeviceMessage> OnDeviceMessage { get; }
+    EventHandler<DeviceMessage>? OnDeviceMessage { get; }
 
     /// <summary>
     /// Triggers a manual update check.
