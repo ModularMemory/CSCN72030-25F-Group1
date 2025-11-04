@@ -1,5 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36623.8 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalloutVault", "FalloutVault\FalloutVault.csproj", "{40A65FF1-F6D7-4AB3-B450-013CE5747C5C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Non-Solution Items", "Non-Solution Items", "{D390029A-E7B6-4A24-AA6B-79933098EDEC}"
@@ -10,6 +13,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Non-Solution Items", "Non-S
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalloutVault.Tests", "FalloutVault.Tests\FalloutVault.Tests.csproj", "{AA2DBF01-09F0-4CF6-8967-23C9D161CE4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalloutVault.UnoApp", "FalloutVault.UnoApp\FalloutVault.UnoApp.csproj", "{58C23ED8-96A8-88EF-071E-82C1053AED7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalloutVault.UnoApp.Tests", "FalloutVault.UnoApp.Tests\FalloutVault.UnoApp.Tests.csproj", "{3AF7ACF3-7D9A-F35F-3FEC-DD4CA4644517}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalloutVault.UnoApp.UITests", "FalloutVault.UnoApp.UITests\FalloutVault.UnoApp.UITests.csproj", "{BDEF995F-E2F4-D2B0-8EDB-2B60376DD979}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,5 +34,22 @@ Global
 		{AA2DBF01-09F0-4CF6-8967-23C9D161CE4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA2DBF01-09F0-4CF6-8967-23C9D161CE4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA2DBF01-09F0-4CF6-8967-23C9D161CE4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58C23ED8-96A8-88EF-071E-82C1053AED7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58C23ED8-96A8-88EF-071E-82C1053AED7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58C23ED8-96A8-88EF-071E-82C1053AED7B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{58C23ED8-96A8-88EF-071E-82C1053AED7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58C23ED8-96A8-88EF-071E-82C1053AED7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58C23ED8-96A8-88EF-071E-82C1053AED7B}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{3AF7ACF3-7D9A-F35F-3FEC-DD4CA4644517}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AF7ACF3-7D9A-F35F-3FEC-DD4CA4644517}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AF7ACF3-7D9A-F35F-3FEC-DD4CA4644517}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AF7ACF3-7D9A-F35F-3FEC-DD4CA4644517}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDEF995F-E2F4-D2B0-8EDB-2B60376DD979}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDEF995F-E2F4-D2B0-8EDB-2B60376DD979}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDEF995F-E2F4-D2B0-8EDB-2B60376DD979}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDEF995F-E2F4-D2B0-8EDB-2B60376DD979}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
