@@ -14,7 +14,7 @@ public class LightController : Device, ILightController
 
     public override string Name { get; }
     public override string Zone { get; }
-    public override EventHandler<DeviceMessage>? OnDeviceMessage { get; }
+    public override EventHandler<DeviceMessage>? OnDeviceMessage { get; set; }
 
     // TODO: Notification on setters
     public bool IsOn

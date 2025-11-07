@@ -7,7 +7,7 @@ public abstract class Device : IDevice
 {
     public abstract string Name { get; }
     public abstract string Zone { get; }
-    public abstract EventHandler<DeviceMessage>? OnDeviceMessage { get; }
+    public abstract EventHandler<DeviceMessage>? OnDeviceMessage { get; set; }
     public abstract void Update();
 
     protected void SendDeviceMessage(DeviceMessage message)
