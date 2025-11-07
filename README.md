@@ -8,8 +8,8 @@
     ```sh
     dotnet tool install -g uno.check && uno-check
     ```
-   > [!NOTE]
-   > You may need to manually install several workloads, such as _ASP.NET and web development_, in the Visual Studio Installer.
+> [!NOTE]
+> You may need to manually install several workloads in the Visual Studio Installer, such as _ASP.NET and web development_.
 
 3. Clone the repository:
     ```sh
