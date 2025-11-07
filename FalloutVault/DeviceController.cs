@@ -20,17 +20,11 @@ public sealed class DeviceController
     // Methods
     public DeviceController AddDevice<TDevice>(TDevice device) where TDevice : IDevice
     {
+        _devices.Add(device.Id, device);
+
         device.SetEventBus(_messageBus);
         device.SetEventBus(_powerEventBus);
 
-        _devices.Add(new DeviceId(device), device);
-
         return this;
-    }
-
-    // Nested classes
-    private readonly record struct DeviceId([UsedImplicitly] string Name, [UsedImplicitly] string Zone)
-    {
-        public DeviceId(IDevice device) : this(device.Name, device.Zone) { }
     }
 }

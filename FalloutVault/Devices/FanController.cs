@@ -1,4 +1,5 @@
 ﻿using FalloutVault.Devices.Interfaces;
+using FalloutVault.Devices.Models;
 
 namespace FalloutVault.Devices;
 
@@ -12,9 +13,8 @@ public class FanController : Device, IFanController
     private double _SpeedRpm;
 
     //properties
-   
-    public override string Name { get; }
-    public override string Zone { get; }
+
+    public override DeviceId Id { get; }
 
     //TODO: Notification on setters
     public bool IsOn
@@ -29,16 +29,15 @@ public class FanController : Device, IFanController
         set => _TargetRpm = value;
     }
 
-    public double SpeedRpm 
-    { 
-        get => _SpeedRpm; 
+    public double SpeedRpm
+    {
+        get => _SpeedRpm;
     }
 
     //Constructors
-    public FanController(string name, string zone)
+    public FanController(DeviceId id)
     {
-        Name = name;
-        Zone = zone;
+        Id = id;
     }
 
     //Methods

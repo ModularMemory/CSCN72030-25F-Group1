@@ -1,4 +1,5 @@
 using FalloutVault.Devices.Interfaces;
+using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 
@@ -7,8 +8,7 @@ namespace FalloutVault.Devices;
 public abstract class Device : IDevice
 {
     // IDevice members
-    public abstract string Name { get; }
-    public abstract string Zone { get; }
+    public abstract DeviceId Id { get; }
     public abstract void Update();
 
     // Message bus

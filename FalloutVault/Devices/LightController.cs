@@ -1,4 +1,5 @@
 using FalloutVault.Devices.Interfaces;
+using FalloutVault.Devices.Models;
 
 namespace FalloutVault.Devices;
 
@@ -11,8 +12,7 @@ public class LightController : Device, ILightController
 
     // Properties
 
-    public override string Name { get; }
-    public override string Zone { get; }
+    public override DeviceId Id { get; }
 
     // TODO: Notification on setters
     public bool IsOn
@@ -29,10 +29,9 @@ public class LightController : Device, ILightController
 
     // Constructors
 
-    public LightController(string name, string zone)
+    public LightController(DeviceId id)
     {
-        Name = name;
-        Zone = zone;
+        Id = id;
     }
 
     // Methods
