@@ -1,5 +1,6 @@
 using FalloutVault.Devices.Interfaces;
-using FalloutVault.Models;
+using FalloutVault.Eventing.Interfaces;
+using FalloutVault.Eventing.Models;
 
 namespace FalloutVault.Devices;
 
@@ -7,11 +8,12 @@ public abstract class Device : IDevice
 {
     public abstract string Name { get; }
     public abstract string Zone { get; }
-    public abstract EventHandler<DeviceMessage>? OnDeviceMessage { get; set; }
+    protected IEventBus<DeviceMessage>? MessageBus { get; private set; }
+    protected IEventBus<WattHours>? PowerBus { get; private set; }
+
     public abstract void Update();
 
-    protected void SendDeviceMessage(DeviceMessage message)
-    {
-        OnDeviceMessage?.Invoke(this, message);
-    }
+    public virtual void SetEventBus(IEventBus<DeviceMessage> eventBus) => MessageBus = eventBus;
+
+    public virtual void SetEventBus(IEventBus<WattHours> eventBus) => PowerBus = eventBus;
 }

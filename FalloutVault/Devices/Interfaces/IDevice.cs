@@ -1,8 +1,9 @@
-using FalloutVault.Models;
+using FalloutVault.Eventing.Interfaces;
+using FalloutVault.Eventing.Models;
 
 namespace FalloutVault.Devices.Interfaces;
 
-public interface IDevice
+public interface IDevice : IEventBusMember<DeviceMessage>, IEventBusMember<WattHours>
 {
     /// <summary>
     /// The name of the device.
@@ -13,11 +14,6 @@ public interface IDevice
     /// The zone where the device is located.
     /// </summary>
     string Zone { get; }
-
-    /// <summary>
-    /// Device message event handler.
-    /// </summary>
-    EventHandler<DeviceMessage>? OnDeviceMessage { get; }
 
     /// <summary>
     /// Triggers a manual update check.

@@ -1,8 +1,7 @@
 ﻿using FalloutVault.Devices.Interfaces;
-using FalloutVault.Models;
-
 
 namespace FalloutVault.Devices;
+
 public class FanController : Device, IFanController
 {
     //fields
@@ -16,7 +15,6 @@ public class FanController : Device, IFanController
    
     public override string Name { get; }
     public override string Zone { get; }
-    public override EventHandler<DeviceMessage>? OnDeviceMessage { get; set; }
 
     //TODO: Notification on setters
     public bool IsOn
