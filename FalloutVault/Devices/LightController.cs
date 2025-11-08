@@ -1,5 +1,6 @@
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
+using FalloutVault.Eventing.Models;
 
 namespace FalloutVault.Devices;
 
@@ -14,17 +15,32 @@ public class LightController : Device, ILightController
 
     public override DeviceId Id { get; }
 
-    // TODO: Notification on setters
     public bool IsOn
     {
         get => _isOn;
-        set => _isOn = value;
+        set
+        {
+            if (SetField(ref _isOn, value))
+            {
+                PublishMessage(
+                    _isOn
+                        ? new DeviceMessage("Light turned on", ValueBoxes.True)
+                        : new DeviceMessage("Light turned off", ValueBoxes.False)
+                );
+            }
+        }
     }
 
     public double DimmerLevel
     {
         get => _dimmerLevel;
-        set => _dimmerLevel = value;
+        set
+        {
+            if (SetField(ref _dimmerLevel, value))
+            {
+                PublishMessage(new DeviceMessage("Light dimmer level changed", _dimmerLevel));
+            }
+        }
     }
 
     // Constructors
