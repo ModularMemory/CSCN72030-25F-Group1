@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Models;
@@ -7,6 +8,8 @@ namespace FalloutVault.Devices;
 public class LightController : Device, ILightController
 {
     // Fields
+    private readonly DeviceTimer<bool> _deviceTimer = new();
+    private readonly Lock _timerLock = new();
     private readonly WattHours _bulbWattage;
 
     private bool _isOn;
@@ -56,7 +59,20 @@ public class LightController : Device, ILightController
 
     public override void Update()
     {
-        throw new NotImplementedException();
+        Debug.Assert(PowerDraw == ComputePowerDraw());
+
+        lock (_timerLock)
+        {
+            if (_deviceTimer.IsRunning)
+            {
+                _deviceTimer.Update();
+
+                if (!_deviceTimer.IsRunning)
+                {
+                    IsOn = _deviceTimer.State;
+                }
+            }
+        }
     }
 
     protected override WattHours ComputePowerDraw()
@@ -65,5 +81,23 @@ public class LightController : Device, ILightController
             return WattHours.Zero;
 
         return _bulbWattage * DimmerLevel;
+    }
+
+    public void TurnOnFor(TimeSpan time)
+    {
+        lock (_timerLock)
+        {
+            _deviceTimer.SetTimer(time, false);
+            IsOn = true;
+        }
+    }
+
+    public void TurnOffFor(TimeSpan time)
+    {
+        lock (_timerLock)
+        {
+            _deviceTimer.SetTimer(time, true);
+            IsOn = false;
+        }
     }
 }
