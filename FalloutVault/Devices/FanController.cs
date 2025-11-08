@@ -1,5 +1,6 @@
 ﻿using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
+using FalloutVault.Eventing.Models;
 
 namespace FalloutVault.Devices;
 
@@ -42,6 +43,11 @@ public class FanController : Device, IFanController
 
     //Methods
     public override void Update()
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override Watt ComputePowerDraw()
     {
         throw new NotImplementedException();
     }
