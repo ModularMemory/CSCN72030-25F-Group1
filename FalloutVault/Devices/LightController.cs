@@ -13,7 +13,7 @@ public class LightController : Device, ILightController
     private readonly Watt _bulbWattage;
 
     private bool _isOn;
-    private double _dimmerLevel;
+    private double _dimmerLevel = 1;
 
     // Properties
 
