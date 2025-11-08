@@ -1,4 +1,4 @@
-namespace FalloutVault.Eventing.Models;
+namespace FalloutVault.Models;
 
 public readonly record struct Watt(double W)
 {

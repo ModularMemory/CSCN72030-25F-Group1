@@ -2,6 +2,7 @@ using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
+using FalloutVault.Models;
 
 namespace FalloutVault.Devices;
 

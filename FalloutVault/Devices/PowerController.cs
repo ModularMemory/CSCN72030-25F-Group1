@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FalloutVault.Devices.Interfaces;
+﻿using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Models;
+using FalloutVault.Models;
 
 namespace FalloutVault.Devices;
+
 public class PowerController : Device, IPowerController
 {
-
     // Fields
     private Watt _powerGeneration;
     private Watt _standardGeneration;
@@ -26,6 +22,7 @@ public class PowerController : Device, IPowerController
         private set
         {
             if (!SetField(ref _powerGeneration, value)) return;
+
             PublishMessage(new DeviceMessage("Power generation changed", _powerGeneration));
         }
     }
@@ -36,6 +33,7 @@ public class PowerController : Device, IPowerController
         {
             if (_standardGeneration.W <= 0)
                 return 0;
+
             return Math.Clamp((double)(_powerGeneration / _standardGeneration), 0, 1);
         }
     }
@@ -52,6 +50,7 @@ public class PowerController : Device, IPowerController
     {
         throw new NotImplementedException();
     }
+
     protected override Watt ComputePowerDraw()
     {
         return Watt.Zero;

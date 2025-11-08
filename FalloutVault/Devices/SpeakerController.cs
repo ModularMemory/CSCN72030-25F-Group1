@@ -2,6 +2,7 @@
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Models;
+using FalloutVault.Models;
 
 namespace FalloutVault.Devices;
 
@@ -16,18 +17,19 @@ public class SpeakerController : Device, ISpeakerController
 
     // Properties
 
-   public override DeviceId Id { get; }
+    public override DeviceId Id { get; }
+
     public bool Activated
     {
         get => _activated;
         set
         {
-            if(!SetField(ref _activated, value)) return;
+            if (!SetField(ref _activated, value)) return;
 
             PublishMessage(_activated
                 ? new DeviceMessage("Speaker turned on", ValueBoxes.True)
                 : new DeviceMessage("Speaker turned off", ValueBoxes.False)
-             );
+            );
 
             PowerDraw = ComputePowerDraw();
         }
@@ -70,6 +72,7 @@ public class SpeakerController : Device, ISpeakerController
 
         return _speakerWattage;
     }
+
     public void TurnOnFor(TimeSpan time)
     {
         lock (_timerLock)
@@ -81,7 +84,7 @@ public class SpeakerController : Device, ISpeakerController
 
     public void TurnOffFor(TimeSpan time)
     {
-        lock ( _timerLock)
+        lock (_timerLock)
         {
             _deviceTimer.SetTimer(time, true);
             Activated = false;
