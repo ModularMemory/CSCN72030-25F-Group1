@@ -31,7 +31,7 @@ public class LightController : Device, ILightController
                 : new DeviceMessage("Light turned off", ValueBoxes.False)
             );
 
-            PowerDraw = PowerDraw = ComputePowerDraw();
+            PowerDraw = ComputePowerDraw();
         }
     }
 
