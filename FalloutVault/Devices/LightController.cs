@@ -10,7 +10,7 @@ public class LightController : Device, ILightController
     // Fields
     private readonly DeviceTimer<bool> _deviceTimer = new();
     private readonly Lock _timerLock = new();
-    private readonly WattHours _bulbWattage;
+    private readonly Watt _bulbWattage;
 
     private bool _isOn;
     private double _dimmerLevel;
@@ -49,7 +49,7 @@ public class LightController : Device, ILightController
 
     // Constructors
 
-    public LightController(DeviceId id, WattHours bulbWattage)
+    public LightController(DeviceId id, Watt bulbWattage)
     {
         Id = id;
         _bulbWattage = bulbWattage;
@@ -75,10 +75,10 @@ public class LightController : Device, ILightController
         }
     }
 
-    protected override WattHours ComputePowerDraw()
+    protected override Watt ComputePowerDraw()
     {
         if (!IsOn)
-            return WattHours.Zero;
+            return Watt.Zero;
 
         return _bulbWattage * DimmerLevel;
     }

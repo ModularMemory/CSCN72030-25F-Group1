@@ -10,9 +10,9 @@ public abstract class Device : IDevice
     // IDevice members
     public abstract DeviceId Id { get; }
 
-    private WattHours _powerDraw;
+    private Watt _powerDraw;
 
-    public WattHours PowerDraw
+    public Watt PowerDraw
     {
         get => _powerDraw;
         protected set
@@ -24,7 +24,7 @@ public abstract class Device : IDevice
     }
 
     public abstract void Update();
-    protected abstract WattHours ComputePowerDraw();
+    protected abstract Watt ComputePowerDraw();
 
     // Message bus
     protected IEventBus<DeviceMessage>? MessageBus { get; private set; }
@@ -32,7 +32,7 @@ public abstract class Device : IDevice
     protected void PublishMessage(DeviceMessage message) => MessageBus?.Publish(this, message);
 
     // Power bus
-    protected IEventBus<WattHours>? PowerBus { get; private set; }
-    public virtual void SetEventBus(IEventBus<WattHours> eventBus) => PowerBus = eventBus;
-    protected void PublishPowerUsage(WattHours power) => PowerBus?.Publish(this, power);
+    protected IEventBus<Watt>? PowerBus { get; private set; }
+    public virtual void SetEventBus(IEventBus<Watt> eventBus) => PowerBus = eventBus;
+    protected void PublishPowerUsage(Watt power) => PowerBus?.Publish(this, power);
 }

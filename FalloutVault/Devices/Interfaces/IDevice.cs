@@ -4,7 +4,7 @@ using FalloutVault.Eventing.Models;
 
 namespace FalloutVault.Devices.Interfaces;
 
-public interface IDevice : IEventBusMember<DeviceMessage>, IEventBusMember<WattHours>
+public interface IDevice : IEventBusMember<DeviceMessage>, IEventBusMember<Watt>
 {
     /// <summary>
     /// The ID of the device.
@@ -14,7 +14,7 @@ public interface IDevice : IEventBusMember<DeviceMessage>, IEventBusMember<WattH
     /// <summary>
     /// The current power draw of the device.
     /// </summary>
-    WattHours PowerDraw { get; }
+    Watt PowerDraw { get; }
 
     /// <summary>
     /// Triggers a manual update check.

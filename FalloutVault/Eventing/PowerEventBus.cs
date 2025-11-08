@@ -5,20 +5,20 @@ using FalloutVault.Eventing.Models;
 
 namespace FalloutVault.Eventing;
 
-public sealed class PowerEventBus : IEventBus<WattHours>
+public sealed class PowerEventBus : IEventBus<Watt>
 {
-    private readonly Dictionary<DeviceId, WattHours> _devicePowerDraws = [];
+    private readonly Dictionary<DeviceId, Watt> _devicePowerDraws = [];
 
-    public event EventHandler<WattHours>? Handler;
+    public event EventHandler<Watt>? Handler;
 
-    public void Publish(object sender, WattHours data)
+    public void Publish(object sender, Watt data)
     {
         if (sender is not IDevice device)
             return;
 
         _devicePowerDraws[device.Id] = data;
 
-        var totalDraw = (WattHours)_devicePowerDraws.Values.Sum(x => x.Wh);
+        var totalDraw = (Watt)_devicePowerDraws.Values.Sum(x => x.W);
         Handler?.Invoke(this, totalDraw);
     }
 }
