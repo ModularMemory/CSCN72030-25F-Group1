@@ -9,7 +9,22 @@ public abstract class Device : IDevice
 {
     // IDevice members
     public abstract DeviceId Id { get; }
+
+    private WattHours _powerDraw;
+
+    public WattHours PowerDraw
+    {
+        get => _powerDraw;
+        protected set
+        {
+            if (!SetField(ref _powerDraw, value)) return;
+
+            PublishPowerUsage(_powerDraw);
+        }
+    }
+
     public abstract void Update();
+    protected abstract WattHours ComputePowerDraw();
 
     // Message bus
     protected IEventBus<DeviceMessage>? MessageBus { get; private set; }

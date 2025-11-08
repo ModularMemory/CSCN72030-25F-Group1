@@ -7,6 +7,7 @@ namespace FalloutVault.Devices;
 public class LightController : Device, ILightController
 {
     // Fields
+    private readonly WattHours _bulbWattage;
 
     private bool _isOn;
     private double _dimmerLevel;
@@ -20,14 +21,14 @@ public class LightController : Device, ILightController
         get => _isOn;
         set
         {
-            if (SetField(ref _isOn, value))
-            {
-                PublishMessage(
-                    _isOn
-                        ? new DeviceMessage("Light turned on", ValueBoxes.True)
-                        : new DeviceMessage("Light turned off", ValueBoxes.False)
-                );
-            }
+            if (!SetField(ref _isOn, value)) return;
+
+            PublishMessage(_isOn
+                ? new DeviceMessage("Light turned on", ValueBoxes.True)
+                : new DeviceMessage("Light turned off", ValueBoxes.False)
+            );
+
+            PowerDraw = PowerDraw = ComputePowerDraw();
         }
     }
 
@@ -36,18 +37,19 @@ public class LightController : Device, ILightController
         get => _dimmerLevel;
         set
         {
-            if (SetField(ref _dimmerLevel, value))
-            {
-                PublishMessage(new DeviceMessage("Light dimmer level changed", _dimmerLevel));
-            }
+            if (!SetField(ref _dimmerLevel, value)) return;
+
+            PublishMessage(new DeviceMessage("Light dimmer level changed", _dimmerLevel));
+            PowerDraw = ComputePowerDraw();
         }
     }
 
     // Constructors
 
-    public LightController(DeviceId id)
+    public LightController(DeviceId id, WattHours bulbWattage)
     {
         Id = id;
+        _bulbWattage = bulbWattage;
     }
 
     // Methods
@@ -57,13 +59,11 @@ public class LightController : Device, ILightController
         throw new NotImplementedException();
     }
 
-    public void TurnOnFor(TimeSpan time)
+    protected override WattHours ComputePowerDraw()
     {
-        throw new NotImplementedException();
-    }
+        if (!IsOn)
+            return WattHours.Zero;
 
-    public void TurnOffFor(TimeSpan time)
-    {
-        throw new NotImplementedException();
+        return _bulbWattage * DimmerLevel;
     }
 }

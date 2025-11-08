@@ -12,6 +12,11 @@ public interface IDevice : IEventBusMember<DeviceMessage>, IEventBusMember<WattH
     DeviceId Id { get; }
 
     /// <summary>
+    /// The current power draw of the device.
+    /// </summary>
+    WattHours PowerDraw { get; }
+
+    /// <summary>
     /// Triggers a manual update check.
     /// </summary>
     void Update();
