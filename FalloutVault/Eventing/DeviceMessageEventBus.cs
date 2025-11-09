@@ -3,7 +3,7 @@ using FalloutVault.Eventing.Models;
 
 namespace FalloutVault.Eventing;
 
-public sealed class DeviceEventBus : IEventBus<DeviceMessage>
+public sealed class DeviceMessageEventBus : IEventBus<DeviceMessage>
 {
     public event EventHandler<DeviceMessage>? Handler;
 

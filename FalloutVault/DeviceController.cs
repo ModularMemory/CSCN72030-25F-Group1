@@ -14,7 +14,7 @@ public sealed class DeviceController : IDisposable
 
     private readonly ILogger _logger;
     private readonly Dictionary<DeviceId, IDevice> _devices = [];
-    private readonly DeviceEventBus _messageBus = new();
+    private readonly DeviceMessageEventBus _messageBus = new();
     private readonly PowerEventBus _powerEventBus = new();
 
     private Timer? _pollTimer;
