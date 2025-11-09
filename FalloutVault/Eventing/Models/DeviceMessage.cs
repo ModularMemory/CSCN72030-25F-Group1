@@ -1,6 +1,10 @@
 namespace FalloutVault.Eventing.Models;
 
-public sealed record DeviceMessage(DateTimeOffset Timestamp, string Message, object? Data)
+public abstract partial class DeviceMessage(DateTimeOffset timestamp, object? data)
 {
-    public DeviceMessage(string message, object? data) : this(DateTimeOffset.UtcNow, message, data) { }
+    public DateTimeOffset Timestamp { get; } = timestamp;
+    public object? Data { get; } = data;
+    public abstract string Message { get; }
+
+    protected DeviceMessage(object? data) : this(DateTimeOffset.UtcNow, data) { }
 }

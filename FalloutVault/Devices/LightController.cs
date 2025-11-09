@@ -28,8 +28,8 @@ public class LightController : Device, ILightController
             if (!SetField(ref _isOn, value)) return;
 
             PublishMessage(_isOn
-                ? new DeviceMessage("Light turned on", ValueBoxes.True)
-                : new DeviceMessage("Light turned off", ValueBoxes.False)
+                ? new DeviceMessage.LightTurnedOn()
+                : new DeviceMessage.LightTurnedOff()
             );
 
             PowerDraw = ComputePowerDraw();
@@ -43,7 +43,7 @@ public class LightController : Device, ILightController
         {
             if (!SetField(ref _dimmerLevel, value)) return;
 
-            PublishMessage(new DeviceMessage("Light dimmer level changed", _dimmerLevel));
+            PublishMessage(new DeviceMessage.DimmerLevelChanged(_dimmerLevel));
             PowerDraw = ComputePowerDraw();
         }
     }

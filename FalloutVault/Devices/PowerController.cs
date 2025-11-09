@@ -25,7 +25,7 @@ public class PowerController : Device, IPowerController
         {
             if (!SetField(ref _powerGeneration, value)) return;
 
-            PublishMessage(new DeviceMessage("Power generation changed", _powerGeneration));
+            PublishMessage(new DeviceMessage.PowerGenerationChanged(_powerGeneration));
         }
     }
 
@@ -60,8 +60,8 @@ public class PowerController : Device, IPowerController
     {
         _totalPowerDraw = totalPowerDraw;
 
-        PublishMessage(new DeviceMessage(
-            "Total power draw updated", new { TotalDraw = totalPowerDraw, Available = _powerGeneration - totalPowerDraw }
+        PublishMessage(new DeviceMessage.TotalPowerDrawChanged(
+            new { TotalDraw = totalPowerDraw, Available = _powerGeneration - totalPowerDraw }
         ));
     }
 

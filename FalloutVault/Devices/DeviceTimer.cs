@@ -28,7 +28,6 @@ public sealed class DeviceTimer<TState>
 
         _isRunning = false;
         return true;
-
     }
 
     /// <summary>

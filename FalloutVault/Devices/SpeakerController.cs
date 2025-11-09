@@ -27,8 +27,8 @@ public class SpeakerController : Device, ISpeakerController
             if (!SetField(ref _activated, value)) return;
 
             PublishMessage(_activated
-                ? new DeviceMessage("Speaker turned on", ValueBoxes.True)
-                : new DeviceMessage("Speaker turned off", ValueBoxes.False)
+                ? new DeviceMessage.SpeakerTurnedOn()
+                : new DeviceMessage.SpeakerTurnedOff()
             );
 
             PowerDraw = ComputePowerDraw();
