@@ -46,6 +46,7 @@ public class PowerController : Device, IPowerController
         Id = id;
         _standardGeneration = standardGeneration;
         _powerGeneration = standardGeneration;
+        _totalPowerDraw = Watt.Zero;
     }
 
     // Methods
