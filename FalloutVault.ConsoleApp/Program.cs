@@ -65,6 +65,9 @@ internal static class Program
                     fanController.IsOn = random.Next(0, 3) == 0;
                     fanController.TargetRpm = random.Next(0, 2_000);
                     break;
+                case SpeakerController speakerController:
+                    speakerController.Activated = random.Next(0, 3) == 0;
+                    break;
                 case PowerController powerController:
                     // No-op
                     break;
