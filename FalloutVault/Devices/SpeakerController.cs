@@ -51,14 +51,9 @@ public class SpeakerController : Device, ISpeakerController
 
         lock (_timerLock)
         {
-            if (_deviceTimer.IsRunning)
+            if (_deviceTimer.CheckCompleted())
             {
-                _deviceTimer.Update();
-
-                if (!_deviceTimer.IsRunning)
-                {
-                    Activated = _deviceTimer.State;
-                }
+                Activated = _deviceTimer.State;
             }
         }
     }

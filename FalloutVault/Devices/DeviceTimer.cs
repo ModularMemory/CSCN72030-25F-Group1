@@ -2,25 +2,33 @@ using System.Diagnostics;
 
 namespace FalloutVault.Devices;
 
-public sealed class DeviceTimer<T>
+/// <summary>
+/// A thread-unsafe timer which must be polled manually to check for completion.
+/// </summary>
+/// <typeparam name="TState">The type of the optional state property.</typeparam>
+public sealed class DeviceTimer<TState>
 {
-    public bool IsRunning { get; private set; }
-    public T? State { get; private set; }
+    public TState? State { get; private set; }
 
     private readonly Stopwatch _stopwatch = new();
+    private bool _isRunning;
     private TimeSpan _duration;
 
     /// <summary>
-    /// Checks if the timer has expired and updates <see cref="IsRunning"/> accordingly.
+    /// Checks if the timer has expired.
     /// </summary>
-    public void Update()
+    /// <returns>
+    /// <see langword="true"/> if the timer completed on this check, otherwise <see langword="false"/>.
+    /// </returns>
+    public bool CheckCompleted()
     {
-        if (!IsRunning) return;
+        if (!_isRunning) return false;
 
-        if (_stopwatch.Elapsed >= _duration)
-        {
-            IsRunning = false;
-        }
+        if (_stopwatch.Elapsed < _duration) return false;
+
+        _isRunning = false;
+        return true;
+
     }
 
     /// <summary>
@@ -28,9 +36,9 @@ public sealed class DeviceTimer<T>
     /// </summary>
     /// <param name="time">The minimum time the timer should run for.</param>
     /// <param name="state">An optional state for the caller to reference after the timer completes.</param>
-    public void SetTimer(TimeSpan time, T? state)
+    public void SetTimer(TimeSpan time, TState? state)
     {
-        IsRunning = true;
+        _isRunning = true;
         State = state;
         _stopwatch.Restart();
         _duration = time;

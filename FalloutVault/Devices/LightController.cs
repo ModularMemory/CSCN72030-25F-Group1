@@ -65,14 +65,9 @@ public class LightController : Device, ILightController
 
         lock (_timerLock)
         {
-            if (_deviceTimer.IsRunning)
+            if (_deviceTimer.CheckCompleted())
             {
-                _deviceTimer.Update();
-
-                if (!_deviceTimer.IsRunning)
-                {
-                    IsOn = _deviceTimer.State;
-                }
+                IsOn = _deviceTimer.State;
             }
         }
     }
