@@ -1,5 +1,6 @@
 ﻿using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
+using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
 
@@ -9,7 +10,8 @@ public class PowerController : Device, IPowerController
 {
     // Fields
     private Watt _powerGeneration;
-    private Watt _standardGeneration;
+    private readonly Watt _standardGeneration;
+    private Watt _totalPowerDraw;
 
     // Properties
     public override DeviceId Id { get; }
@@ -47,6 +49,21 @@ public class PowerController : Device, IPowerController
     }
 
     // Methods
+    public override void SetEventBus(IEventBus<Watt> eventBus)
+    {
+        eventBus.Handler += PowerMessageReceived;
+        base.SetEventBus(eventBus);
+    }
+
+    private void PowerMessageReceived(object? sender, Watt totalPowerDraw)
+    {
+        _totalPowerDraw = totalPowerDraw;
+
+        PublishMessage(new DeviceMessage(
+            "Total power draw updated", new { TotalDraw = totalPowerDraw, Available = _powerGeneration - totalPowerDraw }
+        ));
+    }
+
     public override void Update()
     {
         PowerGeneration = ComputePowerGeneration();
