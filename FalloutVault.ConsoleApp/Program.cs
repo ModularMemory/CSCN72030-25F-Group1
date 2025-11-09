@@ -1,4 +1,5 @@
-﻿using FalloutVault.Devices;
+﻿using System.Diagnostics;
+using FalloutVault.Devices;
 using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
@@ -37,37 +38,34 @@ internal static class Program
     private static async Task ModifyDevices(DeviceController controller)
     {
         var random = new Random(69);
+        var sw = Stopwatch.StartNew();
 
         const int RUN_SECONDS = 30;
         const int DEVICE_CHANGE_DELAY_MS = 250;
-        var cts = new CancellationTokenSource(TimeSpan.FromSeconds(RUN_SECONDS));
-        await Task.Run(() =>
+        while (sw.Elapsed.Seconds < RUN_SECONDS)
         {
-            for (;;)
+            // Sleep
+            await Task.Delay(TimeSpan.FromMilliseconds(DEVICE_CHANGE_DELAY_MS));
+
+            // Get a random device
+            var device = random.GetItems(controller.Devices.ToArray(), 1).First();
+
+            // Do something to it
+            switch (device)
             {
-                // Sleep
-                Thread.Sleep(TimeSpan.FromMilliseconds(DEVICE_CHANGE_DELAY_MS));
-
-                // Get a random device
-                var device = random.GetItems(controller.Devices.ToArray(), 1).First();
-
-                // Do something to it
-                switch (device)
-                {
-                    case LightController lightController:
-                        lightController.IsOn = random.Next(0, 3) == 0;
-                        lightController.DimmerLevel = Math.Sqrt(random.NextDouble()); // sqrt to bias towards higher dimmer levels
-                        break;
-                    case FanController fanController:
-                        fanController.IsOn = random.Next(0, 3) == 0;
-                        fanController.TargetRpm = random.Next(0, 2_000);
-                        break;
-                    case PowerController powerController:
-                        // No-op
-                        break;
-                }
+                case LightController lightController:
+                    lightController.IsOn = random.Next(0, 3) == 0;
+                    lightController.DimmerLevel = Math.Sqrt(random.NextDouble()); // sqrt to bias towards higher dimmer levels
+                    break;
+                case FanController fanController:
+                    fanController.IsOn = random.Next(0, 3) == 0;
+                    fanController.TargetRpm = random.Next(0, 2_000);
+                    break;
+                case PowerController powerController:
+                    // No-op
+                    break;
             }
-        }, cts.Token);
+        }
     }
 
     private static void AddDevices(DeviceController controller)
