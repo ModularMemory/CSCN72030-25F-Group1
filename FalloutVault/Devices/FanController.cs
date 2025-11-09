@@ -44,7 +44,6 @@ public class FanController : Device, IFanController
     //Methods
     public override void Update()
     {
-        throw new NotImplementedException();
     }
 
     protected override Watt ComputePowerDraw()
