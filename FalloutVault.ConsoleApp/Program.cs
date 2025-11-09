@@ -35,7 +35,8 @@ internal static class Program
 
     private static void MessageBusOnMessage(object? sender, DeviceMessage e)
     {
-        _logger.Information("Device message: {MessageType} - {MessageValue}", e.GetType().Name, JsonSerializer.Serialize(e));
+        _logger.Information("Device message: {@Message}", e);
+        // The @ in @Message means to JSON serialize the object rather than use .ToString()
     }
 
     private static async Task ModifyDevices(DeviceController controller)
