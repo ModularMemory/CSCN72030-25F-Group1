@@ -15,7 +15,7 @@ internal static class Program
     public static async Task Main(string[] args)
     {
         // TODO: Replace with real logger impl
-        _logger = null!;
+        _logger = new Logger<DeviceController>(new LoggerFactory());
 
         using var controller = new DeviceController(_logger);
 
