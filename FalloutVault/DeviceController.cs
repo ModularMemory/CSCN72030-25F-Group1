@@ -4,7 +4,7 @@ using FalloutVault.Eventing;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace FalloutVault;
 
@@ -47,7 +47,7 @@ public sealed class DeviceController : IDisposable
         device.SetEventBus(_messageBus);
         device.SetEventBus(_powerEventBus);
 
-        _logger.LogInformation("Added new device: {DeviceId}", device.Id);
+        _logger.Information("Added new device: {DeviceId}", device.Id);
 
         return this;
     }
@@ -67,7 +67,7 @@ public sealed class DeviceController : IDisposable
             return;
         }
 
-        _logger.LogInformation("Starting controller with polling interval: {Interval}", pollingInterval);
+        _logger.Information("Starting controller with polling interval: {Interval}", pollingInterval);
 
         _pollTimer = new Timer(PollTimerCallback, null, TimeSpan.Zero, pollingInterval);
     }
@@ -93,7 +93,7 @@ public sealed class DeviceController : IDisposable
         _pollTimer.Dispose();
         _pollTimer = null;
 
-        _logger.LogInformation("Stopped controller");
+        _logger.Information("Stopped controller");
     }
 
     public void Dispose()

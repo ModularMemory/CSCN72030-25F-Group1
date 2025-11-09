@@ -1,22 +1,25 @@
 ﻿using System.Diagnostics;
+using System.Text.Json;
 using FalloutVault.Devices;
 using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Core;
 
 namespace FalloutVault.ConsoleApp;
 
 internal static class Program
 {
-    private static ILogger _logger = null!;
+    private static Logger _logger = null!;
 
     public static async Task Main(string[] args)
     {
-        // TODO: Replace with real logger impl
-        _logger = new Logger<DeviceController>(new LoggerFactory());
+        _logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .CreateLogger();
 
         using var controller = new DeviceController(_logger);
 
@@ -32,7 +35,7 @@ internal static class Program
 
     private static void MessageBusOnMessage(object? sender, DeviceMessage e)
     {
-        // TODO: Log it
+        _logger.Information("Device message: {MessageType} - {MessageValue}", e.GetType().Name, JsonSerializer.Serialize(e));
     }
 
     private static async Task ModifyDevices(DeviceController controller)
