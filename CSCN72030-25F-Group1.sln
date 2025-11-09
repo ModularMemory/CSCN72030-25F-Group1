@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalloutVault.UnoApp.Tests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalloutVault.UnoApp.UITests", "FalloutVault.UnoApp.UITests\FalloutVault.UnoApp.UITests.csproj", "{BDEF995F-E2F4-D2B0-8EDB-2B60376DD979}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalloutVault.ConsoleApp", "FalloutVault.ConsoleApp\FalloutVault.ConsoleApp.csproj", "{0B7C016F-B953-4AEA-9C66-E1311DA4DCE6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,10 @@ Global
 		{BDEF995F-E2F4-D2B0-8EDB-2B60376DD979}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDEF995F-E2F4-D2B0-8EDB-2B60376DD979}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDEF995F-E2F4-D2B0-8EDB-2B60376DD979}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B7C016F-B953-4AEA-9C66-E1311DA4DCE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B7C016F-B953-4AEA-9C66-E1311DA4DCE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B7C016F-B953-4AEA-9C66-E1311DA4DCE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B7C016F-B953-4AEA-9C66-E1311DA4DCE6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

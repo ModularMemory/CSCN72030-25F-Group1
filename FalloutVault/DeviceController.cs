@@ -1,6 +1,9 @@
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
 using FalloutVault.Eventing;
+using FalloutVault.Eventing.Interfaces;
+using FalloutVault.Eventing.Models;
+using FalloutVault.Models;
 using Microsoft.Extensions.Logging;
 
 namespace FalloutVault;
@@ -19,6 +22,8 @@ public sealed class DeviceController : IDisposable
     // Properties
 
     public IReadOnlyCollection<IDevice> Devices => _devices.Values;
+    public IEventBus<DeviceMessage> MessageBus => _messageBus;
+    public IEventBus<Watt> PowerEventBus => _powerEventBus;
 
     // Constructors
     public DeviceController(ILogger logger)
