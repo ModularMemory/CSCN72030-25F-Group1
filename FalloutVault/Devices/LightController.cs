@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Models;
@@ -44,6 +43,7 @@ public class LightController : Device, ILightController
             if (!SetField(ref _dimmerLevel, value)) return;
 
             PublishMessage(new DeviceMessage.DimmerLevelChanged(_dimmerLevel));
+
             PowerDraw = ComputePowerDraw();
         }
     }
@@ -61,8 +61,6 @@ public class LightController : Device, ILightController
 
     public override void Update()
     {
-        Debug.Assert(PowerDraw == ComputePowerDraw());
-
         lock (_timerLock)
         {
             if (_deviceTimer.CheckCompleted())

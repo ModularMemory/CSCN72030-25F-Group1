@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using FalloutVault.Devices.Interfaces;
+﻿using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
@@ -47,8 +46,6 @@ public class SpeakerController : Device, ISpeakerController
 
     public override void Update()
     {
-        Debug.Assert(PowerDraw == ComputePowerDraw());
-
         lock (_timerLock)
         {
             if (_deviceTimer.CheckCompleted())
