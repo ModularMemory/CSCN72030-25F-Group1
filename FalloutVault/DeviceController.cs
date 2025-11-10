@@ -62,8 +62,9 @@ public sealed class DeviceController : IDisposable
     /// </summary>
     public void Start(TimeSpan pollingInterval)
     {
-        if (_pollTimer is null)
+        if (_pollTimer is not null)
         {
+            _logger.Warning("Tried to start controller while it was already running");
             return;
         }
 
@@ -76,7 +77,14 @@ public sealed class DeviceController : IDisposable
     {
         foreach (var (_, device) in _devices)
         {
-            device.Update();
+            try
+            {
+                device.Update();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error while updating device: {DeviceId}", device.Id);
+            }
         }
     }
 
