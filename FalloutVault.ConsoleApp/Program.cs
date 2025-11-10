@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Text.Json;
 using FalloutVault.Devices;
 using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Models;
@@ -28,7 +27,7 @@ internal static class Program
 
         controller.Start();
 
-        await ModifyDevices(controller);
+        await ModifyDevices(controller, TimeSpan.FromSeconds(30), TimeSpan.FromMilliseconds(250));
 
         controller.Stop();
     }
@@ -39,17 +38,15 @@ internal static class Program
         // The @ in @Message means to JSON serialize the object rather than use .ToString()
     }
 
-    private static async Task ModifyDevices(DeviceController controller)
+    private static async Task ModifyDevices(DeviceController controller, TimeSpan runTime, TimeSpan deviceModifyDelay)
     {
         var random = new Random(69);
         var sw = Stopwatch.StartNew();
 
-        const int RUN_SECONDS = 30;
-        const int DEVICE_CHANGE_DELAY_MS = 250;
-        while (sw.Elapsed.Seconds < RUN_SECONDS)
+        while (sw.Elapsed < runTime)
         {
             // Sleep
-            await Task.Delay(TimeSpan.FromMilliseconds(DEVICE_CHANGE_DELAY_MS));
+            await Task.Delay(deviceModifyDelay);
 
             // Get a random device
             var device = random.GetItems(controller.Devices.ToArray(), 1).First();
@@ -58,15 +55,15 @@ internal static class Program
             switch (device)
             {
                 case LightController lightController:
-                    lightController.IsOn = random.Next(0, 3) == 0;
+                    lightController.IsOn = random.Next(0, 2) == 0;
                     lightController.DimmerLevel = Math.Sqrt(random.NextDouble()); // sqrt to bias towards higher dimmer levels
                     break;
                 case FanController fanController:
-                    fanController.IsOn = random.Next(0, 3) == 0;
+                    fanController.IsOn = random.Next(0, 2) == 0;
                     fanController.TargetRpm = random.Next(0, 2_000);
                     break;
                 case SpeakerController speakerController:
-                    speakerController.Activated = random.Next(0, 3) == 0;
+                    speakerController.Activated = random.Next(0, 2) == 0;
                     break;
                 case PowerController powerController:
                     // No-op
