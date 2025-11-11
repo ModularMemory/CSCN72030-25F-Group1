@@ -10,22 +10,20 @@ public class SpeakerController : Device, ISpeakerController
     // Fields
     private readonly DeviceTimer<bool> _deviceTimer = new();
     private readonly Lock _timerLock = new();
-    private readonly Watt _speakerWattage;
-
-    private bool _activated;
 
     // Properties
 
     public override DeviceId Id { get; }
+    public Watt SpeakerWattage { get; }
 
-    public bool Activated
+    public bool IsOn
     {
-        get => _activated;
+        get;
         set
         {
-            if (!SetField(ref _activated, value)) return;
+            if (!SetField(ref field, value)) return;
 
-            PublishMessage(_activated
+            PublishMessage(field
                 ? new DeviceMessage.SpeakerTurnedOn()
                 : new DeviceMessage.SpeakerTurnedOff()
             );
@@ -39,7 +37,7 @@ public class SpeakerController : Device, ISpeakerController
     public SpeakerController(DeviceId id, Watt speakerWattage)
     {
         Id = id;
-        _speakerWattage = speakerWattage;
+        SpeakerWattage = speakerWattage;
     }
 
     // Methods
@@ -50,19 +48,19 @@ public class SpeakerController : Device, ISpeakerController
         {
             if (_deviceTimer.CheckCompleted())
             {
-                Activated = _deviceTimer.State;
+                IsOn = _deviceTimer.State;
             }
         }
     }
 
     protected override Watt ComputePowerDraw()
     {
-        if (!Activated)
+        if (!IsOn)
         {
             return Watt.Zero;
         }
 
-        return _speakerWattage;
+        return SpeakerWattage;
     }
 
     public void TurnOnFor(TimeSpan time)
@@ -70,7 +68,7 @@ public class SpeakerController : Device, ISpeakerController
         lock (_timerLock)
         {
             _deviceTimer.SetTimer(time, false);
-            Activated = true;
+            IsOn = true;
         }
     }
 
@@ -79,7 +77,7 @@ public class SpeakerController : Device, ISpeakerController
         lock (_timerLock)
         {
             _deviceTimer.SetTimer(time, true);
-            Activated = false;
+            IsOn = false;
         }
     }
 }

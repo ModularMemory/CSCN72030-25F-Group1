@@ -9,23 +9,21 @@ namespace FalloutVault.Devices;
 public class PowerController : Device, IPowerController
 {
     // Fields
-    private Watt _powerGeneration;
-    private readonly Watt _standardGeneration;
     private Watt _totalPowerDraw;
 
     // Properties
     public override DeviceId Id { get; }
 
-    public Watt StandardGeneration => _standardGeneration;
+    public Watt StandardGeneration { get; }
 
     public Watt PowerGeneration
     {
-        get => _powerGeneration;
+        get;
         private set
         {
-            if (!SetField(ref _powerGeneration, value)) return;
+            if (!SetField(ref field, value)) return;
 
-            PublishMessage(new DeviceMessage.PowerGenerationChanged(_powerGeneration));
+            PublishMessage(new DeviceMessage.PowerGenerationChanged(field));
         }
     }
 
@@ -33,10 +31,10 @@ public class PowerController : Device, IPowerController
     {
         get
         {
-            if (_standardGeneration.W <= 0)
+            if (StandardGeneration.W <= 0)
                 return 0;
 
-            return Math.Clamp((double)(_powerGeneration / _standardGeneration), 0, 1);
+            return Math.Clamp((double)(PowerGeneration / StandardGeneration), 0, 1);
         }
     }
 
@@ -44,8 +42,8 @@ public class PowerController : Device, IPowerController
     public PowerController(DeviceId id, Watt standardGeneration)
     {
         Id = id;
-        _standardGeneration = standardGeneration;
-        _powerGeneration = standardGeneration;
+        StandardGeneration = standardGeneration;
+        PowerGeneration = standardGeneration;
         _totalPowerDraw = Watt.Zero;
     }
 
@@ -61,7 +59,7 @@ public class PowerController : Device, IPowerController
         _totalPowerDraw = totalPowerDraw;
 
         PublishMessage(new DeviceMessage.TotalPowerDrawChanged(
-            new { TotalDraw = totalPowerDraw, Available = _powerGeneration - totalPowerDraw }
+            new { TotalDraw = totalPowerDraw, Available = PowerGeneration - totalPowerDraw }
         ));
     }
 
@@ -82,6 +80,6 @@ public class PowerController : Device, IPowerController
         // possible: calculate power consumption based on datafile room data
 
         // for now hard code for demo purposes
-        return _standardGeneration;
+        return StandardGeneration;
     }
 }

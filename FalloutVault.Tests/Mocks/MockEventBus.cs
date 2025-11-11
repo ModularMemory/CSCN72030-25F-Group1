@@ -6,7 +6,6 @@ namespace FalloutVault.Tests.Mocks;
 internal abstract class MockEventBus<TMessage> : IEventBus<TMessage>
 {
     private readonly List<TMessage> _messages = [];
-    private readonly IEventBus<TMessage>? _innerBus;
 
     public event EventHandler<TMessage>? Handler;
 
@@ -14,14 +13,15 @@ internal abstract class MockEventBus<TMessage> : IEventBus<TMessage>
 
     protected IEventBus<TMessage>? InnerBus
     {
-        get => _innerBus;
+        get;
         init
         {
-            if (_innerBus != null) _innerBus.Handler -= InnerBusOnHandler;
+            // Unsubscribe
+            field?.Handler -= InnerBusOnHandler;
 
-            _innerBus = value;
-
-            if (_innerBus != null) _innerBus.Handler += InnerBusOnHandler;
+            // Set new and subscribe
+            field = value;
+            field?.Handler += InnerBusOnHandler;
         }
     }
 

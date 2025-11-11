@@ -11,16 +11,14 @@ public abstract class Device : IDevice
     // IDevice members
     public abstract DeviceId Id { get; }
 
-    private Watt _powerDraw;
-
     public Watt PowerDraw
     {
-        get => _powerDraw;
+        get;
         protected set
         {
-            if (!SetField(ref _powerDraw, value)) return;
+            if (!SetField(ref field, value)) return;
 
-            PublishPowerUsage(_powerDraw);
+            PublishPowerUsage(field);
         }
     }
 

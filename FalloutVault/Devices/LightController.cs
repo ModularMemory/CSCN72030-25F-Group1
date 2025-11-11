@@ -10,23 +10,20 @@ public class LightController : Device, ILightController
     // Fields
     private readonly DeviceTimer<bool> _deviceTimer = new();
     private readonly Lock _timerLock = new();
-    private readonly Watt _bulbWattage;
-
-    private bool _isOn;
-    private double _dimmerLevel;
 
     // Properties
 
     public override DeviceId Id { get; }
+    public Watt BulbWattage { get; }
 
     public bool IsOn
     {
-        get => _isOn;
+        get;
         set
         {
-            if (!SetField(ref _isOn, value)) return;
+            if (!SetField(ref field, value)) return;
 
-            PublishMessage(_isOn
+            PublishMessage(field
                 ? new DeviceMessage.LightTurnedOn()
                 : new DeviceMessage.LightTurnedOff()
             );
@@ -37,12 +34,12 @@ public class LightController : Device, ILightController
 
     public double DimmerLevel
     {
-        get => _dimmerLevel;
+        get;
         set
         {
-            if (!SetField(ref _dimmerLevel, value)) return;
+            if (!SetField(ref field, value)) return;
 
-            PublishMessage(new DeviceMessage.DimmerLevelChanged(_dimmerLevel));
+            PublishMessage(new DeviceMessage.DimmerLevelChanged(field));
 
             PowerDraw = ComputePowerDraw();
         }
@@ -53,7 +50,7 @@ public class LightController : Device, ILightController
     public LightController(DeviceId id, Watt bulbWattage)
     {
         Id = id;
-        _bulbWattage = bulbWattage;
+        BulbWattage = bulbWattage;
         DimmerLevel = 1;
     }
 
@@ -75,7 +72,7 @@ public class LightController : Device, ILightController
         if (!IsOn)
             return Watt.Zero;
 
-        return _bulbWattage * DimmerLevel;
+        return BulbWattage * DimmerLevel;
     }
 
     public void TurnOnFor(TimeSpan time)
