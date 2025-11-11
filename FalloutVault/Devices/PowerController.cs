@@ -1,5 +1,6 @@
 ﻿using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
+using FalloutVault.Eventing.Commands;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
@@ -66,6 +67,11 @@ public class PowerController : Device, IPowerController
     public override void Update()
     {
         PowerGeneration = ComputePowerGeneration();
+    }
+
+    public override void SendCommand(DeviceCommand command)
+    {
+        throw new NotImplementedException();
     }
 
     private Watt ComputePowerGeneration()

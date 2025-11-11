@@ -1,5 +1,6 @@
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
+using FalloutVault.Eventing.Commands;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
@@ -12,6 +13,7 @@ public abstract class Device : IDevice
     public abstract DeviceId Id { get; }
 
     public abstract void Update();
+    public abstract void SendCommand(DeviceCommand command);
 
     // Message bus
     protected IEventBus<DeviceMessage>? MessageBus { get; private set; }

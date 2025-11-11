@@ -1,4 +1,5 @@
 using FalloutVault.Devices.Models;
+using FalloutVault.Eventing.Commands;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
@@ -16,4 +17,10 @@ public interface IDevice : IEventBusMember<DeviceMessage>, IEventBusMember<Watt>
     /// Triggers a manual update check.
     /// </summary>
     void Update();
+
+    /// <summary>
+    /// Sends a command to the device.
+    /// </summary>
+    /// <param name="command">The command to send.</param>
+    void SendCommand(DeviceCommand command);
 }

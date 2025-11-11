@@ -1,5 +1,6 @@
 ﻿using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
+using FalloutVault.Eventing.Commands;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
 
@@ -51,6 +52,11 @@ public class SpeakerController : PoweredDevice, ISpeakerController
                 IsOn = _deviceTimer.State;
             }
         }
+    }
+
+    public override void SendCommand(DeviceCommand command)
+    {
+        throw new NotImplementedException();
     }
 
     protected override Watt ComputePowerDraw()

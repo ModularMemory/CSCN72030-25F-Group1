@@ -1,5 +1,6 @@
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
+using FalloutVault.Eventing.Commands;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
 
@@ -65,6 +66,11 @@ public class LightController : PoweredDevice, ILightController
                 IsOn = _deviceTimer.State;
             }
         }
+    }
+
+    public override void SendCommand(DeviceCommand command)
+    {
+        throw new NotImplementedException();
     }
 
     protected override Watt ComputePowerDraw()
