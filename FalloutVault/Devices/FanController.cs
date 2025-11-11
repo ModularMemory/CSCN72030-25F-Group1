@@ -4,7 +4,7 @@ using FalloutVault.Models;
 
 namespace FalloutVault.Devices;
 
-public class FanController : Device, IFanController
+public class FanController : PoweredDevice, IFanController
 {
     //fields
     private bool _IsOn;

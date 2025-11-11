@@ -5,7 +5,7 @@ using FalloutVault.Models;
 
 namespace FalloutVault.Devices;
 
-public class SpeakerController : Device, ISpeakerController
+public class SpeakerController : PoweredDevice, ISpeakerController
 {
     // Fields
     private readonly DeviceTimer<bool> _deviceTimer = new();

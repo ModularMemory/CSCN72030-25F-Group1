@@ -26,6 +26,7 @@ public sealed class DeviceController : IDisposable
     public IEventBus<Watt> PowerEventBus => _powerEventBus;
 
     // Constructors
+
     public DeviceController(ILogger logger)
     {
         _logger = logger;

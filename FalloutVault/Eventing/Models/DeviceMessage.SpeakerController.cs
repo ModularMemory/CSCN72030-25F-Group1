@@ -2,18 +2,18 @@ namespace FalloutVault.Eventing.Models;
 
 public partial class DeviceMessage
 {
-    public class SpeakerTurnedOn : DeviceMessage
+    public class SpeakerTurnedOn : DeviceTurnedOn
     {
-        public SpeakerTurnedOn() : base(ValueBoxes.True) { }
-        public SpeakerTurnedOn(DateTimeOffset timestamp) : base(timestamp, ValueBoxes.True) { }
+        public SpeakerTurnedOn() { }
+        public SpeakerTurnedOn(DateTimeOffset timestamp) : base(timestamp) { }
 
         public override string Message => "Speaker turned on";
     }
 
-    public class SpeakerTurnedOff : DeviceMessage
+    public class SpeakerTurnedOff : DeviceTurnedOff
     {
-        public SpeakerTurnedOff() : base(ValueBoxes.False) { }
-        public SpeakerTurnedOff(DateTimeOffset timestamp) : base(timestamp, ValueBoxes.False) { }
+        public SpeakerTurnedOff() { }
+        public SpeakerTurnedOff(DateTimeOffset timestamp) : base(timestamp) { }
 
         public override string Message => "Speaker turned off";
     }

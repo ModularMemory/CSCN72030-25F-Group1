@@ -1,9 +1,7 @@
 ﻿namespace FalloutVault.Devices.Interfaces;
 
-public interface IFanController
+public interface IFanController : IOnOff
 {
-    bool IsOn { get; set; }
-
     double TargetRpm { get; set; }
 
     double SpeedRpm { get; }

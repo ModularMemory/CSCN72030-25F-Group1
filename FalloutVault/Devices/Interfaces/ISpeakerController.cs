@@ -1,6 +1,5 @@
 ﻿namespace FalloutVault.Devices.Interfaces;
 
-public interface ISpeakerController : ITemporaryOn, ITemporaryOff
+public interface ISpeakerController : IOnOff, ITemporaryOn, ITemporaryOff
 {
-    bool IsOn { get; set; }
 }

@@ -68,12 +68,6 @@ public class PowerController : Device, IPowerController
         PowerGeneration = ComputePowerGeneration();
     }
 
-    protected override Watt ComputePowerDraw()
-    {
-        return Watt.Zero;
-        // this system doesnt consume any power, why does it need this?
-    }
-
     private Watt ComputePowerGeneration()
     {
         // possible: calculate power consumption from different devices

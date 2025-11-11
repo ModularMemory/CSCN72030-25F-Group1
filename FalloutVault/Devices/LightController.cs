@@ -5,7 +5,7 @@ using FalloutVault.Models;
 
 namespace FalloutVault.Devices;
 
-public class LightController : Device, ILightController
+public class LightController : PoweredDevice, ILightController
 {
     // Fields
     private readonly DeviceTimer<bool> _deviceTimer = new();

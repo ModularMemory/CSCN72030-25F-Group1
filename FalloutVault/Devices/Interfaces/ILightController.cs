@@ -2,10 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FalloutVault.Devices.Interfaces;
 
-public interface ILightController : ITemporaryOn, ITemporaryOff
+public interface ILightController : IOnOff, ITemporaryOn, ITemporaryOff
 {
-    bool IsOn { get; set; }
-
     [Range(0, 1)]
     double DimmerLevel { get; set; }
 }

@@ -2,18 +2,18 @@ namespace FalloutVault.Eventing.Models;
 
 public partial class DeviceMessage
 {
-    public class LightTurnedOn : DeviceMessage
+    public class LightTurnedOn : DeviceTurnedOn
     {
-        public LightTurnedOn() : base(ValueBoxes.True) { }
-        public LightTurnedOn(DateTimeOffset timestamp) : base(timestamp, ValueBoxes.True) { }
+        public LightTurnedOn() { }
+        public LightTurnedOn(DateTimeOffset timestamp) : base(timestamp) { }
 
         public override string Message => "Light turned on";
     }
 
-    public class LightTurnedOff : DeviceMessage
+    public class LightTurnedOff : DeviceTurnedOff
     {
-        public LightTurnedOff() : base(ValueBoxes.False) { }
-        public LightTurnedOff(DateTimeOffset timestamp) : base(timestamp, ValueBoxes.False) { }
+        public LightTurnedOff(){ }
+        public LightTurnedOff(DateTimeOffset timestamp) : base(timestamp) { }
 
         public override string Message => "Light turned off";
     }
