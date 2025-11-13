@@ -1,4 +1,4 @@
-namespace FalloutVault;
+namespace FalloutVault.Utils;
 
 internal static class Utils
 {

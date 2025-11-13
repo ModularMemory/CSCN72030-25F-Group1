@@ -14,7 +14,7 @@
     </ItemGroup>
     
     <ItemGroup>
-        <Using Include="FalloutVault.Utils" Static="True" />
+        <Using Include="FalloutVault.Utils.Utils" Static="True" />
     </ItemGroup>
 
 </Project>

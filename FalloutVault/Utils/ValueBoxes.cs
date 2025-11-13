@@ -1,4 +1,4 @@
-namespace FalloutVault;
+namespace FalloutVault.Utils;
 
 /// <summary>
 /// Pre-boxed values for reduced GC pressure.
