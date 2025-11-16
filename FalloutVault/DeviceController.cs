@@ -1,5 +1,4 @@
 using FalloutVault.Devices.Interfaces;
-using FalloutVault.Devices.Models;
 using FalloutVault.Eventing;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
@@ -10,32 +9,24 @@ namespace FalloutVault;
 
 public sealed class DeviceController : IDisposable
 {
-    // Fields
-
     private readonly ILogger _logger;
-    private readonly Dictionary<DeviceId, IDevice> _devices = [];
-    private readonly DeviceMessageEventBus _messageBus = new();
-    private readonly PowerEventBus _powerEventBus = new();
+    private readonly DeviceRegistry _deviceRegistry;
 
     private Timer? _pollTimer;
 
-    // Properties
+    public IEventBus<DeviceMessage> MessageBus { get; }
+    public IEventBus<Watt> PowerEventBus { get; }
 
-    public IReadOnlyCollection<IDevice> Devices => _devices.Values;
-    public IEventBus<DeviceMessage> MessageBus => _messageBus;
-    public IEventBus<Watt> PowerEventBus => _powerEventBus;
-
-    // Constructors
-
-    public DeviceController(ILogger logger)
+    public DeviceController(DeviceRegistry deviceRegistry, ILogger logger)
     {
+        _deviceRegistry = deviceRegistry;
         _logger = logger;
+        MessageBus = new DeviceMessageEventBus();
+        PowerEventBus = new PowerEventBus();
     }
 
-    // Methods
-
     /// <summary>
-    /// Registers a new device with the controller.
+    /// Registers a new device with the controller and the related registry.
     /// </summary>
     /// <param name="device">The device to register.</param>
     /// <typeparam name="TDevice">A class that implements the <see cref="IDevice"/> interface.</typeparam>
@@ -43,12 +34,12 @@ public sealed class DeviceController : IDisposable
     /// <exception cref="ArgumentException">A <paramref name="device"/> with the same name and zone was already added.</exception>
     public DeviceController AddDevice<TDevice>(TDevice device) where TDevice : IDevice
     {
-        _devices.Add(device.Id, device);
+        _deviceRegistry.RegisterDevice(device);
 
-        device.SetEventBus(_messageBus);
-        device.SetEventBus(_powerEventBus);
+        device.SetEventBus(MessageBus);
+        device.SetEventBus(PowerEventBus);
 
-        _logger.Information("Added new device: {DeviceId}", device.Id);
+        _logger.Information("Connected device {DeviceId}", device.Id);
 
         return this;
     }
@@ -76,7 +67,7 @@ public sealed class DeviceController : IDisposable
 
     private void PollTimerCallback(object? state)
     {
-        foreach (var (_, device) in _devices)
+        foreach (var device in _deviceRegistry.Devices)
         {
             try
             {

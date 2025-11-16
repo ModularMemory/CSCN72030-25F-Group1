@@ -14,6 +14,11 @@ public interface IDevice : IEventBusMember<DeviceMessage>, IEventBusMember<Watt>
     DeviceId Id { get; }
 
     /// <summary>
+    /// The type of the device.
+    /// </summary>
+    DeviceType Type { get; }
+
+    /// <summary>
     /// Triggers a manual update check.
     /// </summary>
     void Update();

@@ -11,6 +11,7 @@ public abstract class Device : IDevice
 {
     // IDevice members
     public abstract DeviceId Id { get; }
+    public abstract DeviceType Type { get; }
 
     public abstract void Update();
     public abstract void SendCommand(DeviceCommand command);

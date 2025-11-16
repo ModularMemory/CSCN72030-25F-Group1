@@ -17,6 +17,7 @@ public class FanController : PoweredDevice, IFanController
     //properties
 
     public override DeviceId Id { get; }
+    public override DeviceType Type => DeviceType.FanController;
 
     //TODO: Notification on setters
     public bool IsOn

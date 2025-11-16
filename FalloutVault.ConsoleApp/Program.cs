@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using FalloutVault.Devices;
+using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
@@ -20,14 +21,20 @@ internal static class Program
             .WriteTo.Console()
             .CreateLogger();
 
-        using var controller = new DeviceController(_logger);
+        var registry = new DeviceRegistry(_logger);
+        using var controller = new DeviceController(registry, _logger);
 
         controller.MessageBus.Handler += MessageBusOnMessage;
-        AddDevices(controller);
+        var devices = GetDevices();
+
+        foreach (var device in devices)
+        {
+            controller.AddDevice(device);
+        }
 
         controller.Start();
 
-        await ModifyDevices(controller, TimeSpan.FromSeconds(30), TimeSpan.FromMilliseconds(250));
+        await ModifyDevices(devices, TimeSpan.FromSeconds(30), TimeSpan.FromMilliseconds(250));
 
         controller.Stop();
     }
@@ -38,7 +45,7 @@ internal static class Program
         // The @ in @Message means to JSON serialize the object rather than use .ToString()
     }
 
-    private static async Task ModifyDevices(DeviceController controller, TimeSpan runTime, TimeSpan deviceModifyDelay)
+    private static async Task ModifyDevices(IReadOnlyList<IDevice> devices, TimeSpan runTime, TimeSpan deviceModifyDelay)
     {
         var random = new Random(69);
         var sw = Stopwatch.StartNew();
@@ -49,7 +56,7 @@ internal static class Program
             await Task.Delay(deviceModifyDelay);
 
             // Get a random device
-            var device = random.GetItems(controller.Devices.ToArray(), 1).First();
+            var device = random.GetItems(devices.ToArray(), 1).First();
 
             // Do something to it
             switch (device)
@@ -72,25 +79,27 @@ internal static class Program
         }
     }
 
-    private static void AddDevices(DeviceController controller)
+    private static IReadOnlyList<IDevice> GetDevices()
     {
-        controller
+        return
+        [
             // Lights
-            .AddDevice(new LightController(new DeviceId("Light-1", "East Hall"), (Watt)50))
-            .AddDevice(new LightController(new DeviceId("Light-2", "East Hall"), (Watt)100))
-            .AddDevice(new LightController(new DeviceId("Light-3", "East Hall"), (Watt)75))
-            .AddDevice(new LightController(new DeviceId("Light-4", "West Hall"), (Watt)50))
-            .AddDevice(new LightController(new DeviceId("Light-5", "North Hall"), (Watt)120))
+            new LightController(new DeviceId("Light-1", "East Hall"), (Watt)50),
+            new LightController(new DeviceId("Light-2", "East Hall"), (Watt)100),
+            new LightController(new DeviceId("Light-3", "East Hall"), (Watt)75),
+            new LightController(new DeviceId("Light-4", "West Hall"), (Watt)50),
+            new LightController(new DeviceId("Light-5", "North Hall"), (Watt)120),
             // Fans
-            .AddDevice(new FanController(new DeviceId("Fan-1", "East Hall")))
-            .AddDevice(new FanController(new DeviceId("Fan-3", "West Hall")))
-            .AddDevice(new FanController(new DeviceId("Fan-2", "North Hall")))
+            new FanController(new DeviceId("Fan-1", "East Hall")),
+            new FanController(new DeviceId("Fan-3", "West Hall")),
+            new FanController(new DeviceId("Fan-2", "North Hall")),
             // Speaker controller
-            .AddDevice(new SpeakerController(new DeviceId("Speaker-1", "East Hall"), (Watt)100))
-            .AddDevice(new SpeakerController(new DeviceId("Speaker-2", "West Hall"), (Watt)100))
-            .AddDevice(new SpeakerController(new DeviceId("Speaker-3", "North Hall"), (Watt)100))
-            .AddDevice(new SpeakerController(new DeviceId("Speaker-4", "Generator Room"), (Watt)100))
+            new SpeakerController(new DeviceId("Speaker-1", "East Hall"), (Watt)100),
+            new SpeakerController(new DeviceId("Speaker-2", "West Hall"), (Watt)100),
+            new SpeakerController(new DeviceId("Speaker-3", "North Hall"), (Watt)100),
+            new SpeakerController(new DeviceId("Speaker-4", "Generator Room"), (Watt)100),
             // Power Controller
-            .AddDevice(new PowerController(new DeviceId("Central-Reactor", "Generator Room"), (Watt)1_000));
+            new PowerController(new DeviceId("Central-Reactor", "Generator Room"), (Watt)1_000)
+        ];
     }
 }

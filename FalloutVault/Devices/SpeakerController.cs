@@ -15,6 +15,7 @@ public class SpeakerController : PoweredDevice, ISpeakerController
     // Properties
 
     public override DeviceId Id { get; }
+    public override DeviceType Type => DeviceType.SpeakerController;
     public Watt SpeakerWattage { get; }
 
     public bool IsOn

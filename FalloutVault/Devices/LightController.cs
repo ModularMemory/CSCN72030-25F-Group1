@@ -15,6 +15,7 @@ public class LightController : PoweredDevice, ILightController
     // Properties
 
     public override DeviceId Id { get; }
+    public override DeviceType Type => DeviceType.LightController;
     public Watt BulbWattage { get; }
 
     public bool IsOn

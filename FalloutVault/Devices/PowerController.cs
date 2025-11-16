@@ -14,6 +14,7 @@ public class PowerController : Device, IPowerController
 
     // Properties
     public override DeviceId Id { get; }
+    public override DeviceType Type => DeviceType.PowerController;
 
     public Watt StandardGeneration { get; }
 
