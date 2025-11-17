@@ -12,6 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Non-Solution Items", "Non-S
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{00ACB321-52B1-4FD3-984A-F48AAD5EE6D5}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\run-tests.yml = .github\workflows\run-tests.yml
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalloutVault.Tests", "FalloutVault.Tests\FalloutVault.Tests.csproj", "{AA2DBF01-09F0-4CF6-8967-23C9D161CE4B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalloutVault.UnoApp", "FalloutVault.UnoApp\FalloutVault.UnoApp.csproj", "{58C23ED8-96A8-88EF-071E-82C1053AED7B}"
