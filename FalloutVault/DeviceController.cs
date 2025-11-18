@@ -10,14 +10,14 @@ namespace FalloutVault;
 public sealed class DeviceController : IDeviceController, IDisposable
 {
     private readonly ILogger _logger;
-    private readonly DeviceRegistry _deviceRegistry;
+    private readonly IDeviceRegistry _deviceRegistry;
 
     private Timer? _pollTimer;
 
     private readonly IEventBus<DeviceMessage> _messageBus;
     private readonly IEventBus<Watt> _powerEventBus;
 
-    public DeviceController(DeviceRegistry deviceRegistry, IEventBus<DeviceMessage> messageBus, IEventBus<Watt> powerEventBus, ILogger logger)
+    public DeviceController(IDeviceRegistry deviceRegistry, IEventBus<DeviceMessage> messageBus, IEventBus<Watt> powerEventBus, ILogger logger)
     {
         _deviceRegistry = deviceRegistry;
         _logger = logger;
