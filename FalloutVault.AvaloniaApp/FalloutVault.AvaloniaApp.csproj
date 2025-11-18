@@ -23,5 +23,6 @@
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
         <PackageReference Include="CommunityToolkit.Mvvm"/>
+        <PackageReference Include="HotAvalonia" PrivateAssets="all" Publish="True"/>
     </ItemGroup>
 </Project>
