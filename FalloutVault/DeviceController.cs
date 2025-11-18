@@ -25,7 +25,7 @@ public sealed class DeviceController : IDeviceController, IDisposable
         _powerEventBus = powerEventBus;
     }
 
-    public DeviceController AddDevice<TDevice>(TDevice device) where TDevice : IDevice
+    public IDeviceController AddDevice<TDevice>(TDevice device) where TDevice : IDevice
     {
         _deviceRegistry.RegisterDevice(device);
 

@@ -31,7 +31,7 @@ public sealed class DeviceRegistry : IDeviceRegistry
         _logger = logger;
     }
 
-    public DeviceRegistry RegisterDevice<TDevice>(TDevice device) where TDevice : IDevice
+    public IDeviceRegistry RegisterDevice<TDevice>(TDevice device) where TDevice : IDevice
     {
         var deviceId = device.Id;
         var deviceType = device.Type;

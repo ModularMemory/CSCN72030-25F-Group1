@@ -11,7 +11,7 @@ public interface IDeviceController
     /// <typeparam name="TDevice">A class that implements the <see cref="IDevice"/> interface.</typeparam>
     /// <returns>The controller instance.</returns>
     /// <exception cref="ArgumentException">A <paramref name="device"/> with the same name and zone was already added.</exception>
-    DeviceController AddDevice<TDevice>(TDevice device) where TDevice : IDevice;
+    IDeviceController AddDevice<TDevice>(TDevice device) where TDevice : IDevice;
 
     /// <summary>
     /// Starts the controller with the default polling interval of 50ms.

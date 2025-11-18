@@ -19,5 +19,5 @@ public interface IDeviceRegistry
     /// <typeparam name="TDevice">A class that implements the <see cref="IDevice"/> interface.</typeparam>
     /// <returns>The registry instance.</returns>
     /// <exception cref="ArgumentException">A <paramref name="device"/> with the same name and zone was already added.</exception>
-    DeviceRegistry RegisterDevice<TDevice>(TDevice device) where TDevice : IDevice;
+    IDeviceRegistry RegisterDevice<TDevice>(TDevice device) where TDevice : IDevice;
 }
