@@ -8,13 +8,15 @@
     }
   },
   "profiles": {
-    "FalloutVault.UnoApp (WinAppSDK Unpackaged)": {
+    "FalloutVault.UnoApp (Desktop)": {
       "commandName": "Project",
-      "compatibleTargetFramework": "windows"
+      "compatibleTargetFramework": "desktop"
     },
-    "FalloutVault.UnoApp (WinAppSDK Packaged)": {
-      "commandName": "MsixPackage",
-      "compatibleTargetFramework": "windows"
-    },
+    "FalloutVault.UnoApp (Desktop WSL2)": {
+      "commandName": "WSL2",
+      "commandLineArgs": "{ProjectDir}/bin/Debug/net9.0-desktop/FalloutVault.UnoApp.dll",
+      "distributionName": "",
+      "compatibleTargetFramework": "desktop"
+    }
   }
 }

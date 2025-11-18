@@ -8,13 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
-      <PackageReference Include="Serilog" Version="4.3.0" />
-      <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
+        <PackageReference Include="JetBrains.Annotations"/>
+        <PackageReference Include="Serilog"/>
+        <PackageReference Include="Serilog.Sinks.Console"/>
     </ItemGroup>
-    
+
     <ItemGroup>
-        <Using Include="FalloutVault.Utils.Utils" Static="True" />
+        <Using Include="FalloutVault.Utils.Utils" Static="True"/>
     </ItemGroup>
 
 </Project>

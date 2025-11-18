@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Non-Solution Items", "Non-S
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 		README.md = README.md
+		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{00ACB321-52B1-4FD3-984A-F48AAD5EE6D5}"

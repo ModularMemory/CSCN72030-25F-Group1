@@ -23,10 +23,9 @@ internal static class Program
 
         var registry = new DeviceRegistry(_logger);
         using var controller = new DeviceController(registry, _logger);
-
         controller.MessageBus.Handler += MessageBusOnMessage;
-        var devices = GetDevices();
 
+        var devices = GetDevices();
         foreach (var device in devices)
         {
             controller.AddDevice(device);

@@ -1,6 +1,7 @@
 using Uno.Resizetizer;
 
 namespace FalloutVault.UnoApp;
+
 public partial class App : Application
 {
     /// <summary>
