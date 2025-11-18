@@ -1,0 +1,61 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:FalloutVault.AvaloniaApp.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="FalloutVault.AvaloniaApp.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="FalloutVault.AvaloniaApp">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <ScrollViewer>
+        <Border
+            BorderBrush="Brown"
+            BorderThickness="2"
+            CornerRadius="10"
+            Margin="10">
+            <Grid
+                RowDefinitions="250,*"
+                Margin="10">
+
+                <StackPanel Grid.Row="0" Orientation="Vertical">
+                    <TextBlock Text="{Binding LeftTitle}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                </StackPanel>
+                <StackPanel Grid.Row="1" Orientation="Vertical">
+                    <TextBlock Text="{Binding RightTitle}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                    <Border
+                        Height="40"
+                        BorderBrush="Red"
+                        BorderThickness="2"
+                        Background="DarkRed"
+                        CornerRadius="20"
+                        Padding="10, 0">
+
+                        <StackPanel
+                            Orientation="Horizontal"
+                            Spacing="10">
+                            <TextBlock
+                                Text="Device 1"
+                                Foreground="White"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center" />
+                            <Button
+                                Content="Turn On/Off"
+                                Foreground="White" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </ScrollViewer>
+
+</Window>

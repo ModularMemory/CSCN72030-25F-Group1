@@ -9,10 +9,14 @@
     <PackageVersion Include="NUnit.Analyzers" Version="4.11.2" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.3.3" />
-    <PackageVersion Include="Uno.UITest.Helpers" Version="1.1.0-dev.70" />
-    <PackageVersion Include="Xamarin.UITest" Version="4.4.2" />
+    <PackageVersion Include="Avalonia" Version="11.3.9"/>
+    <PackageVersion Include="Avalonia.Desktop" Version="11.3.9"/>
+    <PackageVersion Include="Avalonia.Themes.Fluent" Version="11.3.9"/>
+    <PackageVersion Include="Avalonia.Fonts.Inter" Version="11.3.9"/>
     <PackageVersion Include="Serilog" Version="4.3.0" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
     <PackageVersion Include="JetBrains.Annotations" Version="2025.2.2" />
+    <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.9" />
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.2.1"/>
   </ItemGroup>
 </Project>
