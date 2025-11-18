@@ -24,5 +24,13 @@
         </PackageReference>
         <PackageReference Include="CommunityToolkit.Mvvm"/>
         <PackageReference Include="HotAvalonia" PrivateAssets="all" Publish="True"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+        <PackageReference Include="Serilog"/>
+        <PackageReference Include="Serilog.Sinks.Console"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\FalloutVault\FalloutVault.csproj" />
     </ItemGroup>
 </Project>

@@ -1,30 +1,37 @@
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
+using FalloutVault.Interfaces;
 using FalloutVault.Models;
 using Serilog;
 
 namespace FalloutVault;
 
-public sealed class DeviceRegistry
+public sealed class DeviceRegistry : IDeviceRegistry
 {
     private readonly ILogger _logger;
     private readonly Dictionary<DeviceId, (IDevice device, DeviceType deviceType, DeviceCapabilities deviceCapabilities)> _devices = [];
 
-    internal IEnumerable<IDevice> Devices => _devices.Values.Select(x => x.device);
+    public IEnumerable<IDevice> DeviceInstancesInternal => _devices.Values.Select(x => x.device);
+
+    public int DeviceCount => _devices.Count;
+    public IEnumerable<(DeviceId deviceId, DeviceType deviceType, DeviceCapabilities deviceCapabilities)> Devices
+        => _devices.Select(x => (x.Key, x.Value.deviceType, x.Value.deviceCapabilities));
+
+    public (DeviceType deviceType, DeviceCapabilities deviceCapabilities) this[DeviceId deviceId]
+    {
+        get
+        {
+            var device = _devices[deviceId];
+            return (device.deviceType, device.deviceCapabilities);
+        }
+    }
 
     public DeviceRegistry(ILogger logger)
     {
         _logger = logger;
     }
 
-    /// <summary>
-    /// Registers a new device with the registry.
-    /// </summary>
-    /// <param name="device">The device to register.</param>
-    /// <typeparam name="TDevice">A class that implements the <see cref="IDevice"/> interface.</typeparam>
-    /// <returns>The registry instance.</returns>
-    /// <exception cref="ArgumentException">A <paramref name="device"/> with the same name and zone was already added.</exception>
-    internal DeviceRegistry RegisterDevice<TDevice>(TDevice device) where TDevice : IDevice
+    public DeviceRegistry RegisterDevice<TDevice>(TDevice device) where TDevice : IDevice
     {
         var deviceId = device.Id;
         var deviceType = device.Type;

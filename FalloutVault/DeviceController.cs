@@ -1,57 +1,42 @@
 using FalloutVault.Devices.Interfaces;
-using FalloutVault.Eventing;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
+using FalloutVault.Interfaces;
 using FalloutVault.Models;
 using Serilog;
 
 namespace FalloutVault;
 
-public sealed class DeviceController : IDisposable
+public sealed class DeviceController : IDeviceController, IDisposable
 {
     private readonly ILogger _logger;
     private readonly DeviceRegistry _deviceRegistry;
 
     private Timer? _pollTimer;
 
-    public IEventBus<DeviceMessage> MessageBus { get; }
-    public IEventBus<Watt> PowerEventBus { get; }
+    private readonly IEventBus<DeviceMessage> _messageBus;
+    private readonly IEventBus<Watt> _powerEventBus;
 
-    public DeviceController(DeviceRegistry deviceRegistry, ILogger logger)
+    public DeviceController(DeviceRegistry deviceRegistry, IEventBus<DeviceMessage> messageBus, IEventBus<Watt> powerEventBus, ILogger logger)
     {
         _deviceRegistry = deviceRegistry;
         _logger = logger;
-        MessageBus = new DeviceMessageEventBus();
-        PowerEventBus = new PowerEventBus();
+        _messageBus = messageBus;
+        _powerEventBus = powerEventBus;
     }
 
-    /// <summary>
-    /// Registers a new device with the controller and the related registry.
-    /// </summary>
-    /// <param name="device">The device to register.</param>
-    /// <typeparam name="TDevice">A class that implements the <see cref="IDevice"/> interface.</typeparam>
-    /// <returns>The controller instance.</returns>
-    /// <exception cref="ArgumentException">A <paramref name="device"/> with the same name and zone was already added.</exception>
     public DeviceController AddDevice<TDevice>(TDevice device) where TDevice : IDevice
     {
         _deviceRegistry.RegisterDevice(device);
 
-        device.SetEventBus(MessageBus);
-        device.SetEventBus(PowerEventBus);
+        device.SetEventBus(_messageBus);
+        device.SetEventBus(_powerEventBus);
 
         _logger.Information("Connected device {DeviceId}", device.Id);
 
         return this;
     }
 
-    /// <summary>
-    /// Starts the controller with the default polling interval of 50ms.
-    /// </summary>
-    public void Start() => Start(TimeSpan.FromMilliseconds(50));
-
-    /// <summary>
-    /// Starts the controller with a custom polling interval.
-    /// </summary>
     public void Start(TimeSpan pollingInterval)
     {
         if (_pollTimer is not null)
@@ -67,7 +52,7 @@ public sealed class DeviceController : IDisposable
 
     private void PollTimerCallback(object? state)
     {
-        foreach (var device in _deviceRegistry.Devices)
+        foreach (var device in _deviceRegistry.DeviceInstancesInternal)
         {
             try
             {
@@ -80,9 +65,6 @@ public sealed class DeviceController : IDisposable
         }
     }
 
-    /// <summary>
-    /// Stops the controller.
-    /// </summary>
     public void Stop()
     {
         if (_pollTimer is null)

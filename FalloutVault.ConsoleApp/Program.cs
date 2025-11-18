@@ -2,40 +2,62 @@
 using FalloutVault.Devices;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
+using FalloutVault.Eventing;
+using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
+using FalloutVault.Interfaces;
 using FalloutVault.Models;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.Core;
 
 namespace FalloutVault.ConsoleApp;
 
 internal static class Program
 {
-    private static Logger _logger = null!;
+    private static ILogger _logger = null!;
 
     public static async Task Main(string[] args)
     {
-        _logger = new LoggerConfiguration()
-            .WriteTo.Console()
-            .CreateLogger();
+        // Setup services
+        var serviceCollection = new ServiceCollection();
 
-        var registry = new DeviceRegistry(_logger);
-        using var controller = new DeviceController(registry, _logger);
-        controller.MessageBus.Handler += MessageBusOnMessage;
+        var serviceProvider = AddServices(serviceCollection)
+            .BuildServiceProvider();
 
+        _logger = serviceProvider.GetRequiredService<ILogger>();
+        serviceProvider.GetRequiredService<IEventBus<DeviceMessage>>().Handler += MessageBusOnMessage;
+
+        // Add devices
+        var controller = serviceProvider.GetRequiredService<IDeviceController>();
         var devices = GetDevices();
         foreach (var device in devices)
         {
             controller.AddDevice(device);
         }
 
+        // Run
         controller.Start();
 
         await ModifyDevices(devices, TimeSpan.FromSeconds(30), TimeSpan.FromMilliseconds(250));
 
         controller.Stop();
+    }
+
+    private static IServiceCollection AddServices(IServiceCollection serviceCollection)
+    {
+        serviceCollection
+            .AddSingleton<ILogger>(provider =>
+                new LoggerConfiguration()
+                    .WriteTo.Console()
+                    .CreateLogger());
+
+        serviceCollection
+            .AddSingleton<IEventBus<DeviceMessage>, DeviceMessageEventBus>()
+            .AddSingleton<IEventBus<Watt>, PowerEventBus>()
+            .AddSingleton<IDeviceRegistry, DeviceRegistry>()
+            .AddSingleton<IDeviceController, DeviceController>();
+
+        return serviceCollection;
     }
 
     private static void MessageBusOnMessage(object? sender, DeviceMessage e)
