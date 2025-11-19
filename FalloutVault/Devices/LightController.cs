@@ -68,7 +68,21 @@ public class LightController : PoweredDevice, ILightController
 
     public override void SendCommand(DeviceCommand command)
     {
-        throw new NotImplementedException();
+        switch (command)
+        {
+            case DeviceCommand.SetOn:
+                IsOn = (bool)command.Data!;
+                break;
+            case DeviceCommand.SetLightDimmer:
+                DimmerLevel = (double)command.Data!;
+                break;
+            case DeviceCommand.TurnOnFor:
+                TurnOnFor((TimeSpan)command.Data!);
+                break;
+            case DeviceCommand.TurnOffFor:
+                TurnOffFor((TimeSpan)command.Data!);
+                break;
+        }
     }
 
     protected override Watt ComputePowerDraw()
