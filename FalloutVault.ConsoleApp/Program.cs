@@ -28,14 +28,15 @@ internal static class Program
         serviceProvider.GetRequiredService<IEventBus<DeviceMessage>>().Handler += MessageBusOnMessage;
 
         // Add devices
-        var controller = serviceProvider.GetRequiredService<IDeviceController>();
+        var registry = serviceProvider.GetRequiredService<IDeviceRegistry>();
         var devices = GetDevices();
         foreach (var device in devices)
         {
-            controller.AddDevice(device);
+            registry.RegisterDevice(device);
         }
 
         // Run
+        var controller = serviceProvider.GetRequiredService<IDeviceController>();
         controller.Start();
 
         await ModifyDevices(devices, TimeSpan.FromSeconds(30), TimeSpan.FromMilliseconds(250));

@@ -1,18 +1,10 @@
-using FalloutVault.Devices.Interfaces;
+using FalloutVault.Commands;
+using FalloutVault.Devices.Models;
 
 namespace FalloutVault.Interfaces;
 
 public interface IDeviceController
 {
-    /// <summary>
-    /// Registers a new device with the controller and the related registry.
-    /// </summary>
-    /// <param name="device">The device to register.</param>
-    /// <typeparam name="TDevice">A class that implements the <see cref="IDevice"/> interface.</typeparam>
-    /// <returns>The controller instance.</returns>
-    /// <exception cref="ArgumentException">A <paramref name="device"/> with the same name and zone was already added.</exception>
-    IDeviceController AddDevice<TDevice>(TDevice device) where TDevice : IDevice;
-
     /// <summary>
     /// Starts the controller with the default polling interval of 50ms.
     /// </summary>
@@ -27,4 +19,12 @@ public interface IDeviceController
     /// Stops the controller.
     /// </summary>
     void Stop();
+
+    /// <summary>
+    /// Sends a command to the specified device.
+    /// </summary>
+    /// <param name="targetDevice">The device to send the command to.</param>
+    /// <param name="command">The command to send.</param>
+    /// <returns>True if the command was successfully sent to the device, otherwise false.</returns>
+    bool SendCommand(DeviceId targetDevice, DeviceCommand command);
 }

@@ -1,4 +1,7 @@
+using System.Diagnostics;
+using FalloutVault.Commands;
 using FalloutVault.Devices.Interfaces;
+using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
@@ -11,30 +14,29 @@ public sealed class DeviceController : IDeviceController, IDisposable
 {
     private readonly ILogger _logger;
     private readonly IDeviceRegistry _deviceRegistry;
-
-    private Timer? _pollTimer;
-
     private readonly IEventBus<DeviceMessage> _messageBus;
     private readonly IEventBus<Watt> _powerEventBus;
+    private readonly Dictionary<DeviceId, IDevice> _devices = [];
+
+    private Timer? _pollTimer;
 
     public DeviceController(IDeviceRegistry deviceRegistry, IEventBus<DeviceMessage> messageBus, IEventBus<Watt> powerEventBus, ILogger logger)
     {
         _deviceRegistry = deviceRegistry;
-        _logger = logger;
         _messageBus = messageBus;
         _powerEventBus = powerEventBus;
+        _logger = logger;
+
+        _deviceRegistry.DeviceRegistered += DeviceRegistryOnDeviceRegistered;
     }
 
-    public IDeviceController AddDevice<TDevice>(TDevice device) where TDevice : IDevice
+    private void DeviceRegistryOnDeviceRegistered(object? sender, IDevice device)
     {
-        _deviceRegistry.RegisterDevice(device);
+        Debug.Assert(!_devices.ContainsKey(device.Id));
 
         device.SetEventBus(_messageBus);
         device.SetEventBus(_powerEventBus);
-
-        _logger.Information("Connected device {DeviceId}", device.Id);
-
-        return this;
+        _devices.Add(device.Id, device);
     }
 
     public void Start(TimeSpan pollingInterval)
@@ -52,7 +54,7 @@ public sealed class DeviceController : IDeviceController, IDisposable
 
     private void PollTimerCallback(object? state)
     {
-        foreach (var device in _deviceRegistry.DeviceInstancesInternal)
+        foreach (var device in _devices.Values)
         {
             try
             {
@@ -76,6 +78,17 @@ public sealed class DeviceController : IDeviceController, IDisposable
         _pollTimer = null;
 
         _logger.Information("Stopped controller");
+    }
+
+    public bool SendCommand(DeviceId targetDevice, DeviceCommand command)
+    {
+        if (_devices.TryGetValue(targetDevice, out var device))
+        {
+            device.SendCommand(command);
+            return true;
+        }
+
+        return false;
     }
 
     public void Dispose()

@@ -1,6 +1,6 @@
+using FalloutVault.Commands;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
-using FalloutVault.Eventing.Commands;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
 
