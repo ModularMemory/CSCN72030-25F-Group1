@@ -1,4 +1,5 @@
-﻿using FalloutVault.Devices;
+﻿using FalloutVault.Commands;
+using FalloutVault.Devices;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
 using FalloutVault.Tests.Mocks;
@@ -21,7 +22,7 @@ public class Tests
         lightController.SetEventBus(eventBus);
 
         // Act
-        lightController.IsOn = true;
+        lightController.SendCommand(new DeviceCommand.SetOn(true));
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
@@ -41,7 +42,7 @@ public class Tests
         lightController.SetEventBus(eventBus);
 
         // Act
-        lightController.IsOn = false;
+        lightController.SendCommand(new DeviceCommand.SetOn(false));
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
@@ -62,7 +63,7 @@ public class Tests
         lightController.SetEventBus(eventBus);
 
         // Act
-        lightController.DimmerLevel = 0.5;
+        lightController.SendCommand(new DeviceCommand.SetLightDimmer(0.5));
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
@@ -86,7 +87,7 @@ public class Tests
         // Act + Assert on-ness
         Assert.That(lightController.IsOn, Is.False);
 
-        lightController.TurnOnFor(onTime);
+        lightController.SendCommand(new DeviceCommand.TurnOnFor(onTime));
         Assert.That(lightController.IsOn, Is.True);
 
         Thread.Sleep(onTime);
@@ -117,7 +118,7 @@ public class Tests
         // Act + Assert on-ness
         Assert.That(lightController.IsOn, Is.True);
 
-        lightController.TurnOffFor(offTime);
+        lightController.SendCommand(new DeviceCommand.TurnOffFor(offTime));
         Assert.That(lightController.IsOn, Is.False);
 
         Thread.Sleep(offTime);
