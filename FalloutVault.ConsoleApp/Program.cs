@@ -29,7 +29,6 @@ internal static class Program
         serviceProvider.GetRequiredService<IEventBus<DeviceMessage>>().Handler += MessageBusOnMessage;
 
         // Add devices
-        var controller = serviceProvider.GetRequiredService<IDeviceController>();
         var registry = serviceProvider.GetRequiredService<IDeviceRegistry>();
         var devices = GetDevices();
         foreach (var device in devices)
@@ -38,6 +37,7 @@ internal static class Program
         }
 
         // Run
+        var controller = serviceProvider.GetRequiredService<IDeviceController>();
         controller.Start();
 
         await ModifyDevices(devices, controller, registry, TimeSpan.FromSeconds(30), TimeSpan.FromMilliseconds(250));
@@ -74,7 +74,7 @@ internal static class Program
         var sw = Stopwatch.StartNew();
 
         var deviceInfos = devices
-            .Select(x => (x.Id, registry[x.Id].deviceType, registry[x.Id].deviceCapabilities))
+            .Select(x => (x.Id, registry[x.Id].type, registry[x.Id].capabilities))
             .ToArray();
 
         while (sw.Elapsed < runTime)
@@ -86,14 +86,14 @@ internal static class Program
             var device = random.GetItems(deviceInfos, 1).First();
 
             // Modify it (capabilities)
-            if (device.deviceCapabilities.HasFlag(DeviceCapabilities.OnOff))
+            if (device.capabilities.HasFlag(DeviceCapabilities.OnOff))
             {
                 var isOn = random.Next(0, 2) == 0;
                 controller.SendCommand(device.Id, new DeviceCommand.SetOn(isOn));
             }
 
             // Modify it (type)
-            switch (device.deviceType)
+            switch (device.type)
             {
                 case DeviceType.LightController:
                     var dimmerLevel = Math.Sqrt(random.NextDouble()); // sqrt to bias towards higher dimmer levels

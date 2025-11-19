@@ -16,7 +16,6 @@ public sealed class DeviceController : IDeviceController, IDisposable
     private readonly IDeviceRegistry _deviceRegistry;
     private readonly IEventBus<DeviceMessage> _messageBus;
     private readonly IEventBus<Watt> _powerEventBus;
-    private readonly Dictionary<DeviceId, IDevice> _devices = [];
 
     private Timer? _pollTimer;
 
@@ -28,15 +27,17 @@ public sealed class DeviceController : IDeviceController, IDisposable
         _logger = logger;
 
         _deviceRegistry.DeviceRegistered += DeviceRegistryOnDeviceRegistered;
+        foreach (var device in _deviceRegistry.DeviceInstances)
+        {
+            // Ensure all devices are accounted for
+            DeviceRegistryOnDeviceRegistered(null, device);
+        }
     }
 
     private void DeviceRegistryOnDeviceRegistered(object? sender, IDevice device)
     {
-        Debug.Assert(!_devices.ContainsKey(device.Id));
-
         device.SetEventBus(_messageBus);
         device.SetEventBus(_powerEventBus);
-        _devices.Add(device.Id, device);
     }
 
     public void Start(TimeSpan pollingInterval)
@@ -54,7 +55,7 @@ public sealed class DeviceController : IDeviceController, IDisposable
 
     private void PollTimerCallback(object? state)
     {
-        foreach (var device in _devices.Values)
+        foreach (var device in _deviceRegistry.DeviceInstances)
         {
             try
             {
@@ -82,7 +83,7 @@ public sealed class DeviceController : IDeviceController, IDisposable
 
     public bool SendCommand(DeviceId targetDevice, DeviceCommand command)
     {
-        if (_devices.TryGetValue(targetDevice, out var device))
+        if (_deviceRegistry.TryGetDeviceInstance(targetDevice, out var device))
         {
             device.SendCommand(command);
             return true;

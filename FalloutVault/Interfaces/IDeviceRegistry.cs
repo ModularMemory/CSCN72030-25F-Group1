@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
 using FalloutVault.Models;
@@ -6,6 +7,11 @@ namespace FalloutVault.Interfaces;
 
 public interface IDeviceRegistry
 {
+    /// <summary>
+    /// The device instances registered in the registry.
+    /// </summary>
+    internal IEnumerable<IDevice> DeviceInstances { get; }
+
     /// <summary>
     /// Fires when a new device is added to the registry.
     /// </summary>
@@ -19,7 +25,15 @@ public interface IDeviceRegistry
     /// <summary>
     /// The <see cref="DeviceId"/>, <see cref="DeviceType"/>, and <see cref="DeviceCapabilities"/> of the devices in the registry.
     /// </summary>
-    IEnumerable<(DeviceId deviceId, DeviceType deviceType, DeviceCapabilities deviceCapabilities)> Devices { get; }
+    IEnumerable<(DeviceId id, DeviceType type, DeviceCapabilities capabilities)> Devices { get; }
+
+    /// <summary>
+    /// Tries to get the registered device by the given id.
+    /// </summary>
+    /// <param name="deviceId">The device to query for.</param>
+    /// <param name="device">The device instance.</param>
+    /// <returns>True if the device was found in the registry, otherwise false.</returns>
+    internal bool TryGetDeviceInstance(DeviceId deviceId, [NotNullWhen(true)] out IDevice? device);
 
     /// <summary>
     /// Registers a new device with the registry.
@@ -33,16 +47,16 @@ public interface IDeviceRegistry
     /// <summary>
     /// Tries to get the type and capabilities of the requested device.
     /// </summary>
-    /// <param name="deviceId">The device to query for.</param>
-    /// <param name="deviceType">The type of the device.</param>
-    /// <param name="deviceCapabilities">The capabilities of the device.</param>
+    /// <param name="id">The device to query for.</param>
+    /// <param name="type">The type of the device.</param>
+    /// <param name="capabilities">The capabilities of the device.</param>
     /// <returns>True if the device info was found in the registry, otherwise false.</returns>
-    bool TryGetDeviceInfo(DeviceId deviceId, out DeviceType deviceType, out DeviceCapabilities deviceCapabilities);
+    bool TryGetDeviceInfo(DeviceId id, out DeviceType type, out DeviceCapabilities capabilities);
 
     /// <summary>
     /// Gets the type and capabilities of a given device.
     /// </summary>
     /// <param name="deviceId">The device to search for.</param>
     /// <exception cref="KeyNotFoundException">The <paramref name="deviceId"/> is not in the registry.</exception>
-    (DeviceType deviceType, DeviceCapabilities deviceCapabilities) this[DeviceId deviceId] { get; }
+    (DeviceType type, DeviceCapabilities capabilities) this[DeviceId deviceId] { get; }
 }

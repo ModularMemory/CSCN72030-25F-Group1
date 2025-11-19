@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
 using FalloutVault.Interfaces;
@@ -9,17 +10,32 @@ namespace FalloutVault;
 public sealed class DeviceRegistry : IDeviceRegistry
 {
     private readonly ILogger _logger;
-    private readonly Dictionary<DeviceId, (IDevice device, DeviceType deviceType, DeviceCapabilities deviceCapabilities)> _devices = [];
+    private readonly Dictionary<DeviceId, (IDevice device, DeviceType type, DeviceCapabilities capabilities)> _devices = [];
+
+    public IEnumerable<IDevice> DeviceInstances => _devices.Values.Select(x => x.device);
 
     public event EventHandler<IDevice>? DeviceRegistered;
 
     public int DeviceCount => _devices.Count;
-    public IEnumerable<(DeviceId deviceId, DeviceType deviceType, DeviceCapabilities deviceCapabilities)> Devices
-        => _devices.Select(x => (x.Key, x.Value.deviceType, x.Value.deviceCapabilities));
+
+    public IEnumerable<(DeviceId id, DeviceType type, DeviceCapabilities capabilities)> Devices
+        => _devices.Select(x => (x.Key, deviceType: x.Value.type, deviceCapabilities: x.Value.capabilities));
 
     public DeviceRegistry(ILogger logger)
     {
         _logger = logger;
+    }
+
+    public bool TryGetDeviceInstance(DeviceId deviceId, [NotNullWhen(true)] out IDevice? device)
+    {
+        if (_devices.TryGetValue(deviceId, out var info))
+        {
+            device = info.device;
+            return true;
+        }
+
+        device = null;
+        return false;
     }
 
     public IDeviceRegistry RegisterDevice<TDevice>(TDevice device) where TDevice : IDevice
@@ -49,25 +65,25 @@ public sealed class DeviceRegistry : IDeviceRegistry
         return capabilities;
     }
 
-    public bool TryGetDeviceInfo(DeviceId deviceId, out DeviceType deviceType, out DeviceCapabilities deviceCapabilities)
+    public bool TryGetDeviceInfo(DeviceId id, out DeviceType type, out DeviceCapabilities capabilities)
     {
-        if (_devices.TryGetValue(deviceId, out var device))
+        if (_devices.TryGetValue(id, out var device))
         {
-            (deviceType, deviceCapabilities) = (device.deviceType, device.deviceCapabilities);
+            (type, capabilities) = (device.type, device.capabilities);
             return true;
         }
 
-        deviceType = default;
-        deviceCapabilities = default;
+        type = default;
+        capabilities = default;
         return false;
     }
 
-    public (DeviceType deviceType, DeviceCapabilities deviceCapabilities) this[DeviceId deviceId]
+    public (DeviceType type, DeviceCapabilities capabilities) this[DeviceId deviceId]
     {
         get
         {
             var device = _devices[deviceId];
-            return (device.deviceType, device.deviceCapabilities);
+            return (device.type, device.capabilities);
         }
     }
 
