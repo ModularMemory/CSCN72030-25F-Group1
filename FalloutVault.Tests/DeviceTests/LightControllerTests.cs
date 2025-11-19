@@ -7,7 +7,7 @@ using FalloutVault.Tests.Utils;
 
 namespace FalloutVault.Tests.DeviceTests;
 
-public class Tests
+public class LightControllerTests
 {
     [Test]
     public void LightController_TurnOn_PublishesLightOnMessage()
