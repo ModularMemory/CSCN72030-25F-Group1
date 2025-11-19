@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using FalloutVault.Commands;
 using FalloutVault.Devices;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
@@ -28,6 +29,7 @@ internal static class Program
         serviceProvider.GetRequiredService<IEventBus<DeviceMessage>>().Handler += MessageBusOnMessage;
 
         // Add devices
+        var controller = serviceProvider.GetRequiredService<IDeviceController>();
         var registry = serviceProvider.GetRequiredService<IDeviceRegistry>();
         var devices = GetDevices();
         foreach (var device in devices)
@@ -36,10 +38,9 @@ internal static class Program
         }
 
         // Run
-        var controller = serviceProvider.GetRequiredService<IDeviceController>();
         controller.Start();
 
-        await ModifyDevices(devices, TimeSpan.FromSeconds(30), TimeSpan.FromMilliseconds(250));
+        await ModifyDevices(devices, controller, registry, TimeSpan.FromSeconds(30), TimeSpan.FromMilliseconds(250));
 
         controller.Stop();
     }
@@ -67,35 +68,45 @@ internal static class Program
         // The @ in @Message means to JSON serialize the object rather than use .ToString()
     }
 
-    private static async Task ModifyDevices(IReadOnlyList<IDevice> devices, TimeSpan runTime, TimeSpan deviceModifyDelay)
+    private static async Task ModifyDevices(IReadOnlyList<IDevice> devices, IDeviceController controller, IDeviceRegistry registry, TimeSpan runTime, TimeSpan deviceModifyDelay)
     {
         var random = new Random(69);
         var sw = Stopwatch.StartNew();
+
+        var deviceInfos = devices
+            .Select(x => (x.Id, registry[x.Id].deviceType, registry[x.Id].deviceCapabilities))
+            .ToArray();
 
         while (sw.Elapsed < runTime)
         {
             // Sleep
             await Task.Delay(deviceModifyDelay);
 
-            // Get a random device
-            var device = random.GetItems(devices.ToArray(), 1).First();
+            // Get a device
+            var device = random.GetItems(deviceInfos, 1).First();
 
-            // Do something to it
-            switch (device)
+            // Modify it (capabilities)
+            if (device.deviceCapabilities.HasFlag(DeviceCapabilities.OnOff))
             {
-                case LightController lightController:
-                    lightController.IsOn = random.Next(0, 2) == 0;
-                    lightController.DimmerLevel = Math.Sqrt(random.NextDouble()); // sqrt to bias towards higher dimmer levels
+                var isOn = random.Next(0, 2) == 0;
+                controller.SendCommand(device.Id, new DeviceCommand.SetOn(isOn));
+            }
+
+            // Modify it (type)
+            switch (device.deviceType)
+            {
+                case DeviceType.LightController:
+                    var dimmerLevel = Math.Sqrt(random.NextDouble()); // sqrt to bias towards higher dimmer levels
+                    controller.SendCommand(device.Id, new DeviceCommand.SetLightDimmer(dimmerLevel));
                     break;
-                case FanController fanController:
-                    fanController.IsOn = random.Next(0, 2) == 0;
-                    fanController.TargetRpm = random.Next(0, 2_000);
+                case DeviceType.FanController:
+                    // TODO: Convert to a command:
+                    // fanController.TargetRpm = random.Next(0, 2_000);
                     break;
-                case SpeakerController speakerController:
-                    speakerController.IsOn = random.Next(0, 2) == 0;
+                case DeviceType.SpeakerController:
                     break;
-                case PowerController powerController:
-                    // No-op
+                case DeviceType.PowerController:
+                    // TODO:
                     break;
             }
         }
