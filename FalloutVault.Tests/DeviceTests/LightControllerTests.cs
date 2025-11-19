@@ -25,7 +25,7 @@ public class Tests
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
-        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.LightTurnedOn>());
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.LightOnChanged>());
     }
 
     [Test]
@@ -45,7 +45,8 @@ public class Tests
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
-        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.LightTurnedOff>());
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.LightOnChanged>());
+        Assert.That(eventBus.Messages[0].Data, Is.False);
     }
 
     [Test]
@@ -94,8 +95,10 @@ public class Tests
 
         // Assert event bus
         Assert.That(eventBus.Messages, Has.Count.EqualTo(2));
-        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.LightTurnedOn>());
-        Assert.That(eventBus.Messages[1], Is.TypeOf<DeviceMessage.LightTurnedOff>());
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.LightOnChanged>());
+        Assert.That(eventBus.Messages[0].Data, Is.True);
+        Assert.That(eventBus.Messages[1], Is.TypeOf<DeviceMessage.LightOnChanged>());
+        Assert.That(eventBus.Messages[1].Data, Is.False);
     }
 
     [Test]
@@ -123,7 +126,9 @@ public class Tests
 
         // Assert event bus
         Assert.That(eventBus.Messages, Has.Count.EqualTo(2));
-        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.LightTurnedOff>());
-        Assert.That(eventBus.Messages[1], Is.TypeOf<DeviceMessage.LightTurnedOn>());
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.LightOnChanged>());
+        Assert.That(eventBus.Messages[0].Data, Is.False);
+        Assert.That(eventBus.Messages[1], Is.TypeOf<DeviceMessage.LightOnChanged>());
+        Assert.That(eventBus.Messages[1].Data, Is.True);
     }
 }

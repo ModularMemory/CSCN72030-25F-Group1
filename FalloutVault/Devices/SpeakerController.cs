@@ -25,10 +25,7 @@ public class SpeakerController : PoweredDevice, ISpeakerController
         {
             if (!SetField(ref field, value)) return;
 
-            PublishMessage(field
-                ? new DeviceMessage.SpeakerTurnedOn()
-                : new DeviceMessage.SpeakerTurnedOff()
-            );
+            PublishMessage(new DeviceMessage.SpeakerOnChanged(field));
 
             PowerDraw = ComputePowerDraw();
         }

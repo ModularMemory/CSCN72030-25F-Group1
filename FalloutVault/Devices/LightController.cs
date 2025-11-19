@@ -25,10 +25,7 @@ public class LightController : PoweredDevice, ILightController
         {
             if (!SetField(ref field, value)) return;
 
-            PublishMessage(field
-                ? new DeviceMessage.LightTurnedOn()
-                : new DeviceMessage.LightTurnedOff()
-            );
+            PublishMessage(new DeviceMessage.LightOnChanged(field));
 
             PowerDraw = ComputePowerDraw();
         }
