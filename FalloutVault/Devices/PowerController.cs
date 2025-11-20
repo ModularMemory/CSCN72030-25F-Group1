@@ -49,12 +49,12 @@ public class PowerController : Device, IPowerController
         }
     }
 
-    public bool RequestPower()
+    public bool RequestPower(DeviceId deviceid, Watt watt)
     {
         throw new NotImplementedException();
     }
 
-    public bool ReleasePower()
+    public void ReleasePower(DeviceId deviceid)
     {
         throw new NotImplementedException();
     }
