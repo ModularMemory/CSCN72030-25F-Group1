@@ -1,4 +1,5 @@
-﻿using FalloutVault.Models;
+﻿using FalloutVault.Devices.Models;
+using FalloutVault.Models;
 
 namespace FalloutVault.Devices.Interfaces;
 
@@ -9,4 +10,10 @@ public interface IPowerController
     Watt StandardGeneration { get; }
 
     double Efficiency { get; }
+
+    Watt AvailablePower { get; }
+
+    bool RequestPower(DeviceId deviceId, Watt amount);
+
+    void ReleasePower(DeviceId deviceId);
 }

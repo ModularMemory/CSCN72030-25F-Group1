@@ -19,6 +19,7 @@ public class PowerController : Device, IPowerController
     public Watt StandardGeneration { get; }
 
     public Watt PowerGeneration
+
     {
         get;
         private set
@@ -39,6 +40,25 @@ public class PowerController : Device, IPowerController
             return Math.Clamp((double)(PowerGeneration / StandardGeneration), 0, 1);
         }
     }
+
+    public Watt AvailablePower
+    {
+        get
+        {
+            return new Watt(Math.Max(0, PowerGeneration.W - _totalPowerDraw.W));
+        }
+    }
+
+    public bool RequestPower()
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool ReleasePower()
+    {
+        throw new NotImplementedException();
+    }
+
 
     // Constructors
     public PowerController(DeviceId id, Watt standardGeneration)
