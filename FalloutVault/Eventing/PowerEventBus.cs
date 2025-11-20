@@ -2,12 +2,13 @@ using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Models;
+using System.Linq;
 
 namespace FalloutVault.Eventing;
 
 public sealed class PowerEventBus : IEventBus<Watt>
 {
-    private readonly Dictionary<DeviceId, Watt> _devicePowerDraws = [];
+    private readonly Dictionary<DeviceId, Watt> _devicePowerDraws = new();
 
     public event EventHandler<Watt>? Handler;
 
@@ -19,6 +20,6 @@ public sealed class PowerEventBus : IEventBus<Watt>
         _devicePowerDraws[device.Id] = data;
 
         var totalDraw = (Watt)_devicePowerDraws.Values.Sum(x => x.W);
-        Handler?.Invoke(this, totalDraw);
+        Handler?.Invoke(device, totalDraw);
     }
 }

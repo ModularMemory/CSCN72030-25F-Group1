@@ -4,6 +4,7 @@ using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
+using System.Linq;
 
 namespace FalloutVault.Devices;
 
@@ -11,22 +12,24 @@ public class PowerController : Device, IPowerController
 {
     // Fields
     private Watt _totalPowerDraw;
+    private Watt _powerGeneration;
+    private readonly Dictionary<DeviceId, Watt> _allocations = new();
+    private readonly object _allocationsLock = new();
 
     // Properties
     public override DeviceId Id { get; }
     public override DeviceType Type => DeviceType.PowerController;
 
-    public Watt StandardGeneration { get; }
+    public Watt StandardGeneration { get; } 
 
     public Watt PowerGeneration
-
     {
-        get;
+        get => _powerGeneration;
         private set
         {
-            if (!SetField(ref field, value)) return;
+            if (!SetField(ref _powerGeneration, value)) return;
 
-            PublishMessage(new DeviceMessage.PowerGenerationChanged(field));
+            PublishMessage(new DeviceMessage.PowerGenerationChanged(_powerGeneration));
         }
     }
 
@@ -45,20 +48,33 @@ public class PowerController : Device, IPowerController
     {
         get
         {
+            // available = generation - current draw
             return new Watt(Math.Max(0, PowerGeneration.W - _totalPowerDraw.W));
         }
     }
 
-    public bool RequestPower(DeviceId deviceid, Watt watt)
+    public bool RequestPower(DeviceId deviceId, Watt amount)
     {
-        throw new NotImplementedException();
+        lock (_allocationsLock)
+        {
+            var currentAllocated = _allocations.Values.Sum(x => x.W);
+            if (currentAllocated + amount.W <= PowerGeneration.W)
+            {
+                _allocations[deviceId] = amount;
+                return true;
+            }
+
+            return false;
+        }
     }
 
-    public void ReleasePower(DeviceId deviceid)
+    public void ReleasePower(DeviceId deviceId)
     {
-        throw new NotImplementedException();
+        lock (_allocationsLock)
+        {
+            _allocations.Remove(deviceId);
+        }
     }
-
 
     // Constructors
     public PowerController(DeviceId id, Watt standardGeneration)
@@ -81,8 +97,23 @@ public class PowerController : Device, IPowerController
         _totalPowerDraw = totalPowerDraw;
 
         PublishMessage(new DeviceMessage.TotalPowerDrawChanged(
-            new { TotalDraw = totalPowerDraw, Available = PowerGeneration - totalPowerDraw }
+            new { TotalDraw = totalPowerDraw, Available = new Watt(Math.Max(0, PowerGeneration.W - totalPowerDraw.W)) }
         ));
+
+        // if usage exceeds generation, forcibly shut down the device that just reported
+        if (_totalPowerDraw.W > PowerGeneration.W && sender is IDevice triggeringDevice)
+        {
+            try
+            {
+                triggeringDevice.SendCommand(new DeviceCommand.SetOn(false));
+            }
+            catch
+            {
+                //not much else i can do
+            }
+
+            ReleasePower(triggeringDevice.Id);
+        }
     }
 
     public override void Update()
@@ -92,15 +123,12 @@ public class PowerController : Device, IPowerController
 
     public override void SendCommand(DeviceCommand command)
     {
+        // todo commands: maybe shut off all power generation or adjust the max power amount
         throw new NotImplementedException();
     }
 
     private Watt ComputePowerGeneration()
     {
-        // possible: calculate power consumption from different devices
-        // possible: calculate power consumption based on datafile room data
-
-        // for now hard code for demo purposes
         return StandardGeneration;
     }
 }
