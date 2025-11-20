@@ -15,6 +15,8 @@ public class PowerController : Device, IPowerController
     private Watt _powerGeneration;
     private readonly Dictionary<DeviceId, Watt> _allocations = new();
     private readonly object _allocationsLock = new();
+    private readonly Dictionary<DeviceId, Watt> _devicePowerDraws = new();
+    private readonly object _drawsLock = new();
 
     // Properties
     public override DeviceId Id { get; }
@@ -94,10 +96,16 @@ public class PowerController : Device, IPowerController
 
     private void PowerMessageReceived(object? sender, Watt totalPowerDraw)
     {
-        _totalPowerDraw = totalPowerDraw;
+        if (sender is not IDevice device) return;
+
+        lock(_drawsLock)
+        {
+            _devicePowerDraws[device.Id] = totalPowerDraw;
+            _totalPowerDraw = new Watt(_devicePowerDraws.Values.Sum(x => x.W));
+        }
 
         PublishMessage(new DeviceMessage.TotalPowerDrawChanged(
-            new { TotalDraw = totalPowerDraw, Available = new Watt(Math.Max(0, PowerGeneration.W - totalPowerDraw.W)) }
+            new { TotalDraw = _totalPowerDraw, Available = AvailablePower }
         ));
 
         // if usage exceeds generation, forcibly shut down the device that just reported
