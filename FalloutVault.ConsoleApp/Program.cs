@@ -64,7 +64,8 @@ internal static class Program
 
     private static void MessageBusOnMessage(object? sender, DeviceMessage e)
     {
-        _logger.Information("Device message: {@Message}", e);
+        var senderString = (sender as IDevice)?.Id.ToString() ?? sender?.ToString();
+        _logger.Information("Device message from {Sender}: {@Message}", senderString, e);
         // The @ in @Message means to JSON serialize the object rather than use .ToString()
     }
 
@@ -88,14 +89,16 @@ internal static class Program
             // Modify it (capabilities)
             if (device.capabilities.HasFlag(DeviceCapabilities.OnOff))
             {
-                var isOn = random.Next(0, 2) == 0;
-                controller.SendCommand(device.Id, new DeviceCommand.SetOn(isOn));
+                // var isOn = random.Next(0, 2) == 0;
+                // controller.SendCommand(device.Id, new DeviceCommand.SetOn(isOn));
             }
 
             // Modify it (type)
             switch (device.type)
             {
                 case DeviceType.LightController:
+                    var isOn = random.Next(0, 2) == 0;
+                    controller.SendCommand(device.Id, new DeviceCommand.SetOn(isOn));
                     var dimmerLevel = Math.Sqrt(random.NextDouble()); // sqrt to bias towards higher dimmer levels
                     controller.SendCommand(device.Id, new DeviceCommand.SetLightDimmer(dimmerLevel));
                     break;
