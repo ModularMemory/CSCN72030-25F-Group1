@@ -15,7 +15,7 @@ public interface IDeviceRegistry
     /// <summary>
     /// Fires when a new device is added to the registry.
     /// </summary>
-    event EventHandler<IDevice>? DeviceRegistered;
+    internal event EventHandler<IDevice>? DeviceRegistered;
 
     /// <summary>
     /// The number of registered devices.

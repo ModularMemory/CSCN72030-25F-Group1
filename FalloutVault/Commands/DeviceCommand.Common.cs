@@ -4,24 +4,14 @@ namespace FalloutVault.Commands;
 
 public partial class DeviceCommand
 {
+    public class GetCurrentState() : DeviceCommand(null);
+
     // IOnOff
-    public class SetOn : DeviceCommand
-    {
-        public SetOn(bool data) : base(ValueBoxes.BooleanBox(data)) { }
-        public SetOn(bool data, DateTimeOffset timestamp) : base(ValueBoxes.BooleanBox(data), timestamp) { }
-    }
+    public class SetOn(bool data) : DeviceCommand(ValueBoxes.BooleanBox(data));
 
     // ITemporaryOn
-    public class TurnOnFor : DeviceCommand
-    {
-        public TurnOnFor(TimeSpan? data) : base(data) { }
-        public TurnOnFor(TimeSpan? data, DateTimeOffset timestamp) : base(data, timestamp) { }
-    }
+    public class TurnOnFor(TimeSpan? data) : DeviceCommand(data);
 
     // ITemporaryOff
-    public class TurnOffFor : DeviceCommand
-    {
-        public TurnOffFor(TimeSpan? data) : base(data) { }
-        public TurnOffFor(TimeSpan? data, DateTimeOffset timestamp) : base(data, timestamp) { }
-    }
+    public class TurnOffFor(TimeSpan? data) : DeviceCommand(data);
 }

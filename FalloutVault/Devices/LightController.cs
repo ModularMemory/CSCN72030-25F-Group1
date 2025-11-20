@@ -82,6 +82,10 @@ public class LightController : PoweredDevice, ILightController
             case DeviceCommand.TurnOffFor:
                 TurnOffFor((TimeSpan)command.Data!);
                 break;
+            case DeviceCommand.GetCurrentState:
+                PublishMessage(new DeviceMessage.LightOnChanged(IsOn));
+                PublishMessage(new DeviceMessage.DimmerLevelChanged(DimmerLevel));
+                break;
         }
     }
 
