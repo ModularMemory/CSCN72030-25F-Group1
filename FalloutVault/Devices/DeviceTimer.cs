@@ -42,4 +42,12 @@ public sealed class DeviceTimer<TState>
         _stopwatch.Restart();
         _duration = time;
     }
+
+    /// <summary>
+    /// Cancels the currently running timer.
+    /// </summary>
+    public void Cancel()
+    {
+        _isRunning = false;
+    }
 }

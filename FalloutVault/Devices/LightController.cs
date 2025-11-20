@@ -9,6 +9,7 @@ namespace FalloutVault.Devices;
 public class LightController : PoweredDevice, ILightController
 {
     // Fields
+
     private readonly DeviceTimer<bool> _deviceTimer = new();
     private readonly Lock _timerLock = new();
 
@@ -21,7 +22,7 @@ public class LightController : PoweredDevice, ILightController
     public bool IsOn
     {
         get;
-        set
+        private set
         {
             if (!SetField(ref field, value)) return;
 
@@ -34,9 +35,9 @@ public class LightController : PoweredDevice, ILightController
     public double DimmerLevel
     {
         get;
-        set
+        private set
         {
-            if (!SetField(ref field, value)) return;
+            if (!SetField(ref field, Math.Clamp(value, 0, 1))) return;
 
             PublishMessage(new DeviceMessage.DimmerLevelChanged(field));
 
@@ -71,6 +72,10 @@ public class LightController : PoweredDevice, ILightController
         switch (command)
         {
             case DeviceCommand.SetOn:
+                // Cancel the timer if the light was turned on/off manually
+                lock (_timerLock)
+                    _deviceTimer.Cancel();
+
                 IsOn = (bool)command.Data!;
                 break;
             case DeviceCommand.SetLightDimmer:

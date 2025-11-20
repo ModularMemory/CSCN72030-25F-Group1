@@ -13,10 +13,8 @@ public class LightControllerTests
     public void LightController_TurnOn_PublishesLightOnMessage()
     {
         // Arrange
-        var lightController = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)25)
-        {
-            IsOn = false,
-        };
+        var lightController = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)25);
+        lightController.SendCommand(new DeviceCommand.SetOn(false));
 
         var eventBus = new MockDeviceMessageEventBus();
         lightController.SetEventBus(eventBus);
@@ -33,10 +31,8 @@ public class LightControllerTests
     public void LightController_TurnOff_PublishesLightOffMessage()
     {
         // Arrange
-        var lightController = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)25)
-        {
-            IsOn = true,
-        };
+        var lightController = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)25);
+        lightController.SendCommand(new DeviceCommand.SetOn(true));
 
         var eventBus = new MockDeviceMessageEventBus();
         lightController.SetEventBus(eventBus);
@@ -54,10 +50,8 @@ public class LightControllerTests
     public void LightController_SetDimmer_PublishesDimmerChangedMessage()
     {
         // Arrange
-        var lightController = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)25)
-        {
-            DimmerLevel = 1.0,
-        };
+        var lightController = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)25);
+        lightController.SendCommand(new DeviceCommand.SetLightDimmer(1.0));
 
         var eventBus = new MockDeviceMessageEventBus();
         lightController.SetEventBus(eventBus);
@@ -76,10 +70,8 @@ public class LightControllerTests
     {
         // Arrange
         var onTime = TimeSpan.FromMilliseconds(10);
-        var lightController = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)25)
-        {
-            IsOn = false,
-        };
+        var lightController = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)25);
+        lightController.SendCommand(new DeviceCommand.SetOn(false));
 
         var eventBus = new MockDeviceMessageEventBus();
         lightController.SetEventBus(eventBus);
@@ -107,10 +99,8 @@ public class LightControllerTests
     {
         // Arrange
         var offTime = TimeSpan.FromMilliseconds(10);
-        var lightController = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)25)
-        {
-            IsOn = true,
-        };
+        var lightController = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)25);
+        lightController.SendCommand(new DeviceCommand.SetOn(true));
 
         var eventBus = new MockDeviceMessageEventBus();
         lightController.SetEventBus(eventBus);
