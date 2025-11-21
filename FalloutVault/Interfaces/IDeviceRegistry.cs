@@ -39,10 +39,8 @@ public interface IDeviceRegistry
     /// Registers a new device with the registry.
     /// </summary>
     /// <param name="device">The device to register.</param>
-    /// <typeparam name="TDevice">A class that implements the <see cref="IDevice"/> interface.</typeparam>
-    /// <returns>The registry instance.</returns>
-    /// <exception cref="ArgumentException">A <paramref name="device"/> with the same name and zone was already added.</exception>
-    IDeviceRegistry RegisterDevice<TDevice>(TDevice device) where TDevice : IDevice;
+    /// <exception cref="ArgumentException">A <paramref name="device"/> with the same <see cref="IDevice.Id"/> was already added.</exception>
+    IDeviceRegistry RegisterDevice(IDevice device);
 
     /// <summary>
     /// Tries to get the type and capabilities of the requested device.
