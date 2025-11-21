@@ -30,17 +30,13 @@ internal static class Program
 
         // Add devices
         var registry = serviceProvider.GetRequiredService<IDeviceRegistry>();
-        var devices = GetDevices();
-        foreach (var device in devices)
-        {
-            registry.RegisterDevice(device);
-        }
+        AddDevices(registry);
 
         // Run
         var controller = serviceProvider.GetRequiredService<IDeviceController>();
         controller.Start();
 
-        await ModifyDevices(devices, controller, registry, TimeSpan.FromSeconds(30), TimeSpan.FromMilliseconds(250));
+        await ModifyDevices(controller, registry, TimeSpan.FromSeconds(30), TimeSpan.FromMilliseconds(250));
 
         controller.Stop();
     }
@@ -69,13 +65,13 @@ internal static class Program
         // The @ in @Message means to JSON serialize the object rather than use .ToString()
     }
 
-    private static async Task ModifyDevices(IReadOnlyList<IDevice> devices, IDeviceController controller, IDeviceRegistry registry, TimeSpan runTime, TimeSpan deviceModifyDelay)
+    private static async Task ModifyDevices(IDeviceController controller, IDeviceRegistry registry, TimeSpan runTime, TimeSpan deviceModifyDelay)
     {
         var random = new Random(69);
         var sw = Stopwatch.StartNew();
 
-        var deviceInfos = devices
-            .Select(x => (x.Id, registry[x.Id].type, registry[x.Id].capabilities))
+        var deviceInfos = registry.Devices
+            .Select(x => (x.id, registry[x.id].type, registry[x.id].capabilities))
             .ToArray();
 
         while (sw.Elapsed < runTime)
@@ -90,7 +86,7 @@ internal static class Program
             if (device.capabilities.HasFlag(DeviceCapabilities.OnOff))
             {
                 // var isOn = random.Next(0, 2) == 0;
-                // controller.SendCommand(device.Id, new DeviceCommand.SetOn(isOn));
+                // controller.SendCommand(device.id, new DeviceCommand.SetOn(isOn));
             }
 
             // Modify it (type)
@@ -98,9 +94,9 @@ internal static class Program
             {
                 case DeviceType.LightController:
                     var isOn = random.Next(0, 2) == 0;
-                    controller.SendCommand(device.Id, new DeviceCommand.SetOn(isOn));
+                    controller.SendCommand(device.id, new DeviceCommand.SetOn(isOn));
                     var dimmerLevel = Math.Sqrt(random.NextDouble()); // sqrt to bias towards higher dimmer levels
-                    controller.SendCommand(device.Id, new DeviceCommand.SetLightDimmer(dimmerLevel));
+                    controller.SendCommand(device.id, new DeviceCommand.SetLightDimmer(dimmerLevel));
                     break;
                 case DeviceType.FanController:
                     // TODO: Convert to a command:
@@ -115,9 +111,9 @@ internal static class Program
         }
     }
 
-    private static IReadOnlyList<IDevice> GetDevices()
+    private static void AddDevices(IDeviceRegistry registry)
     {
-        return
+        IEnumerable<IDevice> devices =
         [
             // Lights
             new LightController(new DeviceId("Light-1", "East Hall"), (Watt)50),
@@ -137,5 +133,10 @@ internal static class Program
             // Power Controller
             new PowerController(new DeviceId("Central-Reactor", "Generator Room"), (Watt)1_000)
         ];
+
+        foreach (var device in devices)
+        {
+            registry.RegisterDevice(device);
+        }
     }
 }
