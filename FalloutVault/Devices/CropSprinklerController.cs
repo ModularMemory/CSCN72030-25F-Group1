@@ -1,4 +1,5 @@
-﻿using FalloutVault.Devices.Interfaces;
+﻿using FalloutVault.Commands;
+using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
 using FalloutVault.Models;
 
@@ -12,7 +13,7 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
 
     private int _TargetLitres;
 
-    private double _MinutesOn;
+    private TimeSpan _TimeSpanOn;
 
 
     public override DeviceId Id { get; }
@@ -35,18 +36,35 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
         set => _TargetLitres = value;
     }
 
-    public double MinutesOn
+    public TimeSpan TimeSpanOn
     {
-        get => _MinutesOn;
+        get => _TimeSpanOn;
 
-        set => _MinutesOn = _TargetSection * _TargetLitres;
+        set => _TimeSpanOn = value;
     }
-
 
 
     public CropSprinklerController(DeviceId id)
     {
         Id = id;
+    }
+
+    protected override Watt ComputePowerDraw()
+    {
+        if (!IsOn)
+            return Watt.Zero;
+            
+        return (Watt)50;
+    }
+
+    public override void Update()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void SendCommand(DeviceCommand command)
+    {
+        throw new NotImplementedException();
     }
 }
 
