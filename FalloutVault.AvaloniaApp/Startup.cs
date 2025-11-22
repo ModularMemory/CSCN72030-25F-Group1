@@ -1,4 +1,5 @@
 using FalloutVault.AvaloniaApp.ViewModels;
+using FalloutVault.AvaloniaApp.Views;
 using FalloutVault.Eventing;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
@@ -25,15 +26,40 @@ public static class Startup
             .AddSingleton<IEventBus<DeviceMessage>, DeviceMessageEventBus>()
             .AddSingleton<IEventBus<Watt>, PowerEventBus>()
             .AddSingleton<IDeviceController, DeviceController>()
-            .AddSingleton<IDeviceRegistry, DeviceRegistry>();
+            .AddSingleton<IDeviceRegistry, DeviceRegistry>()
+            .AddSingleton<MainWindow>();
+
 
         return services;
+
+
     }
 
     private static IServiceCollection AddViewModels(IServiceCollection services)
     {
         services
             .AddTransient<MainWindowViewModel>();
+
+        services
+            .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.LightController)
+            .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.FanController)
+            .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.SpeakerController)
+            .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.PowerController)
+            .AddSingleton<DeviceViewModelFactory>(ctx =>
+            {
+                var vms = Enum.GetValues<DeviceType>()
+                    .Where(x => x != DeviceType.Unknown)
+                    .Select(type => (type, ctx.GetRequiredKeyedService<IDeviceViewModel>(type)));
+
+                var dict = new Dictionary<DeviceType, Func<IDeviceViewModel>>();
+
+                foreach (var (type, vm) in vms)
+                {
+                    dict.Add(type, () => ctx.GetRequiredKeyedService<IDeviceViewModel>(type));
+                }
+
+                return new DeviceViewModelFactory(dict);
+            });
 
         return services;
     }

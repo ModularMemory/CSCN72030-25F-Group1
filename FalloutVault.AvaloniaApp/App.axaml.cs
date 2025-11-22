@@ -10,9 +10,13 @@ using FalloutVault.AvaloniaApp.Views;
 using FalloutVault.Devices;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
+using FalloutVault.Eventing.Interfaces;
+using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
 using FalloutVault.Models;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using Serilog.Core;
 
 namespace FalloutVault.AvaloniaApp;
 
@@ -23,13 +27,21 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
     }
 
+    private static ILogger _logger = null!;
+    private static void MessageBusOnMessage(object? sender, DeviceMessage e)
+    {
 
+        var senderString = (sender as IDevice)?.Id.ToString() ?? sender?.ToString();
+        _logger.Information("Device message from {Sender}: {@Message}", senderString, e);
+        // The @ in @Message means to JSON serialize the object rather than use .ToString()
+    }
     public override void OnFrameworkInitializationCompleted()
     {
         var services = new ServiceCollection();
         var serviceProvider = Startup.ConfigureServices(services)
             .BuildServiceProvider();
-
+        _logger = serviceProvider.GetRequiredService<ILogger>();
+        serviceProvider.GetRequiredService<IEventBus<DeviceMessage>>().Handler += MessageBusOnMessage;
         AddDevices(serviceProvider.GetService<IDeviceRegistry>()!);
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -37,10 +49,10 @@ public partial class App : Application
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit.
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = serviceProvider.GetRequiredService<MainWindowViewModel>(),
-            };
+            desktop.MainWindow = serviceProvider.GetRequiredService<MainWindow>();
+
+            desktop.MainWindow.DataContext = serviceProvider.GetRequiredService<MainWindowViewModel>();
+
         }
 
 

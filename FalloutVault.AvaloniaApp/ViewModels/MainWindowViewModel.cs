@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FalloutVault.Devices.Models;
 using FalloutVault.Interfaces;
 using FalloutVault.Models;
@@ -13,17 +14,15 @@ public partial class MainWindowViewModel : ViewModelBase
     public string LeftTitle { get; } = "Rooms";
     public string RightTitle { get; } = "Devices";
 
-    public ObservableCollection<MyModel> Devices { get; } = new();
+    public ObservableCollection<IDeviceViewModel> Devices { get; } = new();
 
-    public MainWindowViewModel(IDeviceRegistry deviceRegistry)
+    public MainWindowViewModel(IDeviceRegistry deviceRegistry, DeviceViewModelFactory deviceViewModelFactory)
     {
         foreach (var (id, type, capabilities) in deviceRegistry.Devices)
         {
-            Devices.Add(new MyModel(id, type));
+            Devices.Add(deviceViewModelFactory.Create(type, id));
         }
-
     }
-
 }
 
 // Source - https://stackoverflow.com/a
@@ -33,26 +32,15 @@ public partial class MainWindowViewModel : ViewModelBase
 public class MyTemplateSelector : IDataTemplate
 {
     [Content]
-    public Dictionary<DeviceType, IDataTemplate> Templates {get;} = new();
+    public Dictionary<DeviceType, IDataTemplate> Templates { get; } = new();
 
     public Control Build(object? data)
     {
-        return Templates[((MyModel) data).Value].Build(data);
+        return Templates[((DeviceViewModel)data).Type].Build(data);
     }
 
     public bool Match(object? data)
     {
-        return data is MyModel;
+        return data is DeviceViewModel;
     }
-}
-
-public class MyModel
-{
-    public MyModel(DeviceId id, DeviceType text)
-    {
-        Id = id;
-        Value = text;
-    }
-    public DeviceId Id { get; }
-    public DeviceType Value { get; }
 }
