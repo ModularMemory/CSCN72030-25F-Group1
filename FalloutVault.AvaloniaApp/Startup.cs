@@ -43,7 +43,7 @@ public static class Startup
         services
             .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.LightController)
             .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.FanController)
-            .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.SpeakerController)
+            .AddKeyedTransient<IDeviceViewModel, SpeakerControllerViewModel>(DeviceType.SpeakerController)
             .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.PowerController)
             .AddSingleton<DeviceViewModelFactory>(ctx =>
             {

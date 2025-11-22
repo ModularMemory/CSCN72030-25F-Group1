@@ -6,9 +6,9 @@ using FalloutVault.Interfaces;
 
 namespace FalloutVault.AvaloniaApp.ViewModels;
 
-public partial class LightControllerViewModel : DeviceViewModel, IOnOff
+public partial class SpeakerControllerViewModel : DeviceViewModel, IOnOff
 {
-    public LightControllerViewModel(
+    public SpeakerControllerViewModel(
         IDeviceController deviceController,
         IEventBus<DeviceMessage> messageBus)
         : base(deviceController, messageBus) { }
@@ -17,10 +17,10 @@ public partial class LightControllerViewModel : DeviceViewModel, IOnOff
     private bool _isOn;
 
     [ObservableProperty]
-    private string _buttonOnText = "Turn Light On";
+    private string _buttonOnText = "Turn Speaker On";
 
     [ObservableProperty]
-    private double _dimmer;
+    private double _volume;
 
     protected override void OnDeviceMessage(object? sender, DeviceMessage message)
     {
@@ -32,11 +32,11 @@ public partial class LightControllerViewModel : DeviceViewModel, IOnOff
             case DeviceMessage.DeviceOnChanged:
                 IsOn = (bool)message.Data!;
                 ButtonOnText = IsOn
-                    ? "Turn Light Off"
-                    : "Turn Light On";
+                    ? "Turn Speaker Off"
+                    : "Turn Speaker On";
                 break;
-            case DeviceMessage.DimmerLevelChanged:
-                Dimmer = (double)message.Data! * 100;
+            case DeviceMessage.VolumeLevelChanged:
+                Volume = (double)message.Data! * 100;
                 break;
         }
     }

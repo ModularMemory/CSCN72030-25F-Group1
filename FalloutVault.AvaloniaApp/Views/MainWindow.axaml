@@ -39,7 +39,8 @@
             </Grid>
 
             <Grid Grid.Column="1" RowDefinitions="Auto, *">
-                <TextBlock Grid.Row="0" Text="{Binding RightTitle}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <TextBlock Grid.Row="0" Text="{Binding RightTitle}" HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
 
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible">
                     <ItemsControl ItemsSource="{Binding Devices}">
@@ -63,34 +64,46 @@
                                         <StackPanel
                                             Orientation="Horizontal"
                                             Spacing="10">
-                                            <TextBlock
-                                                Text="{Binding Id}"
-                                                Foreground="Black"
+                                            <StackPanel
+                                                Orientation="Vertical"
                                                 HorizontalAlignment="Left"
-                                                VerticalAlignment="Center" />
+                                                Spacing="2">
+
+                                                <TextBlock
+                                                    Text="{Binding Id}"
+                                                    Foreground="Black"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center" />
+                                                <TextBlock
+                                                    Text="Light"
+                                                    Foreground="Black"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center" />
+
+                                            </StackPanel>
                                             <Button
                                                 Click="Button_OnClick"
-                                                Content="Turn On/Off"
+                                                Content="{Binding ButtonOnText}"
                                                 Foreground="Black" />
                                             <Border
                                                 Background="#20ffffff"
                                                 CornerRadius="5"
                                                 Padding="10, 0">
 
-                                            <StackPanel
-                                                Orientation="Vertical"
+                                                <StackPanel
+                                                    Orientation="Vertical"
 
-                                                VerticalAlignment="Center">
-                                                <TextBlock
-                                                    Text="{Binding Dimmer, StringFormat={}Dimmer\: {0:N0}\%}"
-                                                    HorizontalAlignment="Center"
-                                                    Foreground="Black"/>
-                                                <Slider Width="100"
-                                                        Minimum="0"
-                                                        Maximum="100"
-                                                        ValueChanged="SliderDimmer_OnValueChanged"
-                                                        Value="{Binding Dimmer}" />
-                                            </StackPanel>
+                                                    VerticalAlignment="Center">
+                                                    <TextBlock
+                                                        Text="{Binding Dimmer, StringFormat={}Dimmer\: {0:N0}\%}"
+                                                        HorizontalAlignment="Center"
+                                                        Foreground="Black" />
+                                                    <Slider Width="100"
+                                                            Minimum="0"
+                                                            Maximum="100"
+                                                            ValueChanged="SliderDimmer_OnValueChanged"
+                                                            Value="{Binding Dimmer}" />
+                                                </StackPanel>
                                             </Border>
                                         </StackPanel>
                                     </Border>
@@ -108,11 +121,23 @@
                                         <StackPanel
                                             Orientation="Horizontal"
                                             Spacing="10">
-                                            <TextBlock
-                                                Text="{Binding Id}"
-                                                Foreground="Black"
+                                            <StackPanel
+                                                Orientation="Vertical"
                                                 HorizontalAlignment="Left"
-                                                VerticalAlignment="Center" />
+                                                Spacing="2">
+
+                                                <TextBlock
+                                                    Text="{Binding Id}"
+                                                    Foreground="Black"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center" />
+                                                <TextBlock
+                                                    Text="Fan"
+                                                    Foreground="Black"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center" />
+
+                                            </StackPanel>
                                             <Button
                                                 Content="Turn On/Off"
                                                 Foreground="Black" />
@@ -132,11 +157,23 @@
                                         <StackPanel
                                             Orientation="Horizontal"
                                             Spacing="10">
-                                            <TextBlock
-                                                Text="{Binding Id}"
-                                                Foreground="Black"
+                                            <StackPanel
+                                                Orientation="Vertical"
                                                 HorizontalAlignment="Left"
-                                                VerticalAlignment="Center" />
+                                                Spacing="2">
+
+                                                <TextBlock
+                                                    Text="{Binding Id}"
+                                                    Foreground="Black"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center" />
+                                                <TextBlock
+                                                    Text="Generator"
+                                                    Foreground="Black"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center" />
+                                            
+                                            </StackPanel>
                                             <Button
                                                 Content="Turn On/Off"
                                                 Foreground="Black" />
@@ -144,26 +181,59 @@
                                     </Border>
                                 </DataTemplate>
                                 <DataTemplate x:Key="SpeakerController"
-                                              x:DataType="vm:DeviceViewModel">
+                                              x:DataType="vm:SpeakerControllerViewModel">
                                     <Border
-                                        Height="40"
                                         BorderBrush="DarkRed"
                                         BorderThickness="2"
-                                        Background="Brown"
+                                        Background="SteelBlue"
                                         CornerRadius="5"
-                                        Padding="10, 0">
+                                        Padding="10, 0"
+                                        Height="100">
 
                                         <StackPanel
                                             Orientation="Horizontal"
                                             Spacing="10">
-                                            <TextBlock
-                                                Text="{Binding Id}"
-                                                Foreground="Black"
+                                            <StackPanel
+                                                Orientation="Vertical"
                                                 HorizontalAlignment="Left"
-                                                VerticalAlignment="Center" />
+                                                Spacing="2">
+
+                                                <TextBlock
+                                                    Text="{Binding Id}"
+                                                    Foreground="Black"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center" />
+                                                <TextBlock
+                                                    Text="Speaker"
+                                                    Foreground="Black"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center" />
+
+                                            </StackPanel>
                                             <Button
-                                                Content="Turn On/Off"
+                                                Click="Button_OnClick"
+                                                Content="{Binding ButtonOnText}"
                                                 Foreground="Black" />
+                                            <Border
+                                                Background="#20ffffff"
+                                                CornerRadius="5"
+                                                Padding="10, 0">
+
+                                                <StackPanel
+                                                    Orientation="Vertical"
+
+                                                    VerticalAlignment="Center">
+                                                    <TextBlock
+                                                        Text="{Binding Volume, StringFormat={}Volume\: {0:N0}\%}"
+                                                        HorizontalAlignment="Center"
+                                                        Foreground="Black" />
+                                                    <Slider Width="100"
+                                                            Minimum="0"
+                                                            Maximum="100"
+                                                            ValueChanged="SliderDimmer_OnValueChanged"
+                                                            Value="{Binding Volume}" />
+                                                </StackPanel>
+                                            </Border>
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>
