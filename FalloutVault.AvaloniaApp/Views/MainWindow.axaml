@@ -15,47 +15,142 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <ScrollViewer>
-        <Border
-            BorderBrush="Brown"
-            BorderThickness="2"
-            CornerRadius="10"
-            Margin="10">
-            <Grid
-                RowDefinitions="250,*"
-                Margin="10">
+    <Border
+        BorderBrush="Brown"
+        BorderThickness="2"
+        CornerRadius="5"
+        Background="DimGray"
+        Margin="10">
+        <Grid
+            ColumnDefinitions="250,*"
+            Margin="10"
+            ColumnSpacing="10">
 
-                <StackPanel Grid.Row="0" Orientation="Vertical">
-                    <TextBlock Text="{Binding LeftTitle}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <Grid Grid.Column="0" RowDefinitions="Auto, *">
+                <TextBlock Grid.Row="0" Text="{Binding LeftTitle}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+                <ScrollViewer Grid.Row="1">
+                    <StackPanel Orientation="Vertical" Spacing="5">
 
-                </StackPanel>
-                <StackPanel Grid.Row="1" Orientation="Vertical">
-                    <TextBlock Text="{Binding RightTitle}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-
-                    <Border
-                        Height="40"
-                        BorderBrush="Red"
-                        BorderThickness="2"
-                        Background="DarkRed"
-                        CornerRadius="20"
-                        Padding="10, 0">
-
-                        <StackPanel
-                            Orientation="Horizontal"
-                            Spacing="10">
-                            <TextBlock
-                                Text="Device 1"
-                                Foreground="White"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center" />
-                            <Button
-                                Content="Turn On/Off"
-                                Foreground="White" />
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
             </Grid>
-        </Border>
-    </ScrollViewer>
 
+            <Grid Grid.Column="1" RowDefinitions="Auto, *">
+                <TextBlock Grid.Row="0" Text="{Binding RightTitle}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible">
+                    <ItemsControl ItemsSource="{Binding Devices}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Spacing="3" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.DataTemplates>
+                            <vm:MyTemplateSelector>
+                                <DataTemplate x:Key="LightController"
+                                              x:DataType="vm:MyModel">
+                                    <Border
+                                        Height="40"
+                                        BorderBrush="DarkRed"
+                                        BorderThickness="2"
+                                        Background="Brown"
+                                        CornerRadius="5"
+                                        Padding="10, 0">
+
+                                        <StackPanel
+                                            Orientation="Horizontal"
+                                            Spacing="10">
+                                            <TextBlock
+                                                Text="{Binding Id}"
+                                                Foreground="Black"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center" />
+                                            <Button
+                                                Content="Turn On/Off"
+                                                Foreground="Black" />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                                <DataTemplate x:Key="FanController"
+                                              x:DataType="vm:MyModel">
+                                    <Border
+                                        Height="40"
+                                        BorderBrush="DarkRed"
+                                        BorderThickness="2"
+                                        Background="Brown"
+                                        CornerRadius="5"
+                                        Padding="10, 0">
+
+                                        <StackPanel
+                                            Orientation="Horizontal"
+                                            Spacing="10">
+                                            <TextBlock
+                                                Text="{Binding Id}"
+                                                Foreground="Black"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center" />
+                                            <Button
+                                                Content="Turn On/Off"
+                                                Foreground="Black" />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                                <DataTemplate x:Key="PowerController"
+                                              x:DataType="vm:MyModel">
+                                    <Border
+                                        Height="40"
+                                        BorderBrush="DarkRed"
+                                        BorderThickness="2"
+                                        Background="Brown"
+                                        CornerRadius="5"
+                                        Padding="10, 0">
+
+                                        <StackPanel
+                                            Orientation="Horizontal"
+                                            Spacing="10">
+                                            <TextBlock
+                                                Text="{Binding Id}"
+                                                Foreground="Black"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center" />
+                                            <Button
+                                                Content="Turn On/Off"
+                                                Foreground="Black" />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                                <DataTemplate x:Key="SpeakerController"
+                                              x:DataType="vm:MyModel">
+                                    <Border
+                                        Height="40"
+                                        BorderBrush="DarkRed"
+                                        BorderThickness="2"
+                                        Background="Brown"
+                                        CornerRadius="5"
+                                        Padding="10, 0">
+
+                                        <StackPanel
+                                            Orientation="Horizontal"
+                                            Spacing="10">
+                                            <TextBlock
+                                                Text="{Binding Id}"
+                                                Foreground="Black"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center" />
+                                            <Button
+                                                Content="Turn On/Off"
+                                                Foreground="Black" />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </vm:MyTemplateSelector>
+                        </ItemsControl.DataTemplates>
+                    </ItemsControl>
+
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </Border>
 </Window>
