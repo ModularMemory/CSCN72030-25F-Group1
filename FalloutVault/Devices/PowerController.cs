@@ -21,7 +21,7 @@ public class PowerController : Device, IPowerController
     // Properties
     public override DeviceId Id { get; }
     public override DeviceType Type => DeviceType.PowerController;
-
+    public bool LastRequestResult { get; private set; }
     public Watt StandardGeneration { get; } 
 
     public Watt PowerGeneration
@@ -55,7 +55,7 @@ public class PowerController : Device, IPowerController
         }
     }
 
-    public bool RequestPower(DeviceId deviceId, Watt amount)
+    private bool RequestPower(DeviceId deviceId, Watt amount)
     {
         lock (_allocationsLock)
         {
@@ -70,7 +70,7 @@ public class PowerController : Device, IPowerController
         }
     }
 
-    public void ReleasePower(DeviceId deviceId)
+    private void ReleasePower(DeviceId deviceId)
     {
         lock (_allocationsLock)
         {
@@ -131,8 +131,15 @@ public class PowerController : Device, IPowerController
 
     public override void SendCommand(DeviceCommand command)
     {
-        // todo commands: maybe shut off all power generation or adjust the max power amount
-        throw new NotImplementedException();
+        switch (command)
+        {
+            case DeviceCommand.RequestPower req:
+                LastRequestResult = RequestPower(req.DeviceId, req.Amount);
+                break;
+            case DeviceCommand.ReleasePower rel:
+                ReleasePower(rel.DeviceId);
+                break;
+        }
     }
 
     private Watt ComputePowerGeneration()

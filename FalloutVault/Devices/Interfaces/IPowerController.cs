@@ -12,8 +12,4 @@ public interface IPowerController
     double Efficiency { get; }
 
     Watt AvailablePower { get; }
-
-    bool RequestPower(DeviceId deviceId, Watt amount);
-
-    void ReleasePower(DeviceId deviceId);
 }
