@@ -12,55 +12,45 @@ public class PowerControllerTests
     [Test]
     public void PowerController_RequestPower_ApprovesWhenPowerAvailable()
     {
-        // Arrange
         var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), new Watt(1000));
         var deviceId = DeviceIdGenerator.GetRandomDeviceId();
 
-        // Act
-        var result = powerController.RequestPower(deviceId, new Watt(500));
+        powerController.SendCommand(new DeviceCommand.RequestPower(deviceId, new Watt(500)));
 
-        // Assert
-        Assert.That(result, Is.True);
+        Assert.That(powerController.LastRequestResult, Is.True);
     }
 
     [Test]
     public void PowerController_RequestPower_DeniesWhenPowerNotAvailable()
     {
-        // Arrange
         var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), new Watt(1000));
         var device1 = DeviceIdGenerator.GetRandomDeviceId();
         var device2 = DeviceIdGenerator.GetRandomDeviceId();
 
-        // Act
-        powerController.RequestPower(device1, new Watt(800));
-        var result = powerController.RequestPower(device2, new Watt(300));
+        powerController.SendCommand(new DeviceCommand.RequestPower(device1, new Watt(800)));
+        powerController.SendCommand(new DeviceCommand.RequestPower(device2, new Watt(300)));
 
-        // Assert
-        Assert.That(result, Is.False);
+        Assert.That(powerController.LastRequestResult, Is.False);
     }
 
     [Test]
     public void PowerController_ReleasePower_FreesAllocatedPower()
     {
-        // Arrange
         var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), new Watt(1000));
         var device1 = DeviceIdGenerator.GetRandomDeviceId();
         var device2 = DeviceIdGenerator.GetRandomDeviceId();
 
-        powerController.RequestPower(device1, new Watt(800));
+        powerController.SendCommand(new DeviceCommand.RequestPower(device1, new Watt(800)));
 
-        // Act
-        powerController.ReleasePower(device1);
-        var result = powerController.RequestPower(device2, new Watt(800));
+        powerController.SendCommand(new DeviceCommand.ReleasePower(device1));
+        powerController.SendCommand(new DeviceCommand.RequestPower(device2, new Watt(800)));
 
-        // Assert
-        Assert.That(result, Is.True);
+        Assert.That(powerController.LastRequestResult, Is.True);
     }
 
     [Test]
     public void PowerController_ReceivePowerDraw_PublishesTotalPowerDrawChangedMessage()
     {
-        // Arrange
         var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), new Watt(1000));
         var lightController = new LightController(DeviceIdGenerator.GetRandomDeviceId(), new Watt(100));
 
@@ -71,10 +61,8 @@ public class PowerControllerTests
         var eventBus = new MockDeviceMessageEventBus();
         powerController.SetEventBus(eventBus);
 
-        // Act
         lightController.SendCommand(new DeviceCommand.SetOn(true));
 
-        // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
         Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.TotalPowerDrawChanged>());
     }
