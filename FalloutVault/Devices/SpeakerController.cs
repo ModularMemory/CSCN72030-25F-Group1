@@ -31,12 +31,26 @@ public class SpeakerController : PoweredDevice, ISpeakerController
         }
     }
 
+    public double Volume
+    {
+        get;
+        set
+        {
+            if (!SetField(ref field, value)) return;
+
+            PublishMessage(new DeviceMessage.VolumeLevelChanged(field));
+
+            PowerDraw = ComputePowerDraw();
+        }
+    }
+
     // Constructors
 
     public SpeakerController(DeviceId id, Watt speakerWattage)
     {
         Id = id;
         SpeakerWattage = speakerWattage;
+        Volume = 1;
     }
 
     // Methods
@@ -54,7 +68,30 @@ public class SpeakerController : PoweredDevice, ISpeakerController
 
     public override void SendCommand(DeviceCommand command)
     {
-        throw new NotImplementedException();
+        switch(command)
+        {
+            case DeviceCommand.SetOn:
+                lock (_timerLock)
+                {
+                    _deviceTimer.Cancel();
+                }
+
+                IsOn = (bool)command.Data!;
+                break;
+            case DeviceCommand.TurnOnFor:
+                TurnOnFor((TimeSpan)command.Data!);
+                break;
+            case DeviceCommand.TurnOffFor:
+                TurnOffFor((TimeSpan)command.Data!);
+                break;
+            case DeviceCommand.SetSpeakerVolume:
+                Volume = (double)command.Data!;
+                break;
+            case DeviceCommand.GetCurrentState:
+                PublishMessage(new DeviceMessage.SpeakerOnChanged(IsOn));
+                PublishMessage(new DeviceMessage.VolumeLevelChanged(Volume));
+                break;
+        }
     }
 
     protected override Watt ComputePowerDraw()
@@ -64,7 +101,7 @@ public class SpeakerController : PoweredDevice, ISpeakerController
             return Watt.Zero;
         }
 
-        return SpeakerWattage;
+        return SpeakerWattage * Volume;
     }
 
     public void TurnOnFor(TimeSpan time)
