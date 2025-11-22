@@ -4,6 +4,6 @@ namespace FalloutVault.Devices.Interfaces;
 
 public interface ISpeakerController : IOnOff, ITemporaryOn, ITemporaryOff
 {
-    [Range(0, 100)]
+    [Range(0, 1)]
     double Volume { get; set; }
 }

@@ -50,7 +50,7 @@ public class SpeakerController : PoweredDevice, ISpeakerController
     {
         Id = id;
         SpeakerWattage = speakerWattage;
-        Volume = 50;
+        Volume = 1;
     }
 
     // Methods
@@ -71,6 +71,11 @@ public class SpeakerController : PoweredDevice, ISpeakerController
         switch(command)
         {
             case DeviceCommand.SetOn:
+                lock (_timerLock)
+                {
+                    _deviceTimer.Cancel();
+                }
+
                 IsOn = (bool)command.Data!;
                 break;
             case DeviceCommand.TurnOnFor:
@@ -82,6 +87,10 @@ public class SpeakerController : PoweredDevice, ISpeakerController
             case DeviceCommand.SetSpeakerVolume:
                 Volume = (double)command.Data!;
                 break;
+            case DeviceCommand.GetCurrentState:
+                PublishMessage(new DeviceMessage.SpeakerOnChanged(IsOn));
+                PublishMessage(new DeviceMessage.VolumeLevelChanged(Volume));
+                break;
         }
     }
 
@@ -92,7 +101,7 @@ public class SpeakerController : PoweredDevice, ISpeakerController
             return Watt.Zero;
         }
 
-        return SpeakerWattage * (Volume / 10);
+        return SpeakerWattage * Volume;
     }
 
     public void TurnOnFor(TimeSpan time)
