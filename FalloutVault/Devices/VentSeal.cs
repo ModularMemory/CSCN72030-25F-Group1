@@ -37,7 +37,7 @@ public class VentSealController : PoweredDevice, IVentSealController
         set
         {
             if (LockState == true) {
-                set => _IsOpen = _IsOpen;
+                set => _IsOpen = _IsOpen; //redundant placeholder
             }
             else
             {

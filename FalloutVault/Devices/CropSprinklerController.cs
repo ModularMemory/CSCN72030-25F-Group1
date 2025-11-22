@@ -38,8 +38,6 @@ public class CropController : PoweredDevice, ICropSprinklerController
 
     public double MinutesOn
     {
-        get => _TargetSection;
-        get => _TargetLitres;
         get => _MinutesOn;
 
         set => _MinutesOn = _TargetSection * _TargetLitres;
