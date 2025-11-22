@@ -8,8 +8,6 @@ namespace FalloutVault.Eventing;
 
 public sealed class PowerEventBus : IEventBus<Watt>
 {
-    private readonly Dictionary<DeviceId, Watt> _devicePowerDraws = new();
-
     public event EventHandler<Watt>? Handler;
 
     public void Publish(object sender, Watt data)
