@@ -1,11 +1,10 @@
 ﻿using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
-using FalloutVault.Eventing.Commands;
 using FalloutVault.Models;
 
 namespace FalloutVault.Devices;
 
-public class CropController : PoweredDevice, ICropSprinklerController
+public class CropSprinklerController : PoweredDevice, ICropSprinklerController
 {
     private bool _IsOn;
 

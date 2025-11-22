@@ -17,4 +17,11 @@ public partial class DeviceMessage
 
         public override string Message => "Vent Lock state changed";
     }
+    public class VentSectionChanged : DeviceMessage
+    {
+        public VentSectionChanged(double data) : base(data) { }
+        public VentSectionChanged(double data, DateTimeOffset timestamp) : base(data, timestamp) { }
+
+        public override string Message => "Vent Target Section changed";
+    }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FalloutVault.Devices.Interfaces
 {
-    internal class IVentSeal
+    internal class IVentSealController
     {
         int _Section { get; set; }
         bool _IsOpen { get; set; }
