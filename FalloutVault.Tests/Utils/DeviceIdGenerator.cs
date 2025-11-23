@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using FalloutVault.Devices.Models;
 
 namespace FalloutVault.Tests.Utils;
@@ -6,7 +7,10 @@ public static class DeviceIdGenerator
 {
     private static readonly char[] NameChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-".ToArray();
 
-    public static DeviceId GetRandomDeviceId(int seed = 0)
+    public static DeviceId GetRandomDeviceId([CallerMemberName] string callerName = "", [CallerLineNumber] int callerLineNumber = 0)
+        => GetRandomDeviceId(HashCode.Combine(callerName.GetHashCode(), callerLineNumber));
+
+    public static DeviceId GetRandomDeviceId(int seed)
     {
         var random = new Random(seed);
 
