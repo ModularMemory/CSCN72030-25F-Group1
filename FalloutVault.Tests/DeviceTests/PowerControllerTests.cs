@@ -66,4 +66,38 @@ public class PowerControllerTests
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
         Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.TotalPowerDrawChanged>());
     }
+
+    [Test]
+    public void PowerController_UsageExceeded_ShutsDownDevice()
+    {
+        // Arrange
+        var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), new Watt(150));
+        var light1 = new LightController(DeviceIdGenerator.GetRandomDeviceId(), new Watt(100));
+        var light2 = new LightController(DeviceIdGenerator.GetRandomDeviceId(), new Watt(100));
+
+
+        var powerEventBus = new PowerEventBus();
+        powerController.SetEventBus(powerEventBus);
+        light1.SetEventBus(powerEventBus);
+        light2.SetEventBus(powerEventBus);
+
+        light1.SendCommand(new DeviceCommand.SetOn(true));
+
+        // Act
+        light2.SendCommand(new DeviceCommand.SetOn(true));
+
+
+        // Assert
+        Assert.That(light2.IsOn, Is.False);
+    }
+
+    [Test]
+    public void PowerController_Efficiency_CalculatesCorrectly()
+    {
+        // Arrange
+        var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), new Watt(1000));
+
+        // Act & Assert
+        Assert.That(powerController.Efficiency, Is.EqualTo(1.0).Within(0.01));
+    }
 }
