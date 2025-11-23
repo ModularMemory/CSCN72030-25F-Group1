@@ -93,7 +93,7 @@ public sealed class DeviceController : IDeviceController, IDisposable
         return false;
     }
 
-    public bool SendCommandToZone(string zone, DeviceCommand command)
+    public bool SendZonedCommand(string zone, DeviceCommand command)
     {
         var devicesInZone = _deviceRegistry.Devices
             .Select(x => x.id)
@@ -106,6 +106,19 @@ public sealed class DeviceController : IDeviceController, IDisposable
         foreach (var deviceId in devicesInZone)
         {
             SendCommand(deviceId, command);
+        }
+
+        return true;
+    }
+
+    public bool SendBroadcastCommand(DeviceCommand command)
+    {
+        if (_deviceRegistry.DeviceCount == 0)
+            return false;
+
+        foreach (var (id, _, _) in _deviceRegistry.Devices)
+        {
+            SendCommand(id, command);
         }
 
         return true;

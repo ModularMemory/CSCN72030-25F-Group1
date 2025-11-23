@@ -34,5 +34,12 @@ public interface IDeviceController
     /// <param name="zone">The zone to search for devices to send to. Case-insensitive.</param>
     /// <param name="command">The command to send.</param>
     /// <returns>True if the command was successfully sent to one or more devices, otherwise false.</returns>
-    bool SendCommandToZone(string zone, DeviceCommand command);
+    bool SendZonedCommand(string zone, DeviceCommand command);
+
+    /// <summary>
+    /// Sends a command to all known devices.
+    /// </summary>
+    /// <param name="command">The command to send.</param>
+    /// <returns>True if the command was successfully sent to one or more devices, otherwise false.</returns>
+    bool SendBroadcastCommand(DeviceCommand command);
 }
