@@ -50,7 +50,6 @@ public class FanController : PoweredDevice, IFanController
 
     public override void SendCommand(DeviceCommand command)
     {
-        throw new NotImplementedException();
     }
 
     protected override Watt ComputePowerDraw()
