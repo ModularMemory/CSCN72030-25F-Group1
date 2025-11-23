@@ -1,35 +1,34 @@
-﻿using FalloutVault.Devices.Interfaces;
+﻿using FalloutVault.Commands;
+using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
-using FalloutVault.Eventing.Commands;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
 
 namespace FalloutVault.Devices;
 
-public class VentSealController : PoweredDevice, IVentSealController
+public class VentSealController : Device, IVentSealController
 {
-    private int _Section;
-
+    //properties
     private bool _IsOpen;
 
     private bool _LockState;
 
-
+    //properties
     public override DeviceId Id { get; }
+
     public override DeviceType Type => DeviceType.VentSealController;
 
 
-    public int Section
-    {
-        get => _Section;
-        set => _Section = value;
-    }
-
+  
     public bool LockState
     {
         get => _LockState;
-        set => _LockState = value;
-    }
+
+        set
+        { _LockState = value;
+            PublishMessage(new DeviceMessage.VentLockedChanged(field));
+        }
+        }
 
     public bool IsOpen
     {
@@ -37,11 +36,12 @@ public class VentSealController : PoweredDevice, IVentSealController
         set
         {
             if (LockState == true) {
-                set => _IsOpen = _IsOpen; //redundant placeholder
+                //redundant placeholder
             }
             else
             {
-                set => _IsOpen = value;
+                _IsOpen = value;
+                PublishMessage(new DeviceMessage.VentStateChanged(field));
             }
         }
     }
@@ -49,6 +49,25 @@ public class VentSealController : PoweredDevice, IVentSealController
     public VentSealController(DeviceId id)
     {
         Id = id;
+    }
+
+    public override void Update()
+    {
+    }
+
+    public override void SendCommand(DeviceCommand command)
+    {
+        switch (command)
+        {
+            case DeviceCommand.IsOpen:
+                IsOpen = (bool)command.Data!; break;
+            case DeviceCommand.IsLocked:
+                LockState = (bool)command.Data!; break;
+            case DeviceCommand.GetCurrentState:
+                PublishMessage(new DeviceMessage.VentStateChanged(IsOpen));
+                PublishMessage(new DeviceMessage.VentLockedChanged(LockState));
+                break;
+        }
     }
 }
 

@@ -7,4 +7,6 @@ public enum DeviceType
     FanController,
     PowerController,
     SpeakerController,
+    CropSprinklerController,
+    VentSealController,
 }
