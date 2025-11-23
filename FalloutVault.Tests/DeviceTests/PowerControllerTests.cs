@@ -23,12 +23,12 @@ public class PowerControllerTests
     [Test]
     public void PowerController_RequestPower_DeniesWhenPowerNotAvailable()
     {
-        var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), new Watt(1000));
+        var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)1000);
         var device1 = DeviceIdGenerator.GetRandomDeviceId();
         var device2 = DeviceIdGenerator.GetRandomDeviceId();
 
-        powerController.SendCommand(new DeviceCommand.RequestPower(device1, new Watt(800)));
-        powerController.SendCommand(new DeviceCommand.RequestPower(device2, new Watt(300)));
+        powerController.SendCommand(new DeviceCommand.RequestPower(device1, (Watt)800));
+        powerController.SendCommand(new DeviceCommand.RequestPower(device2, (Watt)300));
 
         Assert.That(powerController.LastRequestResult, Is.False);
     }
@@ -36,14 +36,14 @@ public class PowerControllerTests
     [Test]
     public void PowerController_ReleasePower_FreesAllocatedPower()
     {
-        var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), new Watt(1000));
+        var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)1000);
         var device1 = DeviceIdGenerator.GetRandomDeviceId();
         var device2 = DeviceIdGenerator.GetRandomDeviceId();
 
-        powerController.SendCommand(new DeviceCommand.RequestPower(device1, new Watt(800)));
+        powerController.SendCommand(new DeviceCommand.RequestPower(device1, (Watt)800));
 
         powerController.SendCommand(new DeviceCommand.ReleasePower(device1));
-        powerController.SendCommand(new DeviceCommand.RequestPower(device2, new Watt(800)));
+        powerController.SendCommand(new DeviceCommand.RequestPower(device2, (Watt)800));
 
         Assert.That(powerController.LastRequestResult, Is.True);
     }
@@ -51,8 +51,8 @@ public class PowerControllerTests
     [Test]
     public void PowerController_ReceivePowerDraw_PublishesTotalPowerDrawChangedMessage()
     {
-        var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), new Watt(1000));
-        var lightController = new LightController(DeviceIdGenerator.GetRandomDeviceId(), new Watt(100));
+        var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)1000);
+        var lightController = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)100);
 
         var powerEventBus = new PowerEventBus();
         powerController.SetEventBus(powerEventBus);
