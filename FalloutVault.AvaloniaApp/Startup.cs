@@ -29,10 +29,7 @@ public static class Startup
             .AddSingleton<IDeviceRegistry, DeviceRegistry>()
             .AddSingleton<MainWindow>();
 
-
         return services;
-
-
     }
 
     private static IServiceCollection AddViewModels(IServiceCollection services)
@@ -45,21 +42,9 @@ public static class Startup
             .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.FanController)
             .AddKeyedTransient<IDeviceViewModel, SpeakerControllerViewModel>(DeviceType.SpeakerController)
             .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.PowerController)
-            .AddSingleton<DeviceViewModelFactory>(ctx =>
-            {
-                var vms = Enum.GetValues<DeviceType>()
-                    .Where(x => x != DeviceType.Unknown)
-                    .Select(type => (type, ctx.GetRequiredKeyedService<IDeviceViewModel>(type)));
-
-                var dict = new Dictionary<DeviceType, Func<IDeviceViewModel>>();
-
-                foreach (var (type, vm) in vms)
-                {
-                    dict.Add(type, () => ctx.GetRequiredKeyedService<IDeviceViewModel>(type));
-                }
-
-                return new DeviceViewModelFactory(dict);
-            });
+            .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.CropSprinklerController)
+            .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.VentSealController)
+            .AddSingleton<DeviceViewModelFactory>();
 
         return services;
     }

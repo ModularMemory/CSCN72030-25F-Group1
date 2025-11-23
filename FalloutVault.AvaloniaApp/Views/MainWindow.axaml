@@ -237,6 +237,78 @@
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>
+                                <DataTemplate x:Key="CropSprinklerController"
+                                              x:DataType="vm:DeviceViewModel">
+                                    <Border
+                                        Height="40"
+                                        BorderBrush="DarkRed"
+                                        BorderThickness="2"
+                                        Background="Brown"
+                                        CornerRadius="5"
+                                        Padding="10, 0">
+
+                                        <StackPanel
+                                            Orientation="Horizontal"
+                                            Spacing="10">
+                                            <StackPanel
+                                                Orientation="Vertical"
+                                                HorizontalAlignment="Left"
+                                                Spacing="2">
+
+                                                <TextBlock
+                                                    Text="{Binding Id}"
+                                                    Foreground="Black"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center" />
+                                                <TextBlock
+                                                    Text="Generator"
+                                                    Foreground="Black"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center" />
+
+                                            </StackPanel>
+                                            <Button
+                                                Content="Turn On/Off"
+                                                Foreground="Black" />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                                <DataTemplate x:Key="VentSealController"
+                                              x:DataType="vm:DeviceViewModel">
+                                    <Border
+                                        Height="40"
+                                        BorderBrush="DarkRed"
+                                        BorderThickness="2"
+                                        Background="Brown"
+                                        CornerRadius="5"
+                                        Padding="10, 0">
+
+                                        <StackPanel
+                                            Orientation="Horizontal"
+                                            Spacing="10">
+                                            <StackPanel
+                                                Orientation="Vertical"
+                                                HorizontalAlignment="Left"
+                                                Spacing="2">
+
+                                                <TextBlock
+                                                    Text="{Binding Id}"
+                                                    Foreground="Black"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center" />
+                                                <TextBlock
+                                                    Text="Generator"
+                                                    Foreground="Black"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center" />
+
+                                            </StackPanel>
+                                            <Button
+                                                Content="Turn On/Off"
+                                                Foreground="Black" />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
                             </vm:MyTemplateSelector>
                         </ItemsControl.DataTemplates>
                     </ItemsControl>
