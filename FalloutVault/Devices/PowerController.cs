@@ -4,7 +4,6 @@ using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
-using System.Linq;
 
 namespace FalloutVault.Devices;
 
@@ -12,8 +11,6 @@ public class PowerController : Device, IPowerController
 {
     // Fields
     private Watt _totalPowerDraw;
-    private Watt _powerGeneration;
-    private bool _isShutdown;
     private readonly Dictionary<DeviceId, Watt> _devicePowerDraws = new();
     private readonly Lock _drawsLock = new();
 
@@ -24,21 +21,23 @@ public class PowerController : Device, IPowerController
 
     public Watt PowerGeneration
     {
-        get => _powerGeneration;
+        get;
         private set
         {
-            if (!SetField(ref _powerGeneration, value)) return;
-            PublishMessage(new DeviceMessage.PowerGenerationChanged(_powerGeneration));
+            if (!SetField(ref field, value)) return;
+
+            PublishMessage(new DeviceMessage.PowerGenerationChanged(field));
         }
     }
 
     public bool IsShutdown
     {
-        get => _isShutdown;
+        get;
         private set
         {
-            if (!SetField(ref _isShutdown, value)) return;
-            PublishMessage(new DeviceMessage.PowerOnChanged(_isShutdown));
+            if (!SetField(ref field, value)) return;
+
+            PublishMessage(new DeviceMessage.PowerOnChanged(field));
         }
     }
 
@@ -67,7 +66,7 @@ public class PowerController : Device, IPowerController
         StandardGeneration = standardGeneration;
         PowerGeneration = standardGeneration;
         _totalPowerDraw = Watt.Zero;
-        _isShutdown = false;
+        IsShutdown = false;
     }
 
     // Methods
@@ -93,13 +92,7 @@ public class PowerController : Device, IPowerController
 
         if (_totalPowerDraw.W > PowerGeneration.W && sender is IDevice triggeringDevice)
         {
-            try
-            {
-                triggeringDevice.SendCommand(new DeviceCommand.SetOn(false));
-            }
-            catch
-            {
-            }
+            triggeringDevice.SendCommand(new DeviceCommand.SetOn(false));
         }
     }
 
@@ -127,7 +120,7 @@ public class PowerController : Device, IPowerController
             return;
 
         IsShutdown = true;
-        PowerGeneration = Watt.Zero;
+        PowerGeneration = ComputePowerGeneration();
     }
 
     private void TurnOn()
@@ -136,7 +129,7 @@ public class PowerController : Device, IPowerController
             return;
 
         IsShutdown = false;
-        PowerGeneration = StandardGeneration;
+        PowerGeneration = ComputePowerGeneration();
     }
 
     private Watt ComputePowerGeneration()
