@@ -67,6 +67,7 @@
                                             <StackPanel
                                                 Orientation="Vertical"
                                                 HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
                                                 Spacing="2">
 
                                                 <TextBlock
@@ -124,6 +125,7 @@
                                             <StackPanel
                                                 Orientation="Vertical"
                                                 HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
                                                 Spacing="2">
 
                                                 <TextBlock
@@ -160,6 +162,7 @@
                                             <StackPanel
                                                 Orientation="Vertical"
                                                 HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
                                                 Spacing="2">
 
                                                 <TextBlock
@@ -196,6 +199,7 @@
                                             <StackPanel
                                                 Orientation="Vertical"
                                                 HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
                                                 Spacing="2">
 
                                                 <TextBlock
@@ -253,6 +257,7 @@
                                             <StackPanel
                                                 Orientation="Vertical"
                                                 HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
                                                 Spacing="2">
 
                                                 <TextBlock
@@ -261,7 +266,7 @@
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center" />
                                                 <TextBlock
-                                                    Text="Generator"
+                                                    Text="Crop Sprinkler"
                                                     Foreground="Black"
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center" />
@@ -289,6 +294,7 @@
                                             <StackPanel
                                                 Orientation="Vertical"
                                                 HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
                                                 Spacing="2">
 
                                                 <TextBlock
@@ -297,7 +303,7 @@
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center" />
                                                 <TextBlock
-                                                    Text="Generator"
+                                                    Text="Vent Seal"
                                                     Foreground="Black"
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center" />

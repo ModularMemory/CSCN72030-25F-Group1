@@ -96,17 +96,12 @@ public sealed class DeviceController : IDeviceController, IDisposable
     public bool SendZonedCommand(string zone, DeviceCommand command)
     {
         var devicesInZone = _deviceRegistry.Devices
-            .Select(x => x.id)
-            .Where(x => x.Zone.Equals(zone, StringComparison.OrdinalIgnoreCase))
-            .ToArray();
-
-        if (devicesInZone.Length == 0)
-            return false;
+            .Where(x => x.id.Zone.Equals(zone, StringComparison.OrdinalIgnoreCase));
 
         var success = false;
-        foreach (var deviceId in devicesInZone)
+        foreach (var (id, _, _) in devicesInZone)
         {
-            success |= SendCommand(deviceId, command);
+            success |= SendCommand(id, command);
         }
 
         return success;
@@ -114,9 +109,6 @@ public sealed class DeviceController : IDeviceController, IDisposable
 
     public bool SendBroadcastCommand(DeviceCommand command)
     {
-        if (_deviceRegistry.DeviceCount == 0)
-            return false;
-
         var success = false;
         foreach (var (id, _, _) in _deviceRegistry.Devices)
         {
