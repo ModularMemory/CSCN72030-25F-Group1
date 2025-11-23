@@ -70,22 +70,22 @@ public class SpeakerController : PoweredDevice, ISpeakerController
     {
         switch(command)
         {
-            case DeviceCommand.SetOn:
+            case DeviceCommand.SetOn setOn:
                 lock (_timerLock)
                 {
                     _deviceTimer.Cancel();
                 }
 
-                IsOn = (bool)command.Data!;
+                IsOn = setOn.IsOn;
                 break;
-            case DeviceCommand.TurnOnFor:
-                TurnOnFor((TimeSpan)command.Data!);
+            case DeviceCommand.TurnOnFor turnOnFor:
+                TurnOnFor(turnOnFor.Time);
                 break;
-            case DeviceCommand.TurnOffFor:
-                TurnOffFor((TimeSpan)command.Data!);
+            case DeviceCommand.TurnOffFor turnOffFor:
+                TurnOffFor(turnOffFor.Time);
                 break;
-            case DeviceCommand.SetSpeakerVolume:
-                Volume = (double)command.Data!;
+            case DeviceCommand.SetSpeakerVolume setSpeakerVolume:
+                Volume = setSpeakerVolume.Volume;
                 break;
             case DeviceCommand.GetCurrentState:
                 PublishMessage(new DeviceMessage.SpeakerOnChanged(IsOn));

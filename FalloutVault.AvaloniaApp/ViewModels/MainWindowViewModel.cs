@@ -2,8 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
-using CommunityToolkit.Mvvm.ComponentModel;
-using FalloutVault.Devices.Models;
 using FalloutVault.Interfaces;
 using FalloutVault.Models;
 
@@ -14,7 +12,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public string LeftTitle { get; } = "Rooms";
     public string RightTitle { get; } = "Devices";
 
-    public ObservableCollection<IDeviceViewModel> Devices { get; } = new();
+    public ObservableCollection<IDeviceViewModel> Devices { get; } = [];
 
     public MainWindowViewModel(IDeviceRegistry deviceRegistry, DeviceViewModelFactory deviceViewModelFactory)
     {
@@ -28,15 +26,15 @@ public partial class MainWindowViewModel : ViewModelBase
 // Source - https://stackoverflow.com/a
 // Posted by kekekeks
 // Retrieved 2025-11-20, License - CC BY-SA 4.0
-
 public class MyTemplateSelector : IDataTemplate
 {
+    // ReSharper disable once CollectionNeverUpdated.Global
     [Content]
-    public Dictionary<DeviceType, IDataTemplate> Templates { get; } = new();
+    public Dictionary<DeviceType, IDataTemplate> Templates { get; } = [];
 
-    public Control Build(object? data)
+    public Control? Build(object? data)
     {
-        return Templates[((DeviceViewModel)data).Type].Build(data);
+        return Templates[((DeviceViewModel)data!).Type].Build(data);
     }
 
     public bool Match(object? data)

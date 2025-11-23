@@ -70,11 +70,11 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
     {
         switch (command)
         {
-            case SetOn:
-                IsOn = (bool)command.Data!;
+            case SetOn setOn:
+                IsOn = setOn.IsOn;
                 break;
-            case CurrentCropSection:
-                TargetSection = (int)command.Data!;
+            case CurrentCropSection currentCropSection:
+                TargetSection = currentCropSection.Section;
                 break;
             case GetCurrentState:
                 PublishMessage(new DeviceMessage.CropSprinklerStateChanged(IsOn));

@@ -4,7 +4,6 @@ using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
-using System.Linq;
 
 namespace FalloutVault.Devices;
 
@@ -133,11 +132,11 @@ public class PowerController : Device, IPowerController
     {
         switch (command)
         {
-            case DeviceCommand.RequestPower req:
-                LastRequestResult = RequestPower(req.DeviceId, req.Amount);
+            case DeviceCommand.RequestPower requestPower:
+                LastRequestResult = RequestPower(requestPower.DeviceId, requestPower.Amount);
                 break;
-            case DeviceCommand.ReleasePower rel:
-                ReleasePower(rel.DeviceId);
+            case DeviceCommand.ReleasePower releasePower:
+                ReleasePower(releasePower.DeviceId);
                 break;
         }
     }

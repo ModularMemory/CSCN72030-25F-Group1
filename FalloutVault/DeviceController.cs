@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using FalloutVault.Commands;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;

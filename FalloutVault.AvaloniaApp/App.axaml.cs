@@ -1,9 +1,6 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
-using System.Linq;
-using System.Security.Authentication.ExtendedProtection;
 using Avalonia.Markup.Xaml;
 using FalloutVault.AvaloniaApp.ViewModels;
 using FalloutVault.AvaloniaApp.Views;
@@ -16,7 +13,6 @@ using FalloutVault.Interfaces;
 using FalloutVault.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using Serilog.Core;
 
 namespace FalloutVault.AvaloniaApp;
 

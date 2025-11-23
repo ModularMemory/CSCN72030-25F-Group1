@@ -1,5 +1,4 @@
-﻿using FalloutVault.Devices.Models;
-using FalloutVault.Models;
+﻿using FalloutVault.Models;
 
 namespace FalloutVault.Devices.Interfaces;
 

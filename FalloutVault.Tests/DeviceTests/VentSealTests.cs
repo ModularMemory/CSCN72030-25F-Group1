@@ -1,7 +1,6 @@
 ﻿using FalloutVault.Commands;
 using FalloutVault.Devices;
 using FalloutVault.Eventing.Models;
-using FalloutVault.Models;
 using FalloutVault.Tests.Mocks;
 using FalloutVault.Tests.Utils;
 

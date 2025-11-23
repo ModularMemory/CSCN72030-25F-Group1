@@ -52,11 +52,11 @@ public class VentSealController : Device, IVentSealController
     {
         switch (command)
         {
-            case DeviceCommand.SetVentOpen:
-                IsOpen = (bool)command.Data!;
+            case DeviceCommand.SetVentOpen setVentOpen:
+                IsOpen = setVentOpen.IsOpen;
                 break;
-            case DeviceCommand.SetVentLocked:
-                LockState = (bool)command.Data!;
+            case DeviceCommand.SetVentLocked setVentLocked:
+                LockState = setVentLocked.IsLocked;
                 break;
             case DeviceCommand.GetCurrentState:
                 PublishMessage(new DeviceMessage.VentStateChanged(IsOpen));
