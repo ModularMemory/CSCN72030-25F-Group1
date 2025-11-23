@@ -14,13 +14,13 @@ public class VentSealTests
     {
         // Arrange
         var ventSealController = new VentSealController(DeviceIdGenerator.GetRandomDeviceId());
-        ventSealController.SendCommand(new DeviceCommand.IsOpen(false));
+        ventSealController.SendCommand(new DeviceCommand.SetVentOpen(false));
 
         var eventBus = new MockDeviceMessageEventBus();
         ventSealController.SetEventBus(eventBus);
 
         // Act
-        ventSealController.SendCommand(new DeviceCommand.IsOpen(true));
+        ventSealController.SendCommand(new DeviceCommand.SetVentOpen(true));
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
@@ -32,13 +32,13 @@ public class VentSealTests
     {
         // Arrange
         var ventSealController = new VentSealController(DeviceIdGenerator.GetRandomDeviceId());
-        ventSealController.SendCommand(new DeviceCommand.IsOpen(true));
+        ventSealController.SendCommand(new DeviceCommand.SetVentOpen(true));
 
         var eventBus = new MockDeviceMessageEventBus();
         ventSealController.SetEventBus(eventBus);
 
         // Act
-        ventSealController.SendCommand(new DeviceCommand.IsOpen(false));
+        ventSealController.SendCommand(new DeviceCommand.SetVentOpen(false));
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
@@ -50,13 +50,13 @@ public class VentSealTests
     {
         // Arrange
         var ventSealController = new VentSealController(DeviceIdGenerator.GetRandomDeviceId());
-        ventSealController.SendCommand(new DeviceCommand.IsLocked(false));
+        ventSealController.SendCommand(new DeviceCommand.SetVentLocked(false));
 
         var eventBus = new MockDeviceMessageEventBus();
         ventSealController.SetEventBus(eventBus);
 
         // Act
-        ventSealController.SendCommand(new DeviceCommand.IsLocked(false));
+        ventSealController.SendCommand(new DeviceCommand.SetVentLocked(false));
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));

@@ -3,27 +3,23 @@ using FalloutVault.Devices;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Tests.Mocks;
 using FalloutVault.Tests.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FalloutVault.Tests.DeviceTests;
-internal class CropSrinklerControllerTests
+
+internal class CropSprinklerControllerTests
 {
     [Test]
     public void CropSprinkler_TurnOn_PublishesStateChangeMessage()
     {
         // Arrange
         var cropSprinklerController = new CropSprinklerController(DeviceIdGenerator.GetRandomDeviceId());
-        cropSprinklerController.SendCommand(new DeviceCommand.IsOn(false));
+        cropSprinklerController.SendCommand(new DeviceCommand.SetOn(false));
 
         var eventBus = new MockDeviceMessageEventBus();
         cropSprinklerController.SetEventBus(eventBus);
 
         // Act
-        cropSprinklerController.SendCommand(new DeviceCommand.IsOn(true));
+        cropSprinklerController.SendCommand(new DeviceCommand.SetOn(true));
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
@@ -37,13 +33,13 @@ internal class CropSrinklerControllerTests
     {
         // Arrange
         var cropSprinklerController = new CropSprinklerController(DeviceIdGenerator.GetRandomDeviceId());
-        cropSprinklerController.SendCommand(new DeviceCommand.IsOn(true));
+        cropSprinklerController.SendCommand(new DeviceCommand.SetOn(true));
 
         var eventBus = new MockDeviceMessageEventBus();
         cropSprinklerController.SetEventBus(eventBus);
 
         // Act
-        cropSprinklerController.SendCommand(new DeviceCommand.IsOn(false));
+        cropSprinklerController.SendCommand(new DeviceCommand.SetOn(false));
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));

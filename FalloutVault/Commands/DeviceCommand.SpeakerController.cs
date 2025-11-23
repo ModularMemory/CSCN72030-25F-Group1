@@ -2,9 +2,5 @@
 
 public partial class DeviceCommand
 {
-    public class SetSpeakerVolume : DeviceCommand
-    {
-        public SetSpeakerVolume(double data) : base(data) { }
-        public SetSpeakerVolume(double data, DateTimeOffset timestamp) : base(data, timestamp) { }
-    }
+    public class SetSpeakerVolume(double data) : DeviceCommand(data);
 }

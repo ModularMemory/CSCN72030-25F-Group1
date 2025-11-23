@@ -1,5 +1,4 @@
 ﻿using FalloutVault.Commands;
-using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
@@ -10,13 +9,9 @@ namespace FalloutVault.Devices;
 public class CropSprinklerController : PoweredDevice, ICropSprinklerController
 {
     private bool _IsOn;
-
     private int _TargetSection;
-
     private int _TargetLitres;
-
     private TimeSpan _TimeSpanOn;
-
 
     public override DeviceId Id { get; }
     public override DeviceType Type => DeviceType.CropSprinklerController;
@@ -28,9 +23,9 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
         {
             _IsOn = value;
             PublishMessage(new DeviceMessage.CropSprinklerStateChanged(_IsOn));
-
         }
     }
+
     public int TargetSection
     {
         get => _TargetSection;
@@ -38,10 +33,9 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
         {
             _TargetSection = value;
             PublishMessage(new DeviceMessage.CropSprinklerSectionChanged(_TargetSection));
-
         }
     }
-        
+
 
     public int TargetLitres
     {
@@ -52,7 +46,6 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
     public TimeSpan TimeSpanOn
     {
         get => _TimeSpanOn;
-
         set => _TimeSpanOn = value;
     }
 
@@ -66,29 +59,27 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
     {
         if (!IsOn)
             return Watt.Zero;
-            
+
         return (Watt)50;
     }
 
-    public override void Update()
-    {
-    }
+    public override void Update() { }
 
     public override void SendCommand(DeviceCommand command)
 
     {
         switch (command)
         {
-            case DeviceCommand.IsOn:
-                IsOn = (bool)command.Data!; break;
-            case DeviceCommand.CurrentCropSection:
-               TargetSection  = (int)command.Data!; break;
-            case DeviceCommand.GetCurrentState:
+            case SetOn:
+                IsOn = (bool)command.Data!;
+                break;
+            case CurrentCropSection:
+                TargetSection = (int)command.Data!;
+                break;
+            case GetCurrentState:
                 PublishMessage(new DeviceMessage.CropSprinklerStateChanged(IsOn));
                 PublishMessage(new DeviceMessage.CropSprinklerSectionChanged(TargetSection));
                 break;
         }
     }
-    }
-
-   
+}

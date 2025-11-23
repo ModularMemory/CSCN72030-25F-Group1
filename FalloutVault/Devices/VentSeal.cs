@@ -8,9 +8,8 @@ namespace FalloutVault.Devices;
 
 public class VentSealController : Device, IVentSealController
 {
-    //properties
+    //fields
     private bool _IsOpen;
-
     private bool _LockState;
 
     //properties
@@ -19,30 +18,26 @@ public class VentSealController : Device, IVentSealController
     public override DeviceType Type => DeviceType.VentSealController;
 
 
-  
     public bool LockState
     {
         get => _LockState;
-
         set
-        { _LockState = value;
-            PublishMessage(new DeviceMessage.VentLockedChanged(field));
+        {
+            _LockState = value;
+            PublishMessage(new DeviceMessage.VentLockedChanged(_LockState));
         }
-        }
+    }
 
     public bool IsOpen
     {
         get => _IsOpen;
         set
         {
-            if (LockState == true) {
-                //redundant placeholder
-            }
-            else
-            {
-                _IsOpen = value;
-                PublishMessage(new DeviceMessage.VentStateChanged(field));
-            }
+            if (LockState)
+                return;
+
+            _IsOpen = value;
+            PublishMessage(new DeviceMessage.VentStateChanged(_IsOpen));
         }
     }
 
@@ -51,18 +46,18 @@ public class VentSealController : Device, IVentSealController
         Id = id;
     }
 
-    public override void Update()
-    {
-    }
+    public override void Update() { }
 
     public override void SendCommand(DeviceCommand command)
     {
         switch (command)
         {
-            case DeviceCommand.IsOpen:
-                IsOpen = (bool)command.Data!; break;
-            case DeviceCommand.IsLocked:
-                LockState = (bool)command.Data!; break;
+            case DeviceCommand.SetVentOpen:
+                IsOpen = (bool)command.Data!;
+                break;
+            case DeviceCommand.SetVentLocked:
+                LockState = (bool)command.Data!;
+                break;
             case DeviceCommand.GetCurrentState:
                 PublishMessage(new DeviceMessage.VentStateChanged(IsOpen));
                 PublishMessage(new DeviceMessage.VentLockedChanged(LockState));
@@ -70,4 +65,3 @@ public class VentSealController : Device, IVentSealController
         }
     }
 }
-
