@@ -28,6 +28,8 @@ internal class CropSrinklerControllerTests
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
         Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.CropSprinklerStateChanged>());
+        Assert.That(eventBus.Messages[0].Data, Is.True);
+
     }
 
     [Test]
@@ -35,13 +37,13 @@ internal class CropSrinklerControllerTests
     {
         // Arrange
         var cropSprinklerController = new CropSprinklerController(DeviceIdGenerator.GetRandomDeviceId());
-        cropSprinklerController.SendCommand(new DeviceCommand.IsOpen(true));
+        cropSprinklerController.SendCommand(new DeviceCommand.IsOn(true));
 
         var eventBus = new MockDeviceMessageEventBus();
         cropSprinklerController.SetEventBus(eventBus);
 
         // Act
-        cropSprinklerController.SendCommand(new DeviceCommand.IsOpen(false));
+        cropSprinklerController.SendCommand(new DeviceCommand.IsOn(false));
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
@@ -53,20 +55,18 @@ internal class CropSrinklerControllerTests
     public void CropSprinkler_SectionChange_PublishesSectionChangeMessage()
     {
         // Arrange
-        var cropSprinklerController = new VentSealController(DeviceIdGenerator.GetRandomDeviceId());
+        var cropSprinklerController = new CropSprinklerController(DeviceIdGenerator.GetRandomDeviceId());
         cropSprinklerController.SendCommand(new DeviceCommand.CurrentCropSection(1));
 
         var eventBus = new MockDeviceMessageEventBus();
         cropSprinklerController.SetEventBus(eventBus);
 
         // Act
-        cropSprinklerController.SendCommand(new DeviceCommand.CurrentCropSection(1));
+        cropSprinklerController.SendCommand(new DeviceCommand.CurrentCropSection(2));
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
         Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.CropSprinklerSectionChanged>());
-        Assert.That(eventBus.Messages[0].Data, Is.False);
+        Assert.That(eventBus.Messages[0].Data, Is.EqualTo(2));
     }
-    [Test]
     }
-}

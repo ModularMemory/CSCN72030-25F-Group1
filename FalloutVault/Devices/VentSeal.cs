@@ -23,8 +23,12 @@ public class VentSealController : Device, IVentSealController
     public bool LockState
     {
         get => _LockState;
-        set => _LockState = value;
-    }
+
+        set
+        { _LockState = value;
+            PublishMessage(new DeviceMessage.VentLockedChanged(field));
+        }
+        }
 
     public bool IsOpen
     {
@@ -37,6 +41,7 @@ public class VentSealController : Device, IVentSealController
             else
             {
                 _IsOpen = value;
+                PublishMessage(new DeviceMessage.VentStateChanged(field));
             }
         }
     }
@@ -63,17 +68,6 @@ public class VentSealController : Device, IVentSealController
                 PublishMessage(new DeviceMessage.VentLockedChanged(LockState));
                 break;
         }
-    }
-
-
-    public void TurnOnFor(TimeSpan time)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void TurnOffFor(TimeSpan time)
-    {
-        throw new NotImplementedException();
     }
 }
 

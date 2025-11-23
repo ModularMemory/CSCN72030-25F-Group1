@@ -1,7 +1,9 @@
 ﻿using FalloutVault.Commands;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
+using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
+using static FalloutVault.Commands.DeviceCommand;
 
 namespace FalloutVault.Devices;
 
@@ -22,13 +24,24 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
     public bool IsOn
     {
         get => _IsOn;
-        set => _IsOn = value;
+        set
+        {
+            _IsOn = value;
+            PublishMessage(new DeviceMessage.CropSprinklerStateChanged(_IsOn));
+
+        }
     }
     public int TargetSection
     {
         get => _TargetSection;
-        set => _TargetSection = value;
+        set
+        {
+            _TargetSection = value;
+            PublishMessage(new DeviceMessage.CropSprinklerSectionChanged(_TargetSection));
+
+        }
     }
+        
 
     public int TargetLitres
     {
@@ -59,13 +72,23 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
 
     public override void Update()
     {
-        throw new NotImplementedException();
     }
 
     public override void SendCommand(DeviceCommand command)
+
     {
-        throw new NotImplementedException();
+        switch (command)
+        {
+            case DeviceCommand.IsOn:
+                IsOn = (bool)command.Data!; break;
+            case DeviceCommand.CurrentCropSection:
+               TargetSection  = (int)command.Data!; break;
+            case DeviceCommand.GetCurrentState:
+                PublishMessage(new DeviceMessage.CropSprinklerStateChanged(IsOn));
+                PublishMessage(new DeviceMessage.CropSprinklerSectionChanged(TargetSection));
+                break;
+        }
     }
-}
+    }
 
    
