@@ -66,7 +66,6 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
     public override void Update() { }
 
     public override void SendCommand(DeviceCommand command)
-
     {
         switch (command)
         {

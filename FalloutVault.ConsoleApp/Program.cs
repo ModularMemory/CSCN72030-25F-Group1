@@ -85,16 +85,14 @@ internal static class Program
             // Modify it (capabilities)
             if (device.capabilities.HasFlag(DeviceCapabilities.OnOff))
             {
-                // var isOn = random.Next(0, 2) == 0;
-                // controller.SendCommand(device.id, new DeviceCommand.SetOn(isOn));
+                var isOn = random.Next(0, 2) == 0;
+                controller.SendCommand(device.id, new DeviceCommand.SetOn(isOn));
             }
 
             // Modify it (type)
             switch (device.type)
             {
                 case DeviceType.LightController:
-                    var isOn = random.Next(0, 2) == 0;
-                    controller.SendCommand(device.id, new DeviceCommand.SetOn(isOn));
                     var dimmerLevel = Math.Sqrt(random.NextDouble()); // sqrt to bias towards higher dimmer levels
                     controller.SendCommand(device.id, new DeviceCommand.SetLightDimmer(dimmerLevel));
                     break;
@@ -103,6 +101,18 @@ internal static class Program
                     // fanController.TargetRpm = random.Next(0, 2_000);
                     break;
                 case DeviceType.SpeakerController:
+                    var volume = random.NextDouble();
+                    controller.SendCommand(device.id, new DeviceCommand.SetSpeakerVolume(volume));
+                    break;
+                case DeviceType.CropSprinklerController:
+                    var targetSection = random.Next(0, 4);
+                    controller.SendCommand(device.id, new DeviceCommand.CurrentCropSection(targetSection));
+                    break;
+                case DeviceType.VentSealController:
+                    var open = random.Next(0, 2) == 0;
+                    controller.SendCommand(device.id, new DeviceCommand.SetVentOpen(open));
+                    var locked = random.Next(0, 5) == 0;
+                    controller.SendCommand(device.id, new DeviceCommand.SetVentLocked(locked));
                     break;
                 case DeviceType.PowerController:
                     // TODO:
@@ -130,6 +140,14 @@ internal static class Program
             new SpeakerController(new DeviceId("Speaker-2", "West Hall"), (Watt)100),
             new SpeakerController(new DeviceId("Speaker-3", "North Hall"), (Watt)100),
             new SpeakerController(new DeviceId("Speaker-4", "Generator Room"), (Watt)100),
+            // Crop sprinkler controller
+            new CropSprinklerController(new DeviceId("CropSprinkler-1", "East Field")),
+            new CropSprinklerController(new DeviceId("CropSprinkler-2", "West Field")),
+            // Vent seal controller
+            new VentSealController(new DeviceId("VentSeal-1", "East Hall")),
+            new VentSealController(new DeviceId("VentSeal-2", "West Hall")),
+            new VentSealController(new DeviceId("VentSeal-3", "North Hall")),
+            new VentSealController(new DeviceId("VentSeal-4", "South Hall")),
             // Power Controller
             new PowerController(new DeviceId("Central-Reactor", "Generator Room"), (Watt)1_000)
         ];

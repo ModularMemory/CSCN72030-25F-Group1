@@ -21,7 +21,7 @@ public class PowerController : Device, IPowerController
     public override DeviceId Id { get; }
     public override DeviceType Type => DeviceType.PowerController;
     public bool LastRequestResult { get; private set; }
-    public Watt StandardGeneration { get; } 
+    public Watt StandardGeneration { get; }
 
     public Watt PowerGeneration
     {
@@ -97,14 +97,14 @@ public class PowerController : Device, IPowerController
     {
         if (sender is not IDevice device) return;
 
-        lock(_drawsLock)
+        lock (_drawsLock)
         {
             _devicePowerDraws[device.Id] = totalPowerDraw;
             _totalPowerDraw = new Watt(_devicePowerDraws.Values.Sum(x => x.W));
         }
 
         PublishMessage(new DeviceMessage.TotalPowerDrawChanged(
-           new PowerDraw(_totalPowerDraw, AvailablePower)
+            new PowerDraw(_totalPowerDraw, AvailablePower)
         ));
 
         // if usage exceeds generation, forcibly shut down the device that just reported

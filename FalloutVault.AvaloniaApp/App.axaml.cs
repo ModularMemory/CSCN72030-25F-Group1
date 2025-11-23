@@ -68,7 +68,7 @@ public partial class App : Application
         }
     }
 
-    private void AddDevices(IDeviceRegistry deviceRegistry)
+    private static void AddDevices(IDeviceRegistry deviceRegistry)
     {
         IEnumerable<IDevice> devices =
         [
@@ -87,9 +87,18 @@ public partial class App : Application
             new SpeakerController(new DeviceId("Speaker-2", "West Hall"), (Watt)100),
             new SpeakerController(new DeviceId("Speaker-3", "North Hall"), (Watt)100),
             new SpeakerController(new DeviceId("Speaker-4", "Generator Room"), (Watt)100),
+            // Crop sprinkler controller
+            new CropSprinklerController(new DeviceId("CropSprinkler-1", "East Field")),
+            new CropSprinklerController(new DeviceId("CropSprinkler-2", "West Field")),
+            // Vent seal controller
+            new VentSealController(new DeviceId("VentSeal-1", "East Hall")),
+            new VentSealController(new DeviceId("VentSeal-2", "West Hall")),
+            new VentSealController(new DeviceId("VentSeal-3", "North Hall")),
+            new VentSealController(new DeviceId("VentSeal-4", "South Hall")),
             // Power Controller
             new PowerController(new DeviceId("Central-Reactor", "Generator Room"), (Watt)1_000)
         ];
+
         foreach (var device in devices)
         {
             deviceRegistry.RegisterDevice(device);
