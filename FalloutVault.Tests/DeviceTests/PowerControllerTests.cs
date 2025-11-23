@@ -12,10 +12,10 @@ public class PowerControllerTests
     [Test]
     public void PowerController_RequestPower_ApprovesWhenPowerAvailable()
     {
-        var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), new Watt(1000));
+        var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)1000);
         var deviceId = DeviceIdGenerator.GetRandomDeviceId();
 
-        powerController.SendCommand(new DeviceCommand.RequestPower(deviceId, new Watt(500)));
+        powerController.SendCommand(new DeviceCommand.RequestPower(deviceId, (Watt)500));
 
         Assert.That(powerController.LastRequestResult, Is.True);
     }
