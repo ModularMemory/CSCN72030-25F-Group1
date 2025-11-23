@@ -19,4 +19,12 @@ public partial class DeviceMessage
 
         public override string Message => "Total power draw changed";
     }
+
+    public class PowerOnChanged : DeviceMessage
+    {
+        public PowerOnChanged(object? data) : base(data) { }
+        public PowerOnChanged(object? data, DateTimeOffset timestamp) : base(data, timestamp) { }
+
+        public override string Message => "Power controller shutdown state changed";
+    }
 }

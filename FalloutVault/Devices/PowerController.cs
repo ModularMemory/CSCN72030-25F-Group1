@@ -4,6 +4,7 @@ using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
+using System.Linq;
 
 namespace FalloutVault.Devices;
 
@@ -12,15 +13,13 @@ public class PowerController : Device, IPowerController
     // Fields
     private Watt _totalPowerDraw;
     private Watt _powerGeneration;
-    private readonly Dictionary<DeviceId, Watt> _allocations = new();
-    private readonly Lock _allocationsLock = new();
+    private bool _isShutdown;
     private readonly Dictionary<DeviceId, Watt> _devicePowerDraws = new();
     private readonly Lock _drawsLock = new();
 
     // Properties
     public override DeviceId Id { get; }
     public override DeviceType Type => DeviceType.PowerController;
-    public bool LastRequestResult { get; private set; }
     public Watt StandardGeneration { get; }
 
     public Watt PowerGeneration
@@ -29,8 +28,17 @@ public class PowerController : Device, IPowerController
         private set
         {
             if (!SetField(ref _powerGeneration, value)) return;
-
             PublishMessage(new DeviceMessage.PowerGenerationChanged(_powerGeneration));
+        }
+    }
+
+    public bool IsShutdown
+    {
+        get => _isShutdown;
+        private set
+        {
+            if (!SetField(ref _isShutdown, value)) return;
+            PublishMessage(new DeviceMessage.PowerOnChanged(_isShutdown));
         }
     }
 
@@ -40,7 +48,6 @@ public class PowerController : Device, IPowerController
         {
             if (StandardGeneration.W <= 0)
                 return 0;
-
             return Math.Clamp((double)(PowerGeneration / StandardGeneration), 0, 1);
         }
     }
@@ -49,31 +56,7 @@ public class PowerController : Device, IPowerController
     {
         get
         {
-            // available = generation - current draw
             return new Watt(Math.Max(0, PowerGeneration.W - _totalPowerDraw.W));
-        }
-    }
-
-    private bool RequestPower(DeviceId deviceId, Watt amount)
-    {
-        lock (_allocationsLock)
-        {
-            var currentAllocated = _allocations.Values.Sum(x => x.W);
-            if (currentAllocated + amount.W <= PowerGeneration.W)
-            {
-                _allocations[deviceId] = amount;
-                return true;
-            }
-
-            return false;
-        }
-    }
-
-    private void ReleasePower(DeviceId deviceId)
-    {
-        lock (_allocationsLock)
-        {
-            _allocations.Remove(deviceId);
         }
     }
 
@@ -84,6 +67,7 @@ public class PowerController : Device, IPowerController
         StandardGeneration = standardGeneration;
         PowerGeneration = standardGeneration;
         _totalPowerDraw = Watt.Zero;
+        _isShutdown = false;
     }
 
     // Methods
@@ -97,17 +81,16 @@ public class PowerController : Device, IPowerController
     {
         if (sender is not IDevice device) return;
 
-        lock (_drawsLock)
+        lock(_drawsLock)
         {
             _devicePowerDraws[device.Id] = totalPowerDraw;
             _totalPowerDraw = new Watt(_devicePowerDraws.Values.Sum(x => x.W));
         }
 
         PublishMessage(new DeviceMessage.TotalPowerDrawChanged(
-            new PowerDraw(_totalPowerDraw, AvailablePower)
+           new PowerDraw(_totalPowerDraw, AvailablePower)
         ));
 
-        // if usage exceeds generation, forcibly shut down the device that just reported
         if (_totalPowerDraw.W > PowerGeneration.W && sender is IDevice triggeringDevice)
         {
             try
@@ -116,10 +99,7 @@ public class PowerController : Device, IPowerController
             }
             catch
             {
-                //not much else i can do
             }
-
-            ReleasePower(triggeringDevice.Id);
         }
     }
 
@@ -132,17 +112,38 @@ public class PowerController : Device, IPowerController
     {
         switch (command)
         {
-            case DeviceCommand.RequestPower requestPower:
-                LastRequestResult = RequestPower(requestPower.DeviceId, requestPower.Amount);
-                break;
-            case DeviceCommand.ReleasePower releasePower:
-                ReleasePower(releasePower.DeviceId);
+            case DeviceCommand.SetOn setOn:
+                if (setOn.IsOn)
+                    TurnOn();
+                else
+                    Shutdown();
                 break;
         }
     }
 
+    private void Shutdown()
+    {
+        if (IsShutdown)
+            return;
+
+        IsShutdown = true;
+        PowerGeneration = Watt.Zero;
+    }
+
+    private void TurnOn()
+    {
+        if (!IsShutdown)
+            return;
+
+        IsShutdown = false;
+        PowerGeneration = StandardGeneration;
+    }
+
     private Watt ComputePowerGeneration()
     {
+        if (IsShutdown)
+            return Watt.Zero;
+
         return StandardGeneration;
     }
 }
