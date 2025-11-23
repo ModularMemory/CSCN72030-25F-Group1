@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using FalloutVault.Commands;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
@@ -88,7 +89,26 @@ public sealed class DeviceController : IDeviceController, IDisposable
             return true;
         }
 
+        _logger.Warning("Failed to send {Command} command to {DeviceId}", command.GetType(), targetDevice);
         return false;
+    }
+
+    public bool SendCommandToZone(string zone, DeviceCommand command)
+    {
+        var devicesInZone = _deviceRegistry.Devices
+            .Select(x => x.id)
+            .Where(x => x.Zone.Equals(zone, StringComparison.OrdinalIgnoreCase))
+            .ToArray();
+
+        if (devicesInZone.Length == 0)
+            return false;
+
+        foreach (var deviceId in devicesInZone)
+        {
+            SendCommand(deviceId, command);
+        }
+
+        return true;
     }
 
     public void Dispose()
