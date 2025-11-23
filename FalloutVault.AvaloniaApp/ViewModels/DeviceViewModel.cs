@@ -24,7 +24,18 @@ public abstract class DeviceViewModel : ViewModelBase, IDeviceViewModel
         get;
         set
         {
-            if (field != default) throw new InvalidOperationException();
+            if (field != default) throw new InvalidOperationException($"{nameof(Id)} can only be set once.");
+
+            field = value;
+        }
+    }
+
+    public DeviceType Type
+    {
+        get;
+        set
+        {
+            if (field != DeviceType.Unknown) throw new InvalidOperationException($"{nameof(Type)} can only be set once.");
 
             field = value;
         }
@@ -33,17 +44,6 @@ public abstract class DeviceViewModel : ViewModelBase, IDeviceViewModel
     public void ForceUpdateCurrentState()
     {
         _deviceController.SendCommand(Id, new DeviceCommand.GetCurrentState());
-    }
-
-    public DeviceType Type
-    {
-        get;
-        set
-        {
-            if (field != DeviceType.Unknown) throw new InvalidOperationException();
-
-            field = value;
-        }
     }
 
     protected abstract void OnDeviceMessage(object? sender, DeviceMessage message);

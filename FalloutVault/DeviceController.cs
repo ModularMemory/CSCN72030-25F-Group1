@@ -103,12 +103,13 @@ public sealed class DeviceController : IDeviceController, IDisposable
         if (devicesInZone.Length == 0)
             return false;
 
+        var success = false;
         foreach (var deviceId in devicesInZone)
         {
-            SendCommand(deviceId, command);
+            success |= SendCommand(deviceId, command);
         }
 
-        return true;
+        return success;
     }
 
     public bool SendBroadcastCommand(DeviceCommand command)
@@ -116,12 +117,13 @@ public sealed class DeviceController : IDeviceController, IDisposable
         if (_deviceRegistry.DeviceCount == 0)
             return false;
 
+        var success = false;
         foreach (var (id, _, _) in _deviceRegistry.Devices)
         {
-            SendCommand(id, command);
+            success |= SendCommand(id, command);
         }
 
-        return true;
+        return success;
     }
 
     public void Dispose()
