@@ -9,15 +9,14 @@ namespace FalloutVault.AvaloniaApp.ViewModels;
 
 public abstract class DeviceViewModel : ViewModelBase, IDeviceViewModel
 {
+    private readonly IDeviceController _deviceController;
     private readonly IEventBus<DeviceMessage> _messageBus;
 
     protected DeviceViewModel(IDeviceController deviceController, IEventBus<DeviceMessage> messageBus)
     {
+        _deviceController = deviceController;
         _messageBus = messageBus;
         _messageBus.Handler += OnDeviceMessage;
-
-        // Must happen after subscribing to the message bus
-        deviceController.SendCommand(Id, new DeviceCommand.GetCurrentState());
     }
 
     public DeviceId Id
@@ -29,6 +28,11 @@ public abstract class DeviceViewModel : ViewModelBase, IDeviceViewModel
 
             field = value;
         }
+    }
+
+    public void ForceUpdateCurrentState()
+    {
+        _deviceController.SendCommand(Id, new DeviceCommand.GetCurrentState());
     }
 
     public DeviceType Type

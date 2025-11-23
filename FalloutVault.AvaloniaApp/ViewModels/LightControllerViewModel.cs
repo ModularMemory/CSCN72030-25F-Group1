@@ -17,7 +17,7 @@ public partial class LightControllerViewModel : DeviceViewModel, IOnOff
     private bool _isOn;
 
     [ObservableProperty]
-    private string _buttonOnText = "Turn Light On";
+    private string? _buttonOnText;
 
     [ObservableProperty]
     private double _dimmer;

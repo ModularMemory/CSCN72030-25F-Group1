@@ -17,7 +17,7 @@ public partial class SpeakerControllerViewModel : DeviceViewModel, IOnOff
     private bool _isOn;
 
     [ObservableProperty]
-    private string _buttonOnText = "Turn Speaker On";
+    private string? _buttonOnText;
 
     [ObservableProperty]
     private double _volume;

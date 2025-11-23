@@ -25,6 +25,7 @@ public class DeviceViewModelFactory
 
         device.Id = deviceId;
         device.Type = deviceType;
+        device.ForceUpdateCurrentState();
 
         return device;
     }

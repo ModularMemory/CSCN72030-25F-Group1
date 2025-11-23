@@ -7,4 +7,5 @@ public interface IDeviceViewModel
 {
     DeviceType Type { get; set; }
     DeviceId Id { get; set; }
+    void ForceUpdateCurrentState();
 }
