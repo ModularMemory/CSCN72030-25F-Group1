@@ -79,9 +79,9 @@ public partial class App : Application
             new LightController(new DeviceId("Light-4", "West Hall"), (Watt)50),
             new LightController(new DeviceId("Light-5", "North Hall"), (Watt)120),
             // Fans
-            new FanController(new DeviceId("Fan-1", "East Hall")),
-            new FanController(new DeviceId("Fan-3", "West Hall")),
-            new FanController(new DeviceId("Fan-2", "North Hall")),
+            new FanController(new DeviceId("Fan-1", "East Hall"), (Watt)50, 2_000),
+            new FanController(new DeviceId("Fan-3", "West Hall"), (Watt)75, 1_500),
+            new FanController(new DeviceId("Fan-2", "North Hall"), (Watt)100, 4_000),
             // Speaker controller
             new SpeakerController(new DeviceId("Speaker-1", "East Hall"), (Watt)100),
             new SpeakerController(new DeviceId("Speaker-2", "West Hall"), (Watt)100),
