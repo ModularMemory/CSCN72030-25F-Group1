@@ -31,14 +31,19 @@ public partial class App : Application
         _logger.Information("Device message from {Sender}: {@Message}", senderString, e);
         // The @ in @Message means to JSON serialize the object rather than use .ToString()
     }
+
     public override void OnFrameworkInitializationCompleted()
     {
         var services = new ServiceCollection();
         var serviceProvider = Startup.ConfigureServices(services)
             .BuildServiceProvider();
+
         _logger = serviceProvider.GetRequiredService<ILogger>();
         serviceProvider.GetRequiredService<IEventBus<DeviceMessage>>().Handler += MessageBusOnMessage;
-        AddDevices(serviceProvider.GetService<IDeviceRegistry>()!);
+        AddDevices(serviceProvider.GetRequiredService<IDeviceRegistry>());
+
+        var controller = serviceProvider.GetRequiredService<IDeviceController>();
+        controller.Start();
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
@@ -48,7 +53,6 @@ public partial class App : Application
             desktop.MainWindow = serviceProvider.GetRequiredService<MainWindow>();
 
             desktop.MainWindow.DataContext = serviceProvider.GetRequiredService<MainWindowViewModel>();
-
         }
 
 

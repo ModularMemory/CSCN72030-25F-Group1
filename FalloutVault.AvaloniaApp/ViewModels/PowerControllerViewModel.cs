@@ -7,9 +7,9 @@ using FalloutVault.Interfaces;
 
 namespace FalloutVault.AvaloniaApp.ViewModels;
 
-public partial class LightControllerViewModel : DeviceViewModel, IOnOff
+public partial class PowerControllerViewModel : DeviceViewModel, IOnOff
 {
-    public LightControllerViewModel(
+    public PowerControllerViewModel(
         IDeviceController deviceController,
         IEventBus<DeviceMessage> messageBus)
         : base(deviceController, messageBus) { }
@@ -19,9 +19,6 @@ public partial class LightControllerViewModel : DeviceViewModel, IOnOff
 
     [ObservableProperty]
     private SolidColorBrush? _buttonColour;
-
-    [ObservableProperty]
-    private double _dimmer;
 
     protected override void OnDeviceMessage(object? sender, DeviceMessage message)
     {
@@ -35,9 +32,6 @@ public partial class LightControllerViewModel : DeviceViewModel, IOnOff
                 ButtonColour = new SolidColorBrush(IsOn
                     ? Color.FromRgb(0,255,0)
                     : Color.FromRgb(255,0,0));
-                break;
-            case DeviceMessage.DimmerLevelChanged:
-                Dimmer = (double)message.Data! * 100;
                 break;
         }
     }

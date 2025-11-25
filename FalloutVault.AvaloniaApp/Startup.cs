@@ -39,11 +39,11 @@ public static class Startup
 
         services
             .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.LightController)
-            .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.FanController)
+            .AddKeyedTransient<IDeviceViewModel, FanControllerViewModel>(DeviceType.FanController)
             .AddKeyedTransient<IDeviceViewModel, SpeakerControllerViewModel>(DeviceType.SpeakerController)
-            .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.PowerController)
-            .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.CropSprinklerController)
-            .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.VentSealController)
+            .AddKeyedTransient<IDeviceViewModel, PowerControllerViewModel>(DeviceType.PowerController)
+            .AddKeyedTransient<IDeviceViewModel, CropSprinklerControllerViewModel>(DeviceType.CropSprinklerController)
+            .AddKeyedTransient<IDeviceViewModel, VentSealControllerViewModel>(DeviceType.VentSealController)
             .AddSingleton<DeviceViewModelFactory>();
 
         return services;

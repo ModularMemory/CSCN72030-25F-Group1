@@ -1,3 +1,4 @@
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Eventing.Interfaces;
@@ -17,7 +18,7 @@ public partial class SpeakerControllerViewModel : DeviceViewModel, IOnOff
     private bool _isOn;
 
     [ObservableProperty]
-    private string? _buttonOnText;
+    private SolidColorBrush? _buttonColour;
 
     [ObservableProperty]
     private double _volume;
@@ -31,9 +32,9 @@ public partial class SpeakerControllerViewModel : DeviceViewModel, IOnOff
         {
             case DeviceMessage.DeviceOnOffChanged:
                 IsOn = (bool)message.Data!;
-                ButtonOnText = IsOn
-                    ? "Turn Speaker Off"
-                    : "Turn Speaker On";
+                ButtonColour = new SolidColorBrush(IsOn
+                    ? Color.FromRgb(0,255,0)
+                    : Color.FromRgb(255,0,0));
                 break;
             case DeviceMessage.VolumeLevelChanged:
                 Volume = (double)message.Data! * 100;
