@@ -1,5 +1,6 @@
 <Project ToolsVersion="15.0">
   <ItemGroup>
+    <PackageVersion Include="Avalonia.Controls.DataGrid" Version="11.3.9" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
     <PackageVersion Include="Material.Icons.Avalonia" Version="3.0.0-preview3.1" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.11" />

@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FalloutVault.Interfaces;
 using FalloutVault.Models;
 
@@ -9,16 +10,40 @@ namespace FalloutVault.AvaloniaApp.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    public string LeftTitle { get; } = "Rooms";
-    public string RightTitle { get; } = "Devices";
+    private readonly List<IDeviceViewModel> _deviceViewModels = [];
 
+    public ObservableCollection<ZoneViewModel> Zones { get; } = [];
     public ObservableCollection<IDeviceViewModel> Devices { get; } = [];
 
     public MainWindowViewModel(IDeviceRegistry deviceRegistry, DeviceViewModelFactory deviceViewModelFactory)
     {
         foreach (var (id, type, capabilities) in deviceRegistry.Devices)
         {
-            Devices.Add(deviceViewModelFactory.Create(type, id));
+            _deviceViewModels.Add(deviceViewModelFactory.Create(type, id));
+        }
+
+        foreach (var zone in deviceRegistry.Devices.Select(x => x.id.Zone).Distinct())
+        {
+            Zones.Add(new ZoneViewModel(zone));
+        }
+
+        UpdateDeviceList();
+    }
+
+    public void UpdateDeviceList()
+    {
+        var enabledZones = Zones
+            .Where(x => x.IsSelected)
+            .Select(x => x.ZoneName)
+            .ToHashSet();
+
+        Devices.Clear();
+        foreach (var viewModel in _deviceViewModels)
+        {
+            if (enabledZones.Contains(viewModel.Id.Zone))
+            {
+                Devices.Add(viewModel);
+            }
         }
     }
 }

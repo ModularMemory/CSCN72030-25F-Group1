@@ -89,4 +89,25 @@ public partial class MainWindow : Window
 
         _deviceController.SendCommand(viewModel.Id, new DeviceCommand.SetFanTargetRpm((int)e.NewValue.GetValueOrDefault()));
     }
+
+    private void CheckAllZones_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
+    {
+        if (!IsInitialized || sender is not CheckBox checkBox || DataContext is not MainWindowViewModel viewModel)
+            return;
+
+        foreach (var zoneViewModel in viewModel.Zones)
+        {
+            zoneViewModel.IsSelected = checkBox.IsChecked.GetValueOrDefault();
+        }
+    }
+
+    private async void CheckZone_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
+    {
+        if (!IsInitialized || sender is not CheckBox checkBox || DataContext is not MainWindowViewModel viewModel)
+            return;
+
+        await Task.Yield();
+
+        viewModel.UpdateDeviceList();
+    }
 }

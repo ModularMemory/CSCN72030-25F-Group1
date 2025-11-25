@@ -24,23 +24,55 @@
         Background="#333"
         Margin="10">
         <Grid
-            ColumnDefinitions="250,*"
+            ColumnDefinitions="Auto,*"
             Margin="10"
             ColumnSpacing="10">
 
             <Grid Grid.Column="0" RowDefinitions="Auto, *">
-                <TextBlock Grid.Row="0" Text="{Binding LeftTitle}"
+                <TextBlock Grid.Row="0" Text="Navigation"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center" />
                 <ScrollViewer Grid.Row="1">
                     <StackPanel Orientation="Vertical" Spacing="5">
-
+                        <DataGrid Margin="20"
+                                  AreRowDetailsFrozen="True"
+                                  CanUserSortColumns="False"
+                                  CanUserReorderColumns="False"
+                                  CanUserResizeColumns="False"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  ItemsSource="{Binding Zones}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn
+                                    Header="Zone"
+                                    Binding="{Binding ZoneName}" />
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox
+                                                IsChecked="{Binding IsSelected}"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                IsCheckedChanged="CheckZone_OnIsCheckedChanged"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <CheckBox
+                                                IsChecked="True"
+                                                IsCheckedChanged="CheckAllZones_OnIsCheckedChanged"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.HeaderTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
 
             <Grid Grid.Column="1" RowDefinitions="Auto, *">
-                <TextBlock Grid.Row="0" Text="{Binding RightTitle}" HorizontalAlignment="Center"
+                <TextBlock Grid.Row="0" Text="Devices" HorizontalAlignment="Center"
                            VerticalAlignment="Center" />
 
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible">
@@ -170,7 +202,7 @@
                                                     Text="Target RPM:"
                                                     Foreground="Black"
                                                     HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"/>
+                                                    VerticalAlignment="Center" />
                                                 <NumericUpDown Value="{Binding TargetSpeed}"
                                                                ValueChanged="TargetRpmNumericUpDown_OnValueChanged"
                                                                Increment="50"
@@ -184,12 +216,12 @@
                                                     Text="Current RPM:"
                                                     Foreground="Black"
                                                     HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"/>
+                                                    VerticalAlignment="Center" />
                                                 <TextBlock
                                                     Text="{Binding CurrentSpeed}"
                                                     Foreground="Black"
                                                     HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"/>
+                                                    VerticalAlignment="Center" />
                                             </StackPanel>
                                         </StackPanel>
                                     </Border>
@@ -279,7 +311,6 @@
                                                 Width="40"
                                                 Height="40">
                                                 <Button.Content>
-
                                                     <icons:MaterialIcon
                                                         Kind="Power"
                                                         Foreground="{Binding ButtonColour}" />
