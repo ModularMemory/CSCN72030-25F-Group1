@@ -43,7 +43,7 @@ public partial class App : Application
         AddDevices(serviceProvider.GetRequiredService<IDeviceRegistry>());
 
         var controller = serviceProvider.GetRequiredService<IDeviceController>();
-        controller.Start();
+        controller.Start(TimeSpan.FromMilliseconds(250));
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {

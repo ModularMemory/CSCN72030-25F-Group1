@@ -4,5 +4,5 @@ public interface IFanController : IOnOff
 {
     int TargetRpm { get; }
 
-    int SpeedRpm { get; }
+    double SpeedRpm { get; }
 }

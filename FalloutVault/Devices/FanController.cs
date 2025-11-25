@@ -14,6 +14,7 @@ public class FanController : PoweredDevice, IFanController
 
     private readonly DeviceTimer<bool> _deviceTimer = new();
     private readonly Lock _timerLock = new();
+    private readonly Random _rpmStepRandom = new();
     private readonly Watt _motorWattage;
     private readonly double _maxRpm;
     private long _lastSpeedUpdate;
@@ -47,14 +48,14 @@ public class FanController : PoweredDevice, IFanController
         }
     }
 
-    public int SpeedRpm
+    public double SpeedRpm
     {
         get;
         private set
         {
             if (!SetField(ref field, value)) return;
 
-            PublishMessage(new DeviceMessage.FanSpeedRpmChanged(field));
+            PublishMessage(new DeviceMessage.FanSpeedRpmChanged((int)field));
 
             PowerDraw = ComputePowerDraw();
         }
@@ -81,11 +82,21 @@ public class FanController : PoweredDevice, IFanController
         }
 
         var currentTimestamp = Stopwatch.GetTimestamp();
-        var delta = (currentTimestamp - _lastSpeedUpdate) / (double)Stopwatch.Frequency;
+        var deltaL = currentTimestamp - _lastSpeedUpdate;
+        var delta = deltaL / (double)Stopwatch.Frequency;
 
-        var targetSpeed = IsOn ? TargetRpm : 0;
-        SpeedRpm = (int)double.Lerp(SpeedRpm, targetSpeed, delta);
-        _lastSpeedUpdate = currentTimestamp;
+        var targetSpeed = IsOn && TargetRpm >= 50
+            ? TargetRpm + _rpmStepRandom.Next(-15, 15)
+            : 0;
+
+        var step = _rpmStepRandom.Next(35, 65) * delta * 3;
+
+        SpeedRpm = Math.Max(
+            0,
+            SpeedRpm + (SpeedRpm < targetSpeed ? step : -step)
+        );
+
+        _lastSpeedUpdate += deltaL;
     }
 
     public override void SendCommand(DeviceCommand command)
