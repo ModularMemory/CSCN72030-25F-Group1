@@ -12,16 +12,16 @@ public partial class DeviceMessage
 
     public class FanTargetRpmChanged : DeviceMessage
     {
-        public FanTargetRpmChanged(double data) : base(data) { }
-        public FanTargetRpmChanged(double data, DateTimeOffset timestamp) : base(data, timestamp) { }
+        public FanTargetRpmChanged(int data) : base(data) { }
+        public FanTargetRpmChanged(int data, DateTimeOffset timestamp) : base(data, timestamp) { }
 
         public override string Message => "Fan target RPM changed";
     }
 
     public class FanSpeedRpmChanged : DeviceMessage
     {
-        public FanSpeedRpmChanged(double data) : base(data) { }
-        public FanSpeedRpmChanged(double data, DateTimeOffset timestamp) : base(data, timestamp) { }
+        public FanSpeedRpmChanged(int data) : base(data) { }
+        public FanSpeedRpmChanged(int data, DateTimeOffset timestamp) : base(data, timestamp) { }
 
         public override string Message => "Fan speed RPM changed";
     }

@@ -97,8 +97,8 @@ internal static class Program
                     controller.SendCommand(device.id, new DeviceCommand.SetLightDimmer(dimmerLevel));
                     break;
                 case DeviceType.FanController:
-                    // TODO: Convert to a command:
-                    // fanController.TargetRpm = random.Next(0, 2_000);
+                    var targetRpm = random.Next(0, 2_000);
+                    controller.SendCommand(device.id, new DeviceCommand.SetFanTargetRpm(targetRpm));
                     break;
                 case DeviceType.SpeakerController:
                     var volume = random.NextDouble();

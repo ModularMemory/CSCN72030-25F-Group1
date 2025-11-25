@@ -36,7 +36,7 @@ public class FanController : PoweredDevice, IFanController
         }
     }
 
-    public double TargetRpm
+    public int TargetRpm
     {
         get;
         private set
@@ -47,7 +47,7 @@ public class FanController : PoweredDevice, IFanController
         }
     }
 
-    public double SpeedRpm
+    public int SpeedRpm
     {
         get;
         private set
@@ -84,7 +84,7 @@ public class FanController : PoweredDevice, IFanController
         var delta = (currentTimestamp - _lastSpeedUpdate) / (double)Stopwatch.Frequency;
 
         var targetSpeed = IsOn ? TargetRpm : 0;
-        SpeedRpm = double.Lerp(targetSpeed, SpeedRpm, delta);
+        SpeedRpm = (int)double.Lerp(SpeedRpm, targetSpeed, delta);
         _lastSpeedUpdate = currentTimestamp;
     }
 

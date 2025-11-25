@@ -2,7 +2,7 @@
 
 public interface IFanController : IOnOff
 {
-    double TargetRpm { get; }
+    int TargetRpm { get; }
 
-    double SpeedRpm { get; }
+    int SpeedRpm { get; }
 }
