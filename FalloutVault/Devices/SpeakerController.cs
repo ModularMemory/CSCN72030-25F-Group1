@@ -25,7 +25,7 @@ public class SpeakerController : PoweredDevice, ISpeakerController
         {
             if (!SetField(ref field, value)) return;
 
-            PublishMessage(new DeviceMessage.SpeakerOnChanged(field));
+            PublishMessage(new DeviceMessage.SpeakerOnOffChanged(field));
 
             PowerDraw = ComputePowerDraw();
         }
@@ -88,7 +88,7 @@ public class SpeakerController : PoweredDevice, ISpeakerController
                 Volume = setSpeakerVolume.Volume;
                 break;
             case DeviceCommand.GetCurrentState:
-                PublishMessage(new DeviceMessage.SpeakerOnChanged(IsOn));
+                PublishMessage(new DeviceMessage.SpeakerOnOffChanged(IsOn));
                 PublishMessage(new DeviceMessage.VolumeLevelChanged(Volume));
                 break;
         }

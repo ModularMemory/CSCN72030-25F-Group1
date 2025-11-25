@@ -30,7 +30,7 @@ public class FanController : PoweredDevice, IFanController
         {
             if (!SetField(ref field, value)) return;
 
-            PublishMessage(new DeviceMessage.FanOnChanged(field));
+            PublishMessage(new DeviceMessage.FanOnOffChanged(field));
 
             PowerDraw = ComputePowerDraw();
         }
@@ -109,7 +109,7 @@ public class FanController : PoweredDevice, IFanController
                 TurnOffFor(turnOffFor.Time);
                 break;
             case DeviceCommand.GetCurrentState:
-                PublishMessage(new DeviceMessage.FanOnChanged(IsOn));
+                PublishMessage(new DeviceMessage.FanOnOffChanged(IsOn));
                 PublishMessage(new DeviceMessage.FanTargetRpmChanged(TargetRpm));
                 break;
         }

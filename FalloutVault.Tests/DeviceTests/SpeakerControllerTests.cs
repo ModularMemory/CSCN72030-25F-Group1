@@ -24,7 +24,7 @@ public class SpeakerControllerTests
 
         //Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
-        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.SpeakerOnChanged>());
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.SpeakerOnOffChanged>());
     }
 
     [Test]
@@ -42,7 +42,7 @@ public class SpeakerControllerTests
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
-        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.SpeakerOnChanged>());
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.SpeakerOnOffChanged>());
         Assert.That(eventBus.Messages[0].Data, Is.False);
     }
 
@@ -88,9 +88,9 @@ public class SpeakerControllerTests
 
         // Assert event bus
         Assert.That(eventBus.Messages, Has.Count.EqualTo(2));
-        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.SpeakerOnChanged>());
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.SpeakerOnOffChanged>());
         Assert.That(eventBus.Messages[0].Data, Is.True);
-        Assert.That(eventBus.Messages[1], Is.TypeOf<DeviceMessage.SpeakerOnChanged>());
+        Assert.That(eventBus.Messages[1], Is.TypeOf<DeviceMessage.SpeakerOnOffChanged>());
         Assert.That(eventBus.Messages[1].Data, Is.False);
     }
 
@@ -117,9 +117,9 @@ public class SpeakerControllerTests
 
         // Assert event bus
         Assert.That(eventBus.Messages, Has.Count.EqualTo(2));
-        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.SpeakerOnChanged>());
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.SpeakerOnOffChanged>());
         Assert.That(eventBus.Messages[0].Data, Is.False);
-        Assert.That(eventBus.Messages[1], Is.TypeOf<DeviceMessage.SpeakerOnChanged>());
+        Assert.That(eventBus.Messages[1], Is.TypeOf<DeviceMessage.SpeakerOnOffChanged>());
         Assert.That(eventBus.Messages[1].Data, Is.True);
     }
 }

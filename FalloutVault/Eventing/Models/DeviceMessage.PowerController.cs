@@ -4,27 +4,22 @@ namespace FalloutVault.Eventing.Models;
 
 public partial class DeviceMessage
 {
-    public class PowerGenerationChanged : DeviceMessage
+    public class PowerOnOffChanged(bool data) : DeviceOnOffChanged(data)
     {
-        public PowerGenerationChanged(Watt data) : base(data) { }
-        public PowerGenerationChanged(Watt data, DateTimeOffset timestamp) : base(data, timestamp) { }
+        public override string Message => "Power controller shutdown state changed";
+    }
+
+    public class PowerGenerationChanged(Watt data) : DeviceMessage(data)
+    {
+        public Watt PowerGeneration { get; } = data;
 
         public override string Message => "Power generation changed";
     }
 
-    public class TotalPowerDrawChanged : DeviceMessage
+    public class TotalPowerDrawChanged(PowerDraw data) : DeviceMessage(data)
     {
-        public TotalPowerDrawChanged(object? data) : base(data) { }
-        public TotalPowerDrawChanged(object? data, DateTimeOffset timestamp) : base(data, timestamp) { }
+        public PowerDraw PowerDraw { get; } = data;
 
         public override string Message => "Total power draw changed";
-    }
-
-    public class PowerOnChanged : DeviceMessage
-    {
-        public PowerOnChanged(object? data) : base(data) { }
-        public PowerOnChanged(object? data, DateTimeOffset timestamp) : base(data, timestamp) { }
-
-        public override string Message => "Power controller shutdown state changed";
     }
 }

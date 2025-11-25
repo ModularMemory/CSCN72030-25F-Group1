@@ -29,7 +29,7 @@ public partial class LightControllerViewModel : DeviceViewModel, IOnOff
 
         switch (message)
         {
-            case DeviceMessage.DeviceOnChanged:
+            case DeviceMessage.DeviceOnOffChanged:
                 IsOn = (bool)message.Data!;
                 ButtonOnText = IsOn
                     ? "Turn Light Off"

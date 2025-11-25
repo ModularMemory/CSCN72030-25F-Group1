@@ -23,7 +23,7 @@ internal class CropSprinklerControllerTests
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
-        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.CropSprinklerStateChanged>());
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.CropSprinklerOnOffChanged>());
         Assert.That(eventBus.Messages[0].Data, Is.True);
 
     }
@@ -43,7 +43,7 @@ internal class CropSprinklerControllerTests
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
-        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.CropSprinklerStateChanged>());
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.CropSprinklerOnOffChanged>());
         Assert.That(eventBus.Messages[0].Data, Is.False);
     }
 

@@ -107,7 +107,7 @@ public class PowerControllerTests
         // Assert
         Assert.That(eventBus.Messages, Has.Count.GreaterThan(0));
         var shutdownMessage = eventBus.Messages
-            .OfType<DeviceMessage.PowerOnChanged>()
+            .OfType<DeviceMessage.PowerOnOffChanged>()
             .FirstOrDefault();
         Assert.That(shutdownMessage, Is.Not.Null);
     }

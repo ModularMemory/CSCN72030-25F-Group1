@@ -22,7 +22,7 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
         set
         {
             _IsOn = value;
-            PublishMessage(new DeviceMessage.CropSprinklerStateChanged(_IsOn));
+            PublishMessage(new DeviceMessage.CropSprinklerOnOffChanged(_IsOn));
         }
     }
 
@@ -76,7 +76,7 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
                 TargetSection = currentCropSection.Section;
                 break;
             case GetCurrentState:
-                PublishMessage(new DeviceMessage.CropSprinklerStateChanged(IsOn));
+                PublishMessage(new DeviceMessage.CropSprinklerOnOffChanged(IsOn));
                 PublishMessage(new DeviceMessage.CropSprinklerSectionChanged(TargetSection));
                 break;
         }

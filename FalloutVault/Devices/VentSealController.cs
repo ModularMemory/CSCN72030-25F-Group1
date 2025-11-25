@@ -37,7 +37,7 @@ public class VentSealController : Device, IVentSealController
                 return;
 
             _IsOpen = value;
-            PublishMessage(new DeviceMessage.VentStateChanged(_IsOpen));
+            PublishMessage(new DeviceMessage.VentOpenChanged(_IsOpen));
         }
     }
 
@@ -59,7 +59,7 @@ public class VentSealController : Device, IVentSealController
                 LockState = setVentLocked.IsLocked;
                 break;
             case DeviceCommand.GetCurrentState:
-                PublishMessage(new DeviceMessage.VentStateChanged(IsOpen));
+                PublishMessage(new DeviceMessage.VentOpenChanged(IsOpen));
                 PublishMessage(new DeviceMessage.VentLockedChanged(LockState));
                 break;
         }

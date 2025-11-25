@@ -2,26 +2,21 @@ namespace FalloutVault.Eventing.Models;
 
 public partial class DeviceMessage
 {
-    public class FanOnChanged : DeviceOnChanged
+    public class FanOnOffChanged(bool data) : DeviceOnOffChanged(data)
     {
-        public FanOnChanged(bool data) : base(data) { }
-        public FanOnChanged(bool data, DateTimeOffset timestamp) : base(data, timestamp) { }
-
         public override string Message => "Fan on changed";
     }
 
-    public class FanTargetRpmChanged : DeviceMessage
+    public class FanTargetRpmChanged(int data) : DeviceMessage(data)
     {
-        public FanTargetRpmChanged(int data) : base(data) { }
-        public FanTargetRpmChanged(int data, DateTimeOffset timestamp) : base(data, timestamp) { }
+        public int TargetRpm { get; } = data;
 
         public override string Message => "Fan target RPM changed";
     }
 
-    public class FanSpeedRpmChanged : DeviceMessage
+    public class FanSpeedRpmChanged(int data) : DeviceMessage(data)
     {
-        public FanSpeedRpmChanged(int data) : base(data) { }
-        public FanSpeedRpmChanged(int data, DateTimeOffset timestamp) : base(data, timestamp) { }
+        public int SpeedRpm { get; } = data;
 
         public override string Message => "Fan speed RPM changed";
     }

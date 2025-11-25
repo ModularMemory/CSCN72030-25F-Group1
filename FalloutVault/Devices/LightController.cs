@@ -26,7 +26,7 @@ public class LightController : PoweredDevice, ILightController
         {
             if (!SetField(ref field, value)) return;
 
-            PublishMessage(new DeviceMessage.LightOnChanged(field));
+            PublishMessage(new DeviceMessage.LightOnOffChanged(field));
 
             PowerDraw = ComputePowerDraw();
         }
@@ -88,7 +88,7 @@ public class LightController : PoweredDevice, ILightController
                 TurnOffFor(turnOffFor.Time);
                 break;
             case DeviceCommand.GetCurrentState:
-                PublishMessage(new DeviceMessage.LightOnChanged(IsOn));
+                PublishMessage(new DeviceMessage.LightOnOffChanged(IsOn));
                 PublishMessage(new DeviceMessage.DimmerLevelChanged(DimmerLevel));
                 break;
         }

@@ -40,7 +40,7 @@ public class PowerController : Device, IPowerController
         private set
         {
             if (!SetField(ref _isShutdown, value)) return;
-            PublishMessage(new DeviceMessage.PowerOnChanged(_isShutdown));
+            PublishMessage(new DeviceMessage.PowerOnOffChanged(_isShutdown));
         }
     }
 

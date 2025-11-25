@@ -2,18 +2,14 @@
 
 public partial class DeviceMessage
 {
-    public class VentStateChanged : DeviceOnChanged
+    public class VentOpenChanged(bool data) : DeviceOpenCloseChanged(data)
     {
-        public VentStateChanged(bool data) : base(data) { }
-        public VentStateChanged(bool data, DateTimeOffset timestamp) : base(data, timestamp) { }
-
-        public override string Message => "Vent state changed";
+        public override string Message => "Vent open changed";
     }
 
-    public class VentLockedChanged : DeviceMessage
+    public class VentLockedChanged(bool data) : DeviceMessage(data)
     {
-        public VentLockedChanged(bool data) : base(data) { }
-        public VentLockedChanged(bool data, DateTimeOffset timestamp) : base(data, timestamp) { }
+        public bool IsLocked { get; } = data;
 
         public override string Message => "Vent Lock state changed";
     }

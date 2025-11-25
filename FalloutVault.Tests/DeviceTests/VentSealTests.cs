@@ -23,7 +23,7 @@ public class VentSealTests
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
-        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.VentStateChanged>());
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.VentOpenChanged>());
     }
 
     [Test]
@@ -41,7 +41,7 @@ public class VentSealTests
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
-        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.VentStateChanged>());
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.VentOpenChanged>());
         Assert.That(eventBus.Messages[0].Data, Is.False);
     }
     [Test]
