@@ -30,14 +30,14 @@ public partial class SpeakerControllerViewModel : DeviceViewModel, IOnOff
 
         switch (message)
         {
-            case DeviceMessage.DeviceOnOffChanged:
-                IsOn = (bool)message.Data!;
+            case DeviceMessage.DeviceOnOffChanged onOffChanged:
+                IsOn = onOffChanged.IsOn;
                 ButtonColour = new SolidColorBrush(IsOn
                     ? Color.FromRgb(0,255,0)
                     : Color.FromRgb(255,0,0));
                 break;
-            case DeviceMessage.VolumeLevelChanged:
-                Volume = (double)message.Data! * 100;
+            case DeviceMessage.VolumeLevelChanged volumeLevelChanged:
+                Volume = volumeLevelChanged.Volume * 100;
                 break;
         }
     }

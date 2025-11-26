@@ -33,17 +33,17 @@ public partial class FanControllerViewModel : DeviceViewModel, IOnOff
 
         switch (message)
         {
-            case DeviceMessage.DeviceOnOffChanged:
-                IsOn = (bool)message.Data!;
+            case DeviceMessage.DeviceOnOffChanged onOffChanged:
+                IsOn = onOffChanged.IsOn;
                 ButtonColour = new SolidColorBrush(IsOn
                     ? Color.FromRgb(0,255,0)
                     : Color.FromRgb(255,0,0));
                 break;
-            case DeviceMessage.FanSpeedRpmChanged:
-                CurrentSpeed = (int)message.Data!;
+            case DeviceMessage.FanSpeedRpmChanged speedRpmChanged:
+                CurrentSpeed = speedRpmChanged.SpeedRpm;
                 break;
-            case DeviceMessage.FanTargetRpmChanged:
-                TargetSpeed = (int)message.Data!;
+            case DeviceMessage.FanTargetRpmChanged targetRpmChanged:
+                TargetSpeed = targetRpmChanged.TargetRpm;
                 break;
         }
     }

@@ -41,8 +41,8 @@ public partial class VentSealControllerViewModel : DeviceViewModel
 
         switch (message)
         {
-            case DeviceMessage.VentOpenChanged:
-                IsOpen = (bool)message.Data!;
+            case DeviceMessage.VentOpenChanged openChanged:
+                IsOpen = openChanged.IsOpen;
                 OpenButtonColour = new SolidColorBrush(IsOpen
                     ? Color.FromRgb(0,255,0)
                     : Color.FromRgb(255,0,0));
@@ -50,8 +50,8 @@ public partial class VentSealControllerViewModel : DeviceViewModel
                     ? MaterialIconKind.Hvac
                     : MaterialIconKind.HvacOff;
                 break;
-            case DeviceMessage.VentLockedChanged:
-                IsLocked = (bool)message.Data!;
+            case DeviceMessage.VentLockedChanged lockedChanged:
+                IsLocked = lockedChanged.IsLocked;
                 LockIcon = IsLocked
                     ? MaterialIconKind.Lock
                     : MaterialIconKind.LockOpenVariant;
