@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using FalloutVault.Commands;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
@@ -15,8 +16,6 @@ public class FanController : PoweredDevice, IFanController
     private readonly DeviceTimer<bool> _deviceTimer = new();
     private readonly Lock _timerLock = new();
     private readonly Random _rpmStepRandom = new();
-    private readonly Watt _motorWattage;
-    private readonly double _maxRpm;
     private long _lastSpeedUpdate;
 
     // Properties
@@ -37,12 +36,16 @@ public class FanController : PoweredDevice, IFanController
         }
     }
 
+    public Watt MotorWattage { get; }
+
+    public int MaxRpm { get; }
+
     public int TargetRpm
     {
         get;
         private set
         {
-            if (!SetField(ref field, value)) return;
+            if (!SetField(ref field, Math.Min(value, MaxRpm))) return;
 
             PublishMessage(new DeviceMessage.FanTargetRpmChanged(field));
         }
@@ -62,10 +65,10 @@ public class FanController : PoweredDevice, IFanController
     }
 
     // Constructors
-    public FanController(DeviceId id, Watt motorWattage, double maxRpm)
+    public FanController(DeviceId id, Watt motorWattage, [Range(0, int.MaxValue)] int maxRpm)
     {
-        _motorWattage = motorWattage;
-        _maxRpm = maxRpm;
+        MotorWattage = motorWattage;
+        MaxRpm = maxRpm;
         Id = id;
     }
 
@@ -120,6 +123,8 @@ public class FanController : PoweredDevice, IFanController
                 TurnOffFor(turnOffFor.Time);
                 break;
             case DeviceCommand.GetCurrentState:
+                PublishMessage(new DeviceMessage.FanMotorWattage(MotorWattage));
+                PublishMessage(new DeviceMessage.FanMaxRpm(MaxRpm));
                 PublishMessage(new DeviceMessage.FanOnOffChanged(IsOn));
                 PublishMessage(new DeviceMessage.FanTargetRpmChanged(TargetRpm));
                 break;
@@ -131,7 +136,7 @@ public class FanController : PoweredDevice, IFanController
         if (!IsOn)
             return Watt.Zero;
 
-        return (Watt)MathUtils.Remap(SpeedRpm, 0, _maxRpm, 0, _motorWattage.W);
+        return (Watt)MathUtils.Remap(SpeedRpm, 0, MaxRpm, 0, MotorWattage.W);
     }
 
     public void TurnOnFor(TimeSpan time)
@@ -147,8 +152,8 @@ public class FanController : PoweredDevice, IFanController
     {
         lock (_timerLock)
         {
-            _deviceTimer.SetTimer(time, false);
-            IsOn = true;
+            _deviceTimer.SetTimer(time, true);
+            IsOn = false;
         }
     }
 }
