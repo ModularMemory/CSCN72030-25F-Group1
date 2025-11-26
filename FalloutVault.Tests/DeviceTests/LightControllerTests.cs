@@ -58,12 +58,13 @@ public class LightControllerTests
         lightController.SetEventBus(eventBus);
 
         // Act
-        lightController.SendCommand(new DeviceCommand.SetLightDimmer(0.5));
+        const double EXPECTED = 0.5;
+        lightController.SendCommand(new DeviceCommand.SetLightDimmer(EXPECTED));
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
         Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.DimmerLevelChanged>());
-        Assert.That(eventBus.Messages[0].Data, Is.EqualTo(0.5).Within(0.01));
+        Assert.That(eventBus.Messages[0].Data, Is.EqualTo(EXPECTED).Within(0.01));
     }
 
     [Test]

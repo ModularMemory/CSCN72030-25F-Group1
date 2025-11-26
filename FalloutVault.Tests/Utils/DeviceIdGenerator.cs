@@ -11,15 +11,23 @@ public static class DeviceIdGenerator
         => GetRandomDeviceId(HashCode.Combine(callerName.GetHashCode(), callerLineNumber));
 
     public static DeviceId GetRandomDeviceId(int seed)
+        => new(GetRandomDeviceName(seed), GetRandomDeviceZone(seed));
+
+    public static string GetRandomDeviceName(int seed)
     {
         var random = new Random(seed);
 
         var nameLen = random.Next(3, 5);
+
+        return string.Concat(random.GetItems(NameChars, nameLen));
+    }
+
+    public static string GetRandomDeviceZone(int seed)
+    {
+        var random = new Random(seed);
+
         var zoneLen = random.Next(3, 5);
 
-        var name = string.Concat(random.GetItems(NameChars, nameLen));
-        var zone = string.Concat(random.GetItems(NameChars, zoneLen));
-
-        return new DeviceId(name, zone);
+        return string.Concat(random.GetItems(NameChars, zoneLen));
     }
 }
