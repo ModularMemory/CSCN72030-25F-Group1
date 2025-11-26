@@ -63,7 +63,7 @@ public class LightControllerTests
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
-        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.DimmerLevelChanged>());
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.LightDimmerLevelChanged>());
         Assert.That(eventBus.Messages[0].Data, Is.EqualTo(EXPECTED).Within(0.01));
     }
 
