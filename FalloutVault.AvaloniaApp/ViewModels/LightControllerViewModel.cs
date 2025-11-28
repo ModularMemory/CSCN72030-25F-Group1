@@ -15,13 +15,13 @@ public partial class LightControllerViewModel : DeviceViewModel, IOnOff
         : base(deviceController, messageBus) { }
 
     [ObservableProperty]
-    private bool _isOn;
+    public partial bool IsOn { get; set; }
 
     [ObservableProperty]
-    private SolidColorBrush? _buttonColour;
+    public partial SolidColorBrush? ButtonColour { get; set; }
 
     [ObservableProperty]
-    private double _dimmer;
+    public partial double Dimmer { get; set; }
 
     protected override void OnDeviceMessage(object? sender, DeviceMessage message)
     {

@@ -13,8 +13,8 @@ public partial class ZoneViewModel : ViewModelBase
     public string ZoneName { get; }
 
     [ObservableProperty]
-    private bool _isSelected;
+    public partial bool IsSelected { get; set; }
 
     [ObservableProperty]
-    private bool _allZonesSelected = true;
+    public partial bool AllZonesSelected { get; set; } = true;
 }

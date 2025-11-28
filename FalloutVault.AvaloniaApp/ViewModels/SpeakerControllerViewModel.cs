@@ -15,13 +15,13 @@ public partial class SpeakerControllerViewModel : DeviceViewModel, IOnOff
         : base(deviceController, messageBus) { }
 
     [ObservableProperty]
-    private bool _isOn;
+    public partial bool IsOn { get; set; }
 
     [ObservableProperty]
-    private SolidColorBrush? _buttonColour;
+    public partial SolidColorBrush? ButtonColour { get; set; }
 
     [ObservableProperty]
-    private double _volume;
+    public partial double Volume { get; set; }
 
     protected override void OnDeviceMessage(object? sender, DeviceMessage message)
     {

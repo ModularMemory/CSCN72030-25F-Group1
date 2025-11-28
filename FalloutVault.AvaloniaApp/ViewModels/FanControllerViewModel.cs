@@ -15,16 +15,16 @@ public partial class FanControllerViewModel : DeviceViewModel, IOnOff
         : base(deviceController, messageBus) { }
 
     [ObservableProperty]
-    private bool _isOn;
+    public partial bool IsOn { get; set; }
 
     [ObservableProperty]
-    private int _currentSpeed;
+    public partial int CurrentSpeed { get; set; }
 
     [ObservableProperty]
-    private int _targetSpeed;
+    public partial int TargetSpeed { get; set; }
 
     [ObservableProperty]
-    private SolidColorBrush? _buttonColour;
+    public partial SolidColorBrush? ButtonColour { get; set; }
 
     protected override void OnDeviceMessage(object? sender, DeviceMessage message)
     {

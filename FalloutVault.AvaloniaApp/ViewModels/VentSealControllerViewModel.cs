@@ -17,22 +17,19 @@ public partial class VentSealControllerViewModel : DeviceViewModel
         : base(deviceController, messageBus) { }
 
     [ObservableProperty]
-    private bool _isOpen;
+    public partial bool IsOpen { get; set; }
 
     [ObservableProperty]
-    private bool _isLocked;
+    public partial bool IsLocked { get; set; }
 
     [ObservableProperty]
-    private SolidColorBrush? _openButtonColour;
+    public partial SolidColorBrush? OpenButtonColour { get; set; }
 
     [ObservableProperty]
-    private MaterialIconKind _ventIcon;
+    public partial MaterialIconKind VentIcon { get; set; }
 
     [ObservableProperty]
-    private MaterialIconKind _lockIcon;
-
-
-
+    public partial MaterialIconKind LockIcon { get; set; }
 
     protected override void OnDeviceMessage(object? sender, DeviceMessage message)
     {

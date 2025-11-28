@@ -15,10 +15,10 @@ public partial class PowerControllerViewModel : DeviceViewModel, IOnOff
         : base(deviceController, messageBus) { }
 
     [ObservableProperty]
-    private bool _isOn;
+    public partial bool IsOn { get; set; }
 
     [ObservableProperty]
-    private SolidColorBrush? _buttonColour;
+    public partial SolidColorBrush? ButtonColour { get; set; }
 
     protected override void OnDeviceMessage(object? sender, DeviceMessage message)
     {
