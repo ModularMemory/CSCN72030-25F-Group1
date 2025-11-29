@@ -15,6 +15,6 @@ public partial class DeviceMessage
         public CropSprinklerSectionChanged(double data) : base(data) { }
         public CropSprinklerSectionChanged(double data, DateTimeOffset timestamp) : base(data, timestamp) { }
 
-        public override string Message => "Crop Sprinkler Target Section changed";
+        public override string Message => "Crop Sprinkler Number of Sections Targetted changed";
     }
 }

@@ -11,7 +11,7 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
 {
     private bool _IsOn;
 
-    private int _TargetSection;
+    private int _TargetSections; //How many sections are being watered
 
     private int _TargetLitres;
 
@@ -31,13 +31,13 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
 
         }
     }
-    public int TargetSection
+    public int TargetSections
     {
-        get => _TargetSection;
+        get => _TargetSections;
         set
         {
-            _TargetSection = value;
-            PublishMessage(new DeviceMessage.CropSprinklerSectionChanged(_TargetSection));
+            _TargetSections = value;
+            PublishMessage(new DeviceMessage.CropSprinklerSectionChanged(_TargetSections));
 
         }
     }
@@ -52,8 +52,8 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
     public TimeSpan TimeSpanOn
     {
         get => _TimeSpanOn;
-
-        set => _TimeSpanOn = value;
+        //Timespan = Litres * # of sections (It takes time for water to move)
+        set => _TimeSpanOn = _TimeSpanOn;
     }
 
 
@@ -82,10 +82,10 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
             case DeviceCommand.IsOn:
                 IsOn = (bool)command.Data!; break;
             case DeviceCommand.CurrentCropSection:
-               TargetSection  = (int)command.Data!; break;
+               TargetSections  = (int)command.Data!; break;
             case DeviceCommand.GetCurrentState:
                 PublishMessage(new DeviceMessage.CropSprinklerStateChanged(IsOn));
-                PublishMessage(new DeviceMessage.CropSprinklerSectionChanged(TargetSection));
+                PublishMessage(new DeviceMessage.CropSprinklerSectionChanged(TargetSections));
                 break;
         }
     }

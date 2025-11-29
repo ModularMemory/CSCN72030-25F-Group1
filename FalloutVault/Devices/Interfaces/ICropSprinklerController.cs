@@ -2,7 +2,7 @@
 
 public interface ICropSprinklerController : IOnOff
 {
-    int TargetSection { get; }
+    int TargetSections { get; }
     int TargetLitres { get;}
     TimeSpan TimeSpanOn { get; }
 }

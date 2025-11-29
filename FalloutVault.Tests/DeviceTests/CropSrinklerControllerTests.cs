@@ -52,7 +52,7 @@ internal class CropSrinklerControllerTests
     }
 
     [Test]
-    public void CropSprinkler_SectionChange_PublishesSectionChangeMessage()
+    public void CropSprinkler_SectionChange_PublishesSectionAmountChangeMessage()
     {
         // Arrange
         var cropSprinklerController = new CropSprinklerController(DeviceIdGenerator.GetRandomDeviceId());
@@ -69,4 +69,23 @@ internal class CropSrinklerControllerTests
         Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.CropSprinklerSectionChanged>());
         Assert.That(eventBus.Messages[0].Data, Is.EqualTo(2));
     }
+
+    [Test]
+    public void CropSprinkler_NoSectionChange_PublishesSectionAmountDoesNotChangeMessage()
+    {
+        // Arrange
+        var cropSprinklerController = new CropSprinklerController(DeviceIdGenerator.GetRandomDeviceId());
+        cropSprinklerController.SendCommand(new DeviceCommand.CurrentCropSection(1));
+
+        var eventBus = new MockDeviceMessageEventBus();
+        cropSprinklerController.SetEventBus(eventBus);
+
+        // Act
+        cropSprinklerController.SendCommand(new DeviceCommand.CurrentCropSection(1));
+
+        // Assert
+        Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.CropSprinklerSectionChanged>());
+        Assert.That(eventBus.Messages[0].Data, Is.EqualTo(1));
     }
+}
