@@ -1,4 +1,5 @@
 using FalloutVault.AvaloniaApp.ViewModels;
+using FalloutVault.AvaloniaApp.Views;
 using FalloutVault.Eventing;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
@@ -25,7 +26,8 @@ public static class Startup
             .AddSingleton<IEventBus<DeviceMessage>, DeviceMessageEventBus>()
             .AddSingleton<IEventBus<Watt>, PowerEventBus>()
             .AddSingleton<IDeviceController, DeviceController>()
-            .AddSingleton<IDeviceRegistry, DeviceRegistry>();
+            .AddSingleton<IDeviceRegistry, DeviceRegistry>()
+            .AddSingleton<MainWindow>();
 
         return services;
     }
@@ -34,6 +36,15 @@ public static class Startup
     {
         services
             .AddTransient<MainWindowViewModel>();
+
+        services
+            .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.LightController)
+            .AddKeyedTransient<IDeviceViewModel, FanControllerViewModel>(DeviceType.FanController)
+            .AddKeyedTransient<IDeviceViewModel, SpeakerControllerViewModel>(DeviceType.SpeakerController)
+            .AddKeyedTransient<IDeviceViewModel, PowerControllerViewModel>(DeviceType.PowerController)
+            .AddKeyedTransient<IDeviceViewModel, CropSprinklerControllerViewModel>(DeviceType.CropSprinklerController)
+            .AddKeyedTransient<IDeviceViewModel, VentSealControllerViewModel>(DeviceType.VentSealController)
+            .AddSingleton<DeviceViewModelFactory>();
 
         return services;
     }

@@ -26,7 +26,7 @@ public class LightController : PoweredDevice, ILightController
         {
             if (!SetField(ref field, value)) return;
 
-            PublishMessage(new DeviceMessage.LightOnChanged(field));
+            PublishMessage(new DeviceMessage.LightOnOffChanged(field));
 
             PowerDraw = ComputePowerDraw();
         }
@@ -39,7 +39,7 @@ public class LightController : PoweredDevice, ILightController
         {
             if (!SetField(ref field, Math.Clamp(value, 0, 1))) return;
 
-            PublishMessage(new DeviceMessage.DimmerLevelChanged(field));
+            PublishMessage(new DeviceMessage.LightDimmerLevelChanged(field));
 
             PowerDraw = ComputePowerDraw();
         }
@@ -71,25 +71,26 @@ public class LightController : PoweredDevice, ILightController
     {
         switch (command)
         {
-            case DeviceCommand.SetOn:
+            case DeviceCommand.SetOn setOn:
                 // Cancel the timer if the light was turned on/off manually
                 lock (_timerLock)
                     _deviceTimer.Cancel();
 
-                IsOn = (bool)command.Data!;
+                IsOn = setOn.IsOn;
                 break;
-            case DeviceCommand.SetLightDimmer:
-                DimmerLevel = (double)command.Data!;
+            case DeviceCommand.SetLightDimmer setLightDimmer:
+                DimmerLevel = setLightDimmer.DimmerLevel;
                 break;
-            case DeviceCommand.TurnOnFor:
-                TurnOnFor((TimeSpan)command.Data!);
+            case DeviceCommand.TurnOnFor turnOnFor:
+                TurnOnFor(turnOnFor.Time);
                 break;
-            case DeviceCommand.TurnOffFor:
-                TurnOffFor((TimeSpan)command.Data!);
+            case DeviceCommand.TurnOffFor turnOffFor:
+                TurnOffFor(turnOffFor.Time);
                 break;
             case DeviceCommand.GetCurrentState:
-                PublishMessage(new DeviceMessage.LightOnChanged(IsOn));
-                PublishMessage(new DeviceMessage.DimmerLevelChanged(DimmerLevel));
+                PublishMessage(new DeviceMessage.LightBulbWattage(BulbWattage));
+                PublishMessage(new DeviceMessage.LightOnOffChanged(IsOn));
+                PublishMessage(new DeviceMessage.LightDimmerLevelChanged(DimmerLevel));
                 break;
         }
     }

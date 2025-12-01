@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
-using FalloutVault.Devices.Models;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FalloutVault.Interfaces;
 using FalloutVault.Models;
 
@@ -10,49 +10,60 @@ namespace FalloutVault.AvaloniaApp.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    public string LeftTitle { get; } = "Rooms";
-    public string RightTitle { get; } = "Devices";
+    private readonly List<IDeviceViewModel> _deviceViewModels = [];
 
-    public ObservableCollection<MyModel> Devices { get; } = new();
+    public ObservableCollection<ZoneViewModel> Zones { get; } = [];
+    public ObservableCollection<IDeviceViewModel> Devices { get; } = [];
 
-    public MainWindowViewModel(IDeviceRegistry deviceRegistry)
+    public MainWindowViewModel(IDeviceRegistry deviceRegistry, DeviceViewModelFactory deviceViewModelFactory)
     {
         foreach (var (id, type, capabilities) in deviceRegistry.Devices)
         {
-            Devices.Add(new MyModel(id, type));
+            _deviceViewModels.Add(deviceViewModelFactory.Create(type, id));
         }
 
+        foreach (var zone in deviceRegistry.Devices.Select(x => x.id.Zone).Distinct())
+        {
+            Zones.Add(new ZoneViewModel(zone));
+        }
+
+        UpdateDeviceList();
     }
 
+    public void UpdateDeviceList()
+    {
+        var enabledZones = Zones
+            .Where(x => x.IsSelected)
+            .Select(x => x.ZoneName)
+            .ToHashSet();
+
+        Devices.Clear();
+        foreach (var viewModel in _deviceViewModels)
+        {
+            if (enabledZones.Contains(viewModel.Id.Zone))
+            {
+                Devices.Add(viewModel);
+            }
+        }
+    }
 }
 
 // Source - https://stackoverflow.com/a
 // Posted by kekekeks
 // Retrieved 2025-11-20, License - CC BY-SA 4.0
-
 public class MyTemplateSelector : IDataTemplate
 {
+    // ReSharper disable once CollectionNeverUpdated.Global
     [Content]
-    public Dictionary<DeviceType, IDataTemplate> Templates {get;} = new();
+    public Dictionary<DeviceType, IDataTemplate> Templates { get; } = [];
 
-    public Control Build(object? data)
+    public Control? Build(object? data)
     {
-        return Templates[((MyModel) data).Value].Build(data);
+        return Templates[((DeviceViewModel)data!).Type].Build(data);
     }
 
     public bool Match(object? data)
     {
-        return data is MyModel;
+        return data is DeviceViewModel;
     }
-}
-
-public class MyModel
-{
-    public MyModel(DeviceId id, DeviceType text)
-    {
-        Id = id;
-        Value = text;
-    }
-    public DeviceId Id { get; }
-    public DeviceType Value { get; }
 }

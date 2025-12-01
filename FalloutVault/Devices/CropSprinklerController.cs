@@ -1,20 +1,17 @@
-﻿using FalloutVault.Devices.Interfaces;
+﻿using FalloutVault.Commands;
 using FalloutVault.Devices.Models;
-using FalloutVault.Eventing.Commands;
+using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
+using static FalloutVault.Commands.DeviceCommand;
 
 namespace FalloutVault.Devices;
 
-public class CropController : PoweredDevice, ICropSprinklerController
+public class CropSprinklerController : PoweredDevice, ICropSprinklerController
 {
     private bool _IsOn;
-
     private int _TargetSection;
-
     private int _TargetLitres;
-
-    private double _MinutesOn;
-
+    private TimeSpan _TimeSpanOn;
 
     public override DeviceId Id { get; }
     public override DeviceType Type => DeviceType.CropSprinklerController;
@@ -22,13 +19,23 @@ public class CropController : PoweredDevice, ICropSprinklerController
     public bool IsOn
     {
         get => _IsOn;
-        set => _IsOn = value;
+        set
+        {
+            _IsOn = value;
+            PublishMessage(new DeviceMessage.CropSprinklerOnOffChanged(_IsOn));
+        }
     }
+
     public int TargetSection
     {
         get => _TargetSection;
-        set => _TargetSection = value;
+        set
+        {
+            _TargetSection = value;
+            PublishMessage(new DeviceMessage.CropSprinklerSectionChanged(_TargetSection));
+        }
     }
+
 
     public int TargetLitres
     {
@@ -36,19 +43,42 @@ public class CropController : PoweredDevice, ICropSprinklerController
         set => _TargetLitres = value;
     }
 
-    public double MinutesOn
+    public TimeSpan TimeSpanOn
     {
-        get => _MinutesOn;
-
-        set => _MinutesOn = _TargetSection * _TargetLitres;
+        get => _TimeSpanOn;
+        set => _TimeSpanOn = value;
     }
-
 
 
     public CropSprinklerController(DeviceId id)
     {
         Id = id;
     }
-}
 
-   
+    protected override Watt ComputePowerDraw()
+    {
+        if (!IsOn)
+            return Watt.Zero;
+
+        return (Watt)50;
+    }
+
+    public override void Update() { }
+
+    public override void SendCommand(DeviceCommand command)
+    {
+        switch (command)
+        {
+            case SetOn setOn:
+                IsOn = setOn.IsOn;
+                break;
+            case CurrentCropSection currentCropSection:
+                TargetSection = currentCropSection.Section;
+                break;
+            case GetCurrentState:
+                PublishMessage(new DeviceMessage.CropSprinklerOnOffChanged(IsOn));
+                PublishMessage(new DeviceMessage.CropSprinklerSectionChanged(TargetSection));
+                break;
+        }
+    }
+}

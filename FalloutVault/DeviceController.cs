@@ -89,7 +89,33 @@ public sealed class DeviceController : IDeviceController, IDisposable
             return true;
         }
 
+        _logger.Warning("Failed to send {Command} command to {DeviceId}", command.GetType(), targetDevice);
         return false;
+    }
+
+    public bool SendZonedCommand(string zone, DeviceCommand command)
+    {
+        var devicesInZone = _deviceRegistry.Devices
+            .Where(x => x.id.Zone.Equals(zone, StringComparison.OrdinalIgnoreCase));
+
+        var success = false;
+        foreach (var (id, _, _) in devicesInZone)
+        {
+            success |= SendCommand(id, command);
+        }
+
+        return success;
+    }
+
+    public bool SendBroadcastCommand(DeviceCommand command)
+    {
+        var success = false;
+        foreach (var (id, _, _) in _deviceRegistry.Devices)
+        {
+            success |= SendCommand(id, command);
+        }
+
+        return success;
     }
 
     public void Dispose()

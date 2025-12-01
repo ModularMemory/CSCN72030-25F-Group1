@@ -4,9 +4,13 @@ namespace FalloutVault.Eventing.Models;
 
 public partial class DeviceMessage
 {
-    public abstract class DeviceOnChanged : DeviceMessage
+    public abstract class DeviceOnOffChanged(bool data) : DeviceMessage(ValueBoxes.BooleanBox(data))
     {
-        public DeviceOnChanged(bool data) : base(ValueBoxes.BooleanBox(data)) { }
-        public DeviceOnChanged(bool data, DateTimeOffset timestamp) : base(ValueBoxes.BooleanBox(data), timestamp) { }
+        public bool IsOn { get; } = data;
+    }
+
+    public abstract class DeviceOpenCloseChanged(bool data) : DeviceMessage(ValueBoxes.BooleanBox(data))
+    {
+        public bool IsOpen { get; } = data;
     }
 }

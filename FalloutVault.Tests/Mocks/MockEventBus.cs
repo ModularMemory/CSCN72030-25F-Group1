@@ -37,4 +37,9 @@ internal abstract class MockEventBus<TMessage> : IEventBus<TMessage>
         _messages.Add(data);
         InnerBus.Publish(sender, data);
     }
+
+    public void ClearMessages()
+    {
+        _messages.Clear();
+    }
 }

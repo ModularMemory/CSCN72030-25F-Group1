@@ -1,8 +1,17 @@
-﻿namespace FalloutVault.Devices.Interfaces;
+﻿using System.ComponentModel.DataAnnotations;
+using FalloutVault.Models;
+
+namespace FalloutVault.Devices.Interfaces;
 
 public interface IFanController : IOnOff
 {
-    double TargetRpm { get; set; }
+    Watt MotorWattage { get; }
+
+    [Range(0, int.MaxValue)]
+    int MaxRpm { get; }
+
+    [Range(0, int.MaxValue)]
+    int TargetRpm { get; }
 
     double SpeedRpm { get; }
 }

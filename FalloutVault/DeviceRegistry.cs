@@ -38,7 +38,7 @@ public sealed class DeviceRegistry : IDeviceRegistry
         return false;
     }
 
-    public IDeviceRegistry RegisterDevice<TDevice>(TDevice device) where TDevice : IDevice
+    public IDeviceRegistry RegisterDevice(IDevice device)
     {
         var deviceId = device.Id;
         var deviceType = device.Type;

@@ -1,0 +1,5 @@
+AXAML
+    filter remove_html_comments
+    filter call_regexp_common HTML
+    extension axaml
+    3rd_gen_scale 1.90

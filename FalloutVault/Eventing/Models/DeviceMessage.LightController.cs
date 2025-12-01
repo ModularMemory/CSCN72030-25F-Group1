@@ -1,19 +1,24 @@
+using FalloutVault.Models;
+
 namespace FalloutVault.Eventing.Models;
 
 public partial class DeviceMessage
 {
-    public class LightOnChanged : DeviceOnChanged
+    public class LightBulbWattage(Watt data) : DeviceMessage(data)
     {
-        public LightOnChanged(bool data) : base(data) { }
-        public LightOnChanged(bool data, DateTimeOffset timestamp) : base(data, timestamp) { }
+        public Watt Wattage { get; } = data;
 
+        public override string Message => "Light bulb wattage";
+    }
+
+    public class LightOnOffChanged(bool data) : DeviceOnOffChanged(data)
+    {
         public override string Message => "Light on changed";
     }
 
-    public class DimmerLevelChanged : DeviceMessage
+    public class LightDimmerLevelChanged(double data) : DeviceMessage(data)
     {
-        public DimmerLevelChanged(double data) : base(data) { }
-        public DimmerLevelChanged(double data, DateTimeOffset timestamp) : base(data, timestamp) { }
+        public double DimmerLevel { get; } = data;
 
         public override string Message => "Light dimmer level changed";
     }

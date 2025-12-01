@@ -24,7 +24,8 @@ public class LightControllerTests
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
-        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.LightOnChanged>());
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.LightOnOffChanged>());
+        Assert.That(eventBus.Messages[0].Data, Is.True);
     }
 
     [Test]
@@ -42,7 +43,7 @@ public class LightControllerTests
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
-        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.LightOnChanged>());
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.LightOnOffChanged>());
         Assert.That(eventBus.Messages[0].Data, Is.False);
     }
 
@@ -57,12 +58,13 @@ public class LightControllerTests
         lightController.SetEventBus(eventBus);
 
         // Act
-        lightController.SendCommand(new DeviceCommand.SetLightDimmer(0.5));
+        const double EXPECTED = 0.5;
+        lightController.SendCommand(new DeviceCommand.SetLightDimmer(EXPECTED));
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
-        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.DimmerLevelChanged>());
-        Assert.That(eventBus.Messages[0].Data, Is.EqualTo(0.5).Within(0.01));
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.LightDimmerLevelChanged>());
+        Assert.That(eventBus.Messages[0].Data, Is.EqualTo(EXPECTED).Within(0.01));
     }
 
     [Test]
@@ -88,9 +90,9 @@ public class LightControllerTests
 
         // Assert event bus
         Assert.That(eventBus.Messages, Has.Count.EqualTo(2));
-        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.LightOnChanged>());
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.LightOnOffChanged>());
         Assert.That(eventBus.Messages[0].Data, Is.True);
-        Assert.That(eventBus.Messages[1], Is.TypeOf<DeviceMessage.LightOnChanged>());
+        Assert.That(eventBus.Messages[1], Is.TypeOf<DeviceMessage.LightOnOffChanged>());
         Assert.That(eventBus.Messages[1].Data, Is.False);
     }
 
@@ -117,9 +119,9 @@ public class LightControllerTests
 
         // Assert event bus
         Assert.That(eventBus.Messages, Has.Count.EqualTo(2));
-        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.LightOnChanged>());
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.LightOnOffChanged>());
         Assert.That(eventBus.Messages[0].Data, Is.False);
-        Assert.That(eventBus.Messages[1], Is.TypeOf<DeviceMessage.LightOnChanged>());
+        Assert.That(eventBus.Messages[1], Is.TypeOf<DeviceMessage.LightOnOffChanged>());
         Assert.That(eventBus.Messages[1].Data, Is.True);
     }
 }

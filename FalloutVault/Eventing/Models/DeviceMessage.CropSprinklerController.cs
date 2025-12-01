@@ -2,18 +2,14 @@
 
 public partial class DeviceMessage
 {
-    public class CropSprinklerOnChanged : DeviceOnChanged
+    public class CropSprinklerOnOffChanged(bool data) : DeviceOnOffChanged(data)
     {
-        public LightOnChanged(bool data) : base(data) { }
-        public LightOnChanged(bool data, DateTimeOffset timestamp) : base(data, timestamp) { }
-
         public override string Message => "Crop Sprinkler state changed";
     }
 
-    public class DimmerLevelChanged : DeviceMessage
+    public class CropSprinklerSectionChanged(int data) : DeviceMessage(data)
     {
-        public CropSprinklerSectionChanged(double data) : base(data) { }
-        public CropSprinklerSectionChanged(double data, DateTimeOffset timestamp) : base(data, timestamp) { }
+        public int Section { get; } = data;
 
         public override string Message => "Crop Sprinkler Target Section changed";
     }
