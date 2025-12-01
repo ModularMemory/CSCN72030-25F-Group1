@@ -3,6 +3,7 @@ using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
+using Serilog;
 
 namespace FalloutVault.Devices;
 
@@ -25,7 +26,10 @@ public class SpeakerController : PoweredDevice, ISpeakerController
         {
             if (!SetField(ref field, value)) return;
 
-            PublishMessage(new DeviceMessage.SpeakerOnChanged(field));
+            //PublishMessage(new DeviceMessage.SpeakerOnOffChanged(field));
+
+            string SpeakerOnMessage = new DeviceMessage.SpeakerOnOffChanged(field).Message;
+            Log.Information(SpeakerOnMessage);
 
             PowerDraw = ComputePowerDraw();
         }

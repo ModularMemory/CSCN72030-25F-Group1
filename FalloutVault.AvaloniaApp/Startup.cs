@@ -18,7 +18,7 @@ public static class Startup
         services
             .AddSingleton<ILogger>(provider =>
                 new LoggerConfiguration()
-                    .WriteTo.Console()
+                    .WriteTo.File("log.txt")
                     .CreateLogger());
 
         services

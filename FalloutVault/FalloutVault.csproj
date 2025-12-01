@@ -8,13 +8,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="JetBrains.Annotations"/>
-        <PackageReference Include="Serilog"/>
-        <PackageReference Include="Serilog.Sinks.Console"/>
+        <PackageReference Include="JetBrains.Annotations" />
+        <PackageReference Include="Serilog" />
+        <PackageReference Include="Serilog.AspNetCore" />
+        <PackageReference Include="Serilog.Settings.Configuration" />
+        <PackageReference Include="Serilog.Sinks.Console" />
+        <PackageReference Include="Serilog.Sinks.File" />
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="FalloutVault.Utils.Utils" Static="True"/>
+        <Using Include="FalloutVault.Utils.Utils" Static="True" />
     </ItemGroup>
 
 </Project>
