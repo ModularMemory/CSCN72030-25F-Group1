@@ -48,7 +48,7 @@ public partial class LightControllerViewModel : DeviceViewModel, IOnOff
     [RelayCommand]
     public async void TimedButton_OnClick()
     {
-        var dialog = new TimedOnOffDialog
+        var dialog = new TimedOnOffDialog(IsOn)
         {
             DataContext = new TimedOnOffDialogViewModel(),
             WindowStartupLocation = WindowStartupLocation.CenterOwner
