@@ -508,7 +508,7 @@
                              Text="{Binding LogSearch}"
                              Width="400" />
                 </StackPanel>
-                <DataGrid Grid.Row="" x:Name="LogDataGrid"
+                <DataGrid Grid.Row="1" x:Name="LogDataGrid"
                           AreRowDetailsFrozen="True"
                           CanUserSortColumns="False"
                           CanUserReorderColumns="False"
