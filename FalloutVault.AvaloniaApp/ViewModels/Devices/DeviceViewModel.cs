@@ -4,18 +4,21 @@ using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
 using FalloutVault.Models;
+using Serilog;
 
 namespace FalloutVault.AvaloniaApp.ViewModels.Devices;
 
 public abstract class DeviceViewModel : ViewModelBase, IDeviceViewModel
 {
     protected readonly IDeviceController DeviceController;
+    protected readonly ILogger Logger;
     private readonly IEventBus<DeviceMessage> _messageBus;
 
-    protected DeviceViewModel(IDeviceController deviceController, IEventBus<DeviceMessage> messageBus)
+    protected DeviceViewModel(IDeviceController deviceController, IEventBus<DeviceMessage> messageBus, ILogger logger)
     {
         DeviceController = deviceController;
         _messageBus = messageBus;
+        Logger = logger;
         _messageBus.Handler += OnDeviceMessage;
     }
 

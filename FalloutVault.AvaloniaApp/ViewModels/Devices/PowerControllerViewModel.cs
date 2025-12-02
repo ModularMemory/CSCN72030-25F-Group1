@@ -1,4 +1,5 @@
 using Avalonia.Media;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FalloutVault.Commands;
@@ -6,6 +7,8 @@ using FalloutVault.Devices.Interfaces;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
+using FalloutVault.Models;
+using Serilog;
 
 namespace FalloutVault.AvaloniaApp.ViewModels.Devices;
 
@@ -13,11 +16,15 @@ public partial class PowerControllerViewModel : DeviceViewModel, IOnOff
 {
     public PowerControllerViewModel(
         IDeviceController deviceController,
-        IEventBus<DeviceMessage> messageBus)
-        : base(deviceController, messageBus) { }
+        IEventBus<DeviceMessage> messageBus,
+        ILogger logger)
+        : base(deviceController, messageBus, logger) { }
 
     [ObservableProperty]
     public partial bool IsOn { get; set; }
+
+    [ObservableProperty]
+    public partial Watt PowerGeneration { get; set; }
 
     [ObservableProperty]
     public partial SolidColorBrush? ButtonColour { get; set; }
@@ -33,14 +40,20 @@ public partial class PowerControllerViewModel : DeviceViewModel, IOnOff
         if (sender is not IDevice device || device.Id != Id)
             return;
 
-        switch (message)
+        Dispatcher.UIThread.Invoke(() =>
         {
-            case DeviceMessage.DeviceOnOffChanged onOffChanged:
-                IsOn = onOffChanged.IsOn;
-                ButtonColour = new SolidColorBrush(IsOn
-                    ? Color.FromRgb(0,255,0)
-                    : Color.FromRgb(255,0,0));
-                break;
-        }
+            switch (message)
+            {
+                case DeviceMessage.DeviceOnOffChanged onOffChanged:
+                    IsOn = onOffChanged.IsOn;
+                    ButtonColour = new SolidColorBrush(IsOn
+                        ? Color.FromRgb(0, 255, 0)
+                        : Color.FromRgb(255, 0, 0));
+                    break;
+                case DeviceMessage.PowerGenerationChanged powerGenerationChanged:
+                    PowerGeneration = powerGenerationChanged.PowerGeneration;
+                    break;
+            }
+        });
     }
 }

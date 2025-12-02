@@ -118,6 +118,7 @@
                                                     VerticalAlignment="Center" />
 
                                             </StackPanel>
+
                                             <Button
                                                 Command="{Binding OnOffButton_OnClick}"
                                                 CornerRadius="20"
@@ -130,6 +131,28 @@
                                                         Foreground="{Binding ButtonColour}" />
                                                 </Button.Content>
                                             </Button>
+                                            <StackPanel
+                                                VerticalAlignment="Center"
+                                                Spacing="3">
+                                                <TextBlock
+                                                    Text="Timer (on/off):"
+                                                    Foreground="Black">
+                                                </TextBlock>
+                                                <Button
+                                                    Command="{Binding TimedButton_OnClick}"
+                                                    CornerRadius="20"
+                                                    Background="#333"
+                                                    Width="80"
+                                                    Height="40"
+                                                    HorizontalAlignment="Center">
+                                                    <Button.Content>
+                                                        <icons:MaterialIcon
+                                                            Kind="Timer"
+                                                            IconSize="20"
+                                                            Foreground="White" />
+                                                    </Button.Content>
+                                                </Button>
+                                            </StackPanel>
                                             <Border
                                                 Background="#20ffffff"
                                                 CornerRadius="5"
@@ -137,7 +160,6 @@
 
                                                 <StackPanel
                                                     Orientation="Vertical"
-
                                                     VerticalAlignment="Center">
                                                     <TextBlock
                                                         Text="{Binding Dimmer, StringFormat={}Dimmer\: {0:N0}\%}"
@@ -148,6 +170,7 @@
                                                             Maximum="100"
                                                             Value="{Binding Dimmer}" />
                                                 </StackPanel>
+
                                             </Border>
                                         </StackPanel>
                                     </Border>
@@ -196,6 +219,28 @@
                                                         Foreground="{Binding ButtonColour}" />
                                                 </Button.Content>
                                             </Button>
+                                            <StackPanel
+                                                VerticalAlignment="Center"
+                                                Spacing="3">
+                                                <TextBlock
+                                                    Text="Timer (on/off):"
+                                                    Foreground="Black">
+                                                </TextBlock>
+                                                <Button
+                                                    Command="{Binding TimedButton_OnClick}"
+                                                    CornerRadius="20"
+                                                    Background="#333"
+                                                    Width="80"
+                                                    Height="40"
+                                                    HorizontalAlignment="Center">
+                                                    <Button.Content>
+                                                        <icons:MaterialIcon
+                                                            Kind="Timer"
+                                                            IconSize="20"
+                                                            Foreground="White" />
+                                                    </Button.Content>
+                                                </Button>
+                                            </StackPanel>
                                             <StackPanel
                                                 Spacing="4"
                                                 VerticalAlignment="Center">
@@ -270,6 +315,8 @@
                                                         Foreground="{Binding ButtonColour}" />
                                                 </Button.Content>
                                             </Button>
+                                            <TextBlock
+                                                Text="{Binding PowerGeneration, StringFormat={}Power: {0}}" />
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>

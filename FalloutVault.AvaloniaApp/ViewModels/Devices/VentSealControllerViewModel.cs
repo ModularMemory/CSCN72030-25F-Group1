@@ -1,4 +1,5 @@
 using Avalonia.Media;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FalloutVault.Commands;
@@ -7,6 +8,7 @@ using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
 using Material.Icons;
+using Serilog;
 
 namespace FalloutVault.AvaloniaApp.ViewModels.Devices;
 
@@ -14,8 +16,9 @@ public partial class VentSealControllerViewModel : DeviceViewModel
 {
     public VentSealControllerViewModel(
         IDeviceController deviceController,
-        IEventBus<DeviceMessage> messageBus)
-        : base(deviceController, messageBus) { }
+        IEventBus<DeviceMessage> messageBus,
+        ILogger logger)
+        : base(deviceController, messageBus, logger) { }
 
     [ObservableProperty]
     public partial bool IsOpen { get; set; }
@@ -49,23 +52,26 @@ public partial class VentSealControllerViewModel : DeviceViewModel
         if (sender is not IDevice device || device.Id != Id)
             return;
 
-        switch (message)
+        Dispatcher.UIThread.Invoke(() =>
         {
-            case DeviceMessage.VentOpenChanged openChanged:
-                IsOpen = openChanged.IsOpen;
-                OpenButtonColour = new SolidColorBrush(IsOpen
-                    ? Color.FromRgb(0,255,0)
-                    : Color.FromRgb(255,0,0));
-                VentIcon = IsOpen
-                    ? MaterialIconKind.Hvac
-                    : MaterialIconKind.HvacOff;
-                break;
-            case DeviceMessage.VentLockedChanged lockedChanged:
-                IsLocked = lockedChanged.IsLocked;
-                LockIcon = IsLocked
-                    ? MaterialIconKind.Lock
-                    : MaterialIconKind.LockOpenVariant;
-                break;
-        }
+            switch (message)
+            {
+                case DeviceMessage.VentOpenChanged openChanged:
+                    IsOpen = openChanged.IsOpen;
+                    OpenButtonColour = new SolidColorBrush(IsOpen
+                        ? Color.FromRgb(0, 255, 0)
+                        : Color.FromRgb(255, 0, 0));
+                    VentIcon = IsOpen
+                        ? MaterialIconKind.Hvac
+                        : MaterialIconKind.HvacOff;
+                    break;
+                case DeviceMessage.VentLockedChanged lockedChanged:
+                    IsLocked = lockedChanged.IsLocked;
+                    LockIcon = IsLocked
+                        ? MaterialIconKind.Lock
+                        : MaterialIconKind.LockOpenVariant;
+                    break;
+            }
+        });
     }
 }
