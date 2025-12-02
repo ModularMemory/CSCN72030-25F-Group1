@@ -2,11 +2,13 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FalloutVault.AvaloniaApp.Models;
 using FalloutVault.AvaloniaApp.Services.Interfaces;
 using FalloutVault.AvaloniaApp.ViewModels.Devices;
 using FalloutVault.Interfaces;
 using FalloutVault.Models;
+using Serilog;
 
 namespace FalloutVault.AvaloniaApp.ViewModels;
 
@@ -14,20 +16,28 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     private readonly IDeviceMessageLogger _deviceMessageLogger;
     private readonly List<IDeviceViewModel> _deviceViewModels = [];
+    private readonly Lock _logLock = new();
 
     public ObservableCollection<ZoneViewModel> Zones { get; } = [];
     public ObservableCollection<IDeviceViewModel> Devices { get; } = [];
     public ObservableCollection<LogViewModel> LogMessages { get; } = [];
 
+    [ObservableProperty]
+    public partial string LogSearch { get; set; }
+
     public MainWindowViewModel(IDeviceRegistry deviceRegistry, IDeviceMessageLogger deviceMessageLogger, DeviceViewModelFactory deviceViewModelFactory)
     {
         _deviceMessageLogger = deviceMessageLogger;
-        _deviceMessageLogger.DeviceMessageReceived += DeviceMessageLogger_OnDeviceMessageReceived;
 
-        foreach (var message in _deviceMessageLogger.Messages)
+        lock (_logLock)
         {
-            DeviceMessageLogger_OnDeviceMessageReceived(null, message);
+            foreach (var message in _deviceMessageLogger.Messages)
+            {
+                AddLogMessage(message);
+            }
         }
+
+        _deviceMessageLogger.DeviceMessageReceived += DeviceMessageLogger_OnDeviceMessageReceived;
 
         foreach (var (id, type, capabilities) in deviceRegistry.Devices)
         {
@@ -61,7 +71,34 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void DeviceMessageLogger_OnDeviceMessageReceived(object? sender, DeviceLog e)
     {
-        LogMessages.Add(new LogViewModel(e.Sender, e.Message));
+        lock (_logLock)
+        {
+            AddLogMessage(e);
+        }
+    }
+
+    partial void OnLogSearchChanged(string value)
+    {
+        lock (_logLock)
+        {
+            LogMessages.Clear();
+            foreach (var deviceLog in _deviceMessageLogger.Messages)
+            {
+                AddLogMessage(deviceLog);
+            }
+        }
+    }
+
+    private void AddLogMessage(DeviceLog log)
+    {
+        if (string.IsNullOrWhiteSpace(LogSearch)
+            || log.Sender.Name.Contains(LogSearch, StringComparison.OrdinalIgnoreCase)
+            || log.Sender.Zone.Contains(LogSearch, StringComparison.OrdinalIgnoreCase)
+            || log.Message.Contains(LogSearch, StringComparison.OrdinalIgnoreCase))
+        {
+            LogMessages.Add(new LogViewModel(log.Sender, log.Message));
+        }
+
         if (LogMessages.Count > 500)
         {
             LogMessages.RemoveAt(0);
