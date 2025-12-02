@@ -16,7 +16,7 @@ public class PowerControllerTests
         var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)1000);
         var lightController = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)100);
 
-        var powerEventBus = new PowerEventBus();
+        var powerEventBus = new MockPowerEventBus();
         powerController.SetEventBus(powerEventBus);
         lightController.SetEventBus(powerEventBus);
 
@@ -39,7 +39,7 @@ public class PowerControllerTests
         var light1 = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)100);
         var light2 = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)100);
 
-        var powerEventBus = new PowerEventBus();
+        var powerEventBus = new MockPowerEventBus();
         powerController.SetEventBus(powerEventBus);
         light1.SetEventBus(powerEventBus);
         light2.SetEventBus(powerEventBus);
@@ -73,7 +73,7 @@ public class PowerControllerTests
         powerController.SendCommand(new DeviceCommand.SetOn(false));
 
         // Assert
-        Assert.That(powerController.PowerGeneration.W, Is.EqualTo(0));
+        Assert.That(powerController.PowerGeneration.W, Is.Zero);
         Assert.That(powerController.IsOn, Is.False);
     }
 
@@ -110,5 +110,34 @@ public class PowerControllerTests
             .OfType<DeviceMessage.PowerOnOffChanged>()
             .FirstOrDefault();
         Assert.That(shutdownMessage, Is.Not.Null);
+    }
+
+    [Test]
+    public void PowerController_OnTurnOff_TurnsOffDevices()
+    {
+        // Arrange
+        var lightController = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)25);
+
+        var powerEventBus = new MockPowerEventBus();
+        var messageEventBus = new MockDeviceMessageEventBus();
+        var registry = new DeviceRegistry(Serilog.Core.Logger.None);
+        
+        var deviceController = new DeviceController(registry, messageEventBus, powerEventBus, Serilog.Core.Logger.None);
+        var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)1000, deviceController);
+
+        registry.RegisterDevice(lightController);
+        registry.RegisterDevice(powerController);
+
+        lightController.SetEventBus(powerEventBus);
+        powerController.SetEventBus(powerEventBus);
+
+        // Act
+        lightController.SendCommand(new DeviceCommand.SetOn(true));
+
+        powerController.SendCommand(new DeviceCommand.SetOn(false));
+
+        // Assert
+        Assert.That(lightController.IsOn, Is.False);
+        Assert.That(powerController.IsOn, Is.False);
     }
 }

@@ -60,15 +60,14 @@ public class PowerController : Device, IPowerController
         }
     }
 
-    // Constructors
-    public PowerController(DeviceId id, Watt standardGeneration)
+    public PowerController(DeviceId id, Watt standardGeneration, IDeviceController? deviceController = null)
     {
         Id = id;
         StandardGeneration = standardGeneration;
         PowerGeneration = standardGeneration;
         _totalPowerDraw = Watt.Zero;
         IsOn = true;
-        _deviceController = _deviceController;
+        _deviceController = deviceController;
     }
 
     // Methods
@@ -124,15 +123,20 @@ public class PowerController : Device, IPowerController
 
     private void TurnOff()
     {
+        if (!IsOn)
+            return;
+
         IsOn = false;
         PowerGeneration = Watt.Zero;
 
-        //still have to decide how to turn off all devices
         _deviceController?.SendBroadcastCommand(new DeviceCommand.SetOn(false));
     }
 
     private void TurnOn()
     {
+        if (IsOn)
+            return;
+
         IsOn = true;
         PowerGeneration = StandardGeneration;
     }
