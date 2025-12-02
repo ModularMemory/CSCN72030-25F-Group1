@@ -1,3 +1,4 @@
+using FalloutVault.AvaloniaApp.Services;
 using FalloutVault.AvaloniaApp.ViewModels;
 using FalloutVault.AvaloniaApp.Views;
 using FalloutVault.Eventing;
@@ -20,6 +21,7 @@ public static class Startup
             .AddSingleton<ILogger>(provider =>
                 new LoggerConfiguration()
                     .WriteTo.Console()
+                    .WriteTo.File("Log.txt")
                     .CreateLogger());
 
         services
@@ -27,6 +29,7 @@ public static class Startup
             .AddSingleton<IEventBus<Watt>, PowerEventBus>()
             .AddSingleton<IDeviceController, DeviceController>()
             .AddSingleton<IDeviceRegistry, DeviceRegistry>()
+            .AddSingleton<IDeviceMessageLogger, DeviceMessageLogger>()
             .AddSingleton<MainWindow>();
 
         return services;
