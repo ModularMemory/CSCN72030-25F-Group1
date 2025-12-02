@@ -14,6 +14,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public ObservableCollection<ZoneViewModel> Zones { get; } = [];
     public ObservableCollection<IDeviceViewModel> Devices { get; } = [];
+    private ObservableCollection<LogViewModel> LogMessages { get; } = [];
 
     public MainWindowViewModel(IDeviceRegistry deviceRegistry, DeviceViewModelFactory deviceViewModelFactory)
     {

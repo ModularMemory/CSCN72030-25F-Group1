@@ -23,19 +23,20 @@
         CornerRadius="5"
         Background="#333"
         Margin="10">
-        <Grid
-            ColumnDefinitions="Auto,*"
-            Margin="10"
-            ColumnSpacing="10">
+        <Grid ColumnDefinitions="Auto,*,Auto"
+              Margin="10"
+              ColumnSpacing="10">
 
-            <Grid Grid.Column="0" RowDefinitions="Auto, *">
+            <Grid Grid.Column="0"
+                  RowDefinitions="Auto, *"
+                  RowSpacing="10">
                 <TextBlock Grid.Row="0" Text="Navigation"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center" />
+
                 <ScrollViewer Grid.Row="1">
                     <StackPanel Orientation="Vertical" Spacing="5">
-                        <DataGrid Margin="20"
-                                  AreRowDetailsFrozen="True"
+                        <DataGrid AreRowDetailsFrozen="True"
                                   CanUserSortColumns="False"
                                   CanUserReorderColumns="False"
                                   CanUserResizeColumns="False"
@@ -52,7 +53,7 @@
                                                 IsChecked="{Binding IsSelected}"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
-                                                IsCheckedChanged="CheckZone_OnIsCheckedChanged"/>
+                                                IsCheckedChanged="CheckZone_OnIsCheckedChanged" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                     <DataGridTemplateColumn.HeaderTemplate>
@@ -75,7 +76,8 @@
                 <TextBlock Grid.Row="0" Text="Devices" HorizontalAlignment="Center"
                            VerticalAlignment="Center" />
 
-                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible">
+                <ScrollViewer Grid.Row="1"
+                              VerticalScrollBarVisibility="Visible">
                     <ItemsControl ItemsSource="{Binding Devices}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -422,7 +424,8 @@
                                                 CornerRadius="20"
                                                 Background="#333"
                                                 Width="40"
-                                                Height="40">
+                                                Height="40"
+                                                IsEnabled="{Binding IsLocked, Converter={x:Static BoolConverters.Not}}">
                                                 <Button.Content>
 
                                                     <icons:MaterialIcon
@@ -448,7 +451,32 @@
                             </vm:MyTemplateSelector>
                         </ItemsControl.DataTemplates>
                     </ItemsControl>
-
+                </ScrollViewer>
+            </Grid>
+            <Grid Grid.Column="2"
+                  RowDefinitions="Auto,*"
+                  RowSpacing="10"
+                  Margin="10">
+                <StackPanel Grid.Row="0"
+                            HorizontalAlignment="Center">
+                    <TextBlock Text="Logs"
+                               HorizontalAlignment="Center" />
+                </StackPanel>
+                <ScrollViewer Grid.Row="1">
+                    <DataGrid AreRowDetailsFrozen="True"
+                              CanUserSortColumns="False"
+                              CanUserReorderColumns="False"
+                              CanUserResizeColumns="False"
+                              HorizontalScrollBarVisibility="Disabled"
+                              ItemsSource="{Binding LogMessages}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Sender"
+                                                Binding="{Binding Sender}" />
+                            <DataGridTextColumn Header="Message"
+                                                Binding="{Binding Message}"
+                                                Width="300"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </ScrollViewer>
             </Grid>
         </Grid>

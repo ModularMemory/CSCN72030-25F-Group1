@@ -40,7 +40,7 @@ public partial class App : Application
 
         _logger = serviceProvider.GetRequiredService<ILogger>();
         serviceProvider.GetRequiredService<IEventBus<DeviceMessage>>().Handler += MessageBusOnMessage;
-        AddDevices(serviceProvider.GetRequiredService<IDeviceRegistry>());
+        AddDevices(serviceProvider);
 
         var controller = serviceProvider.GetRequiredService<IDeviceController>();
         controller.Start(TimeSpan.FromMilliseconds(250));
@@ -72,8 +72,10 @@ public partial class App : Application
         }
     }
 
-    private static void AddDevices(IDeviceRegistry deviceRegistry)
+    private static void AddDevices(ServiceProvider serviceProvider)
     {
+        var deviceController = serviceProvider.GetRequiredService<IDeviceController>(); // I hate this, it should be a bus
+
         IEnumerable<IDevice> devices =
         [
             // Lights
@@ -100,9 +102,10 @@ public partial class App : Application
             new VentSealController(new DeviceId("VentSeal-3", "North Hall")),
             new VentSealController(new DeviceId("VentSeal-4", "South Hall")),
             // Power Controller
-            new PowerController(new DeviceId("Central-Reactor", "Generator Room"), (Watt)1_000)
+            new PowerController(new DeviceId("Central-Reactor", "Generator Room"), (Watt)1_000, deviceController)
         ];
 
+        var deviceRegistry = serviceProvider.GetRequiredService<IDeviceRegistry>();
         foreach (var device in devices)
         {
             deviceRegistry.RegisterDevice(device);
