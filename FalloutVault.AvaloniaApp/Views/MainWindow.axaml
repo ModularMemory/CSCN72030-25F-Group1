@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:avaloniaApp="clr-namespace:FalloutVault.AvaloniaApp"
         xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        xmlns:devices="clr-namespace:FalloutVault.AvaloniaApp.ViewModels.Devices"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="FalloutVault.AvaloniaApp.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -87,7 +88,7 @@
                         <ItemsControl.DataTemplates>
                             <vm:MyTemplateSelector>
                                 <DataTemplate x:Key="LightController"
-                                              x:DataType="vm:LightControllerViewModel">
+                                              x:DataType="devices:LightControllerViewModel">
                                     <Border
                                         BorderBrush="DarkRed"
                                         BorderThickness="2"
@@ -118,13 +119,12 @@
 
                                             </StackPanel>
                                             <Button
-                                                Click="OnOffButton_OnClick"
+                                                Command="{Binding OnOffButton_OnClick}"
                                                 CornerRadius="20"
                                                 Background="#333"
                                                 Width="40"
                                                 Height="40">
                                                 <Button.Content>
-
                                                     <icons:MaterialIcon
                                                         Kind="Power"
                                                         Foreground="{Binding ButtonColour}" />
@@ -146,7 +146,6 @@
                                                     <Slider Width="100"
                                                             Minimum="0"
                                                             Maximum="100"
-                                                            ValueChanged="SliderDimmer_OnValueChanged"
                                                             Value="{Binding Dimmer}" />
                                                 </StackPanel>
                                             </Border>
@@ -154,7 +153,7 @@
                                     </Border>
                                 </DataTemplate>
                                 <DataTemplate x:Key="FanController"
-                                              x:DataType="vm:FanControllerViewModel">
+                                              x:DataType="devices:FanControllerViewModel">
                                     <Border
                                         Height="70"
                                         BorderBrush="DarkRed"
@@ -185,7 +184,7 @@
 
                                             </StackPanel>
                                             <Button
-                                                Click="OnOffButton_OnClick"
+                                                Command="{Binding OnOffButton_OnClick}"
                                                 CornerRadius="20"
                                                 Background="#333"
                                                 Width="40"
@@ -206,7 +205,6 @@
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center" />
                                                 <NumericUpDown Value="{Binding TargetSpeed}"
-                                                               ValueChanged="TargetRpmNumericUpDown_OnValueChanged"
                                                                Increment="50"
                                                                Minimum="0">
                                                 </NumericUpDown>
@@ -229,7 +227,7 @@
                                     </Border>
                                 </DataTemplate>
                                 <DataTemplate x:Key="PowerController"
-                                              x:DataType="vm:PowerControllerViewModel">
+                                              x:DataType="devices:PowerControllerViewModel">
                                     <Border
                                         Height="40"
                                         BorderBrush="DarkRed"
@@ -260,7 +258,7 @@
 
                                             </StackPanel>
                                             <Button
-                                                Click="OnOffButton_OnClick"
+                                                Command="{Binding OnOffButton_OnClick}"
                                                 CornerRadius="20"
                                                 Background="#333"
                                                 Width="40"
@@ -276,7 +274,7 @@
                                     </Border>
                                 </DataTemplate>
                                 <DataTemplate x:Key="SpeakerController"
-                                              x:DataType="vm:SpeakerControllerViewModel">
+                                              x:DataType="devices:SpeakerControllerViewModel">
                                     <Border
                                         BorderBrush="DarkRed"
                                         BorderThickness="2"
@@ -307,7 +305,7 @@
 
                                             </StackPanel>
                                             <Button
-                                                Click="OnOffButton_OnClick"
+                                                Command="{Binding OnOffButton_OnClick}"
                                                 CornerRadius="20"
                                                 Background="#333"
                                                 Width="40"
@@ -334,7 +332,6 @@
                                                     <Slider Width="100"
                                                             Minimum="0"
                                                             Maximum="100"
-                                                            ValueChanged="SliderVolume_OnValueChanged"
                                                             Value="{Binding Volume}" />
                                                 </StackPanel>
                                             </Border>
@@ -342,7 +339,7 @@
                                     </Border>
                                 </DataTemplate>
                                 <DataTemplate x:Key="CropSprinklerController"
-                                              x:DataType="vm:CropSprinklerControllerViewModel">
+                                              x:DataType="devices:CropSprinklerControllerViewModel">
                                     <Border
                                         Height="40"
                                         BorderBrush="DarkRed"
@@ -373,7 +370,7 @@
 
                                             </StackPanel>
                                             <Button
-                                                Click="OnOffButton_OnClick"
+                                                Command="{Binding OnOffButton_OnClick}"
                                                 CornerRadius="20"
                                                 Background="#333"
                                                 Width="40"
@@ -389,7 +386,7 @@
                                     </Border>
                                 </DataTemplate>
                                 <DataTemplate x:Key="VentSealController"
-                                              x:DataType="vm:VentSealControllerViewModel">
+                                              x:DataType="devices:VentSealControllerViewModel">
                                     <Border
                                         Height="40"
                                         BorderBrush="DarkRed"
@@ -420,27 +417,25 @@
 
                                             </StackPanel>
                                             <Button
-                                                Click="VentSealButton_OnClick"
+                                                Command="{Binding SealButton_OnClick}"
                                                 CornerRadius="20"
                                                 Background="#333"
                                                 Width="40"
                                                 Height="40"
                                                 IsEnabled="{Binding IsLocked, Converter={x:Static BoolConverters.Not}}">
                                                 <Button.Content>
-
                                                     <icons:MaterialIcon
                                                         Kind="{Binding VentIcon}"
                                                         Foreground="{Binding OpenButtonColour}" />
                                                 </Button.Content>
                                             </Button>
                                             <Button
-                                                Click="VentSealLockButton_OnClick"
+                                                Command="{Binding LockButton_OnClick}"
                                                 CornerRadius="20"
                                                 Background="#333"
                                                 Width="40"
                                                 Height="40">
                                                 <Button.Content>
-
                                                     <icons:MaterialIcon
                                                         Kind="{Binding LockIcon}" />
                                                 </Button.Content>

@@ -1,4 +1,5 @@
 using FalloutVault.AvaloniaApp.ViewModels;
+using FalloutVault.AvaloniaApp.ViewModels.Devices;
 using FalloutVault.AvaloniaApp.Views;
 using FalloutVault.Eventing;
 using FalloutVault.Eventing.Interfaces;

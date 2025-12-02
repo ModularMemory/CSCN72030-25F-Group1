@@ -1,13 +1,14 @@
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using FalloutVault.Commands;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
 using Material.Icons;
-using Material.Icons.Avalonia;
 
-namespace FalloutVault.AvaloniaApp.ViewModels;
+namespace FalloutVault.AvaloniaApp.ViewModels.Devices;
 
 public partial class VentSealControllerViewModel : DeviceViewModel
 {
@@ -30,6 +31,18 @@ public partial class VentSealControllerViewModel : DeviceViewModel
 
     [ObservableProperty]
     public partial MaterialIconKind LockIcon { get; set; }
+
+    [RelayCommand]
+    public void SealButton_OnClick()
+    {
+        DeviceController.SendCommand(Id, new DeviceCommand.SetVentOpen(!IsOpen));
+    }
+
+    [RelayCommand]
+    public void LockButton_OnClick()
+    {
+        DeviceController.SendCommand(Id, new DeviceCommand.SetVentLocked(!IsLocked));
+    }
 
     protected override void OnDeviceMessage(object? sender, DeviceMessage message)
     {

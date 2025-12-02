@@ -1,7 +1,7 @@
 using FalloutVault.Devices.Models;
 using FalloutVault.Models;
 
-namespace FalloutVault.AvaloniaApp.ViewModels;
+namespace FalloutVault.AvaloniaApp.ViewModels.Devices;
 
 public interface IDeviceViewModel
 {

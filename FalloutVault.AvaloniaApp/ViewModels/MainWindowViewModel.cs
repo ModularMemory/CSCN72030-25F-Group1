@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
 using CommunityToolkit.Mvvm.ComponentModel;
+using FalloutVault.AvaloniaApp.ViewModels.Devices;
 using FalloutVault.Interfaces;
 using FalloutVault.Models;
 

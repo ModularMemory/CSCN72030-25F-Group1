@@ -1,11 +1,13 @@
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using FalloutVault.Commands;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
 
-namespace FalloutVault.AvaloniaApp.ViewModels;
+namespace FalloutVault.AvaloniaApp.ViewModels.Devices;
 
 public partial class LightControllerViewModel : DeviceViewModel, IOnOff
 {
@@ -22,6 +24,17 @@ public partial class LightControllerViewModel : DeviceViewModel, IOnOff
 
     [ObservableProperty]
     public partial double Dimmer { get; set; }
+
+    partial void OnDimmerChanged(double value)
+    {
+        DeviceController.SendCommand(Id, new DeviceCommand.SetLightDimmer(value / 100));
+    }
+
+    [RelayCommand]
+    public void OnOffButton_OnClick()
+    {
+        DeviceController.SendCommand(Id, new DeviceCommand.SetOn(!IsOn));
+    }
 
     protected override void OnDeviceMessage(object? sender, DeviceMessage message)
     {
