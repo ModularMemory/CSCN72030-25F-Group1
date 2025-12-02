@@ -5,6 +5,7 @@ using Avalonia.Markup.Xaml;
 using FalloutVault.AvaloniaApp.Services.Interfaces;
 using FalloutVault.AvaloniaApp.ViewModels;
 using FalloutVault.AvaloniaApp.Views;
+using FalloutVault.Commands;
 using FalloutVault.Devices;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
@@ -64,6 +65,7 @@ public partial class App : Application
     {
         var deviceController = serviceProvider.GetRequiredService<IDeviceController>(); // I hate this, it should be a bus
 
+        FanController coreFan;
         IEnumerable<IDevice> devices =
         [
             // Lights
@@ -76,7 +78,7 @@ public partial class App : Application
             new FanController(new DeviceId("Fan-1", "East Hall"), (Watt)50, 2_000),
             new FanController(new DeviceId("Fan-3", "West Hall"), (Watt)75, 1_500),
             new FanController(new DeviceId("Fan-2", "North Hall"), (Watt)100, 4_000),
-            new FanController(new DeviceId("Core-Fan", "Generator Room"), (Watt)200, 8_000),
+            coreFan = new FanController(new DeviceId("Core-Fan", "Generator Room"), (Watt)200, 8_000),
             // Speaker controller
             new SpeakerController(new DeviceId("Speaker-1", "East Hall"), (Watt)100),
             new SpeakerController(new DeviceId("Speaker-2", "West Hall"), (Watt)100),
@@ -99,5 +101,8 @@ public partial class App : Application
         {
             deviceRegistry.RegisterDevice(device);
         }
+
+        coreFan.SendCommand(new DeviceCommand.SetOn(true));
+        coreFan.SendCommand(new DeviceCommand.SetFanTargetRpm(1_000));
     }
 }

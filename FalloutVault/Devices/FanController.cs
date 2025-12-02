@@ -84,6 +84,11 @@ public class FanController : PoweredDevice, IFanController
             }
         }
 
+        if (_lastSpeedUpdate == 0)
+        {
+            _lastSpeedUpdate = Stopwatch.GetTimestamp();
+        }
+
         var currentTimestamp = Stopwatch.GetTimestamp();
         var deltaL = currentTimestamp - _lastSpeedUpdate;
         var delta = deltaL / (double)Stopwatch.Frequency;
