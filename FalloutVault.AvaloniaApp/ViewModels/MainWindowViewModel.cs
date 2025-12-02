@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FalloutVault.AvaloniaApp.Models;
 using FalloutVault.AvaloniaApp.Services.Interfaces;
@@ -71,10 +72,13 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void DeviceMessageLogger_OnDeviceMessageReceived(object? sender, DeviceLog e)
     {
-        lock (_logLock)
+        Dispatcher.UIThread.Invoke(() =>
         {
-            AddLogMessage(e);
-        }
+            lock (_logLock)
+            {
+                AddLogMessage(e);
+            }
+        });
     }
 
     partial void OnLogSearchChanged(string value)

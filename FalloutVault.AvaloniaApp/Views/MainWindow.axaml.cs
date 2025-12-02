@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 using FalloutVault.AvaloniaApp.Models;
 using FalloutVault.AvaloniaApp.Services.Interfaces;
 using FalloutVault.AvaloniaApp.ViewModels;
@@ -21,8 +22,11 @@ public partial class MainWindow : Window
 
     private void DeviceMessageLoggerOnDeviceMessageReceived(object? sender, DeviceLog e)
     {
-        var lastItem = ((IEnumerable<object>?)LogDataGrid.ItemsSource)?.LastOrDefault();
-        LogDataGrid.ScrollIntoView(lastItem, LogDataGrid.Columns.FirstOrDefault());
+        Dispatcher.UIThread.Invoke(() =>
+        {
+            var lastItem = ((IEnumerable<object>?)LogDataGrid.ItemsSource)?.LastOrDefault();
+            LogDataGrid.ScrollIntoView(lastItem, LogDataGrid.Columns.FirstOrDefault());
+        });
     }
 
     private void CheckAllZones_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
