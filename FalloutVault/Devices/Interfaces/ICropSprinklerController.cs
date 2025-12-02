@@ -1,4 +1,4 @@
-﻿using FalloutVault.Devices.Interfaces;
+﻿namespace FalloutVault.Devices.Interfaces;
 
 public interface ICropSprinklerController : IOnOff
 {

@@ -2,7 +2,7 @@ using FalloutVault.Devices.Models;
 using FalloutVault.Models;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FalloutVault.AvaloniaApp.ViewModels;
+namespace FalloutVault.AvaloniaApp.ViewModels.Devices;
 
 public class DeviceViewModelFactory
 {
