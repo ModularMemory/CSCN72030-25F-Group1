@@ -64,7 +64,7 @@ public class PowerControllerTests
     }
 
     [Test]
-    public void PowerController_Shutdown_SetsGenerationToZero()
+    public void PowerController_TurnedOff_SetsGenerationToZero()
     {
         // Arrange
         var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)1000);
@@ -74,11 +74,11 @@ public class PowerControllerTests
 
         // Assert
         Assert.That(powerController.PowerGeneration.W, Is.EqualTo(0));
-        Assert.That(powerController.IsOn, Is.True);
+        Assert.That(powerController.IsOn, Is.False);
     }
 
     [Test]
-    public void PowerController_Restore_RestoresPowerGeneration()
+    public void PowerController_TurnedOn_RestoresPowerGeneration()
     {
         // Arrange
         var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)1000);
@@ -89,7 +89,7 @@ public class PowerControllerTests
 
         // Assert
         Assert.That(powerController.PowerGeneration.W, Is.EqualTo(1000));
-        Assert.That(powerController.IsOn, Is.False);
+        Assert.That(powerController.IsOn, Is.True);
     }
 
     [Test]
