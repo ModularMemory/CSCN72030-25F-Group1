@@ -111,4 +111,27 @@ public class PowerControllerTests
             .FirstOrDefault();
         Assert.That(shutdownMessage, Is.Not.Null);
     }
+
+    [Test]
+    public void PowerController_OnTurnOff_TurnsOffDevices()
+    {
+        // Arrange
+        var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)1000);
+
+        var lightController = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)25);
+        var powerEventBus = new PowerEventBus();
+        var eventBus = new MockDeviceMessageEventBus();
+
+        powerController.SetEventBus(powerEventBus);
+        lightController.SetEventBus(eventBus);
+
+        // Act
+        lightController.SendCommand(new DeviceCommand.SetOn(true));
+
+        powerController.SendCommand(new DeviceCommand.SetOn(false));
+
+
+        // Assert
+        Assert.That(lightController.IsOn, Is.False);
+    }
 }
