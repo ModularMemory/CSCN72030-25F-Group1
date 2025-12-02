@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using FalloutVault.AvaloniaApp.Services;
 using FalloutVault.AvaloniaApp.ViewModels;
 using FalloutVault.AvaloniaApp.Views;
 using FalloutVault.Devices;
@@ -23,7 +24,7 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
     }
 
-    private static ILogger _logger = null!;
+    private static ILogger _logger = null;
     private static void MessageBusOnMessage(object? sender, DeviceMessage e)
     {
 
@@ -39,6 +40,7 @@ public partial class App : Application
             .BuildServiceProvider();
 
         _logger = serviceProvider.GetRequiredService<ILogger>();
+        _ = serviceProvider.GetRequiredService<IDeviceMessageLogger>();
         serviceProvider.GetRequiredService<IEventBus<DeviceMessage>>().Handler += MessageBusOnMessage;
         AddDevices(serviceProvider.GetRequiredService<IDeviceRegistry>());
 
