@@ -13,7 +13,6 @@ public class PowerController : Device, IPowerController
 {
     // Fields
     private Watt _totalPowerDraw;
-    private Watt _powerGeneration;
     private readonly Dictionary<DeviceId, Watt> _devicePowerDraws = new();
     private readonly Lock _drawsLock = new();
     private readonly IDeviceController? _deviceController;
@@ -68,7 +67,7 @@ public class PowerController : Device, IPowerController
         StandardGeneration = standardGeneration;
         PowerGeneration = standardGeneration;
         _totalPowerDraw = Watt.Zero;
-        IsOn = false;
+        IsOn = true;
         _deviceController = _deviceController;
     }
 

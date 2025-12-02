@@ -74,7 +74,7 @@ public class PowerControllerTests
 
         // Assert
         Assert.That(powerController.PowerGeneration.W, Is.EqualTo(0));
-        Assert.That(powerController.IsShutdown, Is.True);
+        Assert.That(powerController.IsOn, Is.True);
     }
 
     [Test]
@@ -89,7 +89,7 @@ public class PowerControllerTests
 
         // Assert
         Assert.That(powerController.PowerGeneration.W, Is.EqualTo(1000));
-        Assert.That(powerController.IsShutdown, Is.False);
+        Assert.That(powerController.IsOn, Is.False);
     }
 
     [Test]
