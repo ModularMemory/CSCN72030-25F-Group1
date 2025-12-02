@@ -1,13 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Threading;
 using FalloutVault.AvaloniaApp.Models;
 using FalloutVault.AvaloniaApp.Services.Interfaces;
 using FalloutVault.AvaloniaApp.ViewModels;
-using FalloutVault.Commands;
-using FalloutVault.Devices.Interfaces;
-using FalloutVault.Eventing.Models;
-using FalloutVault.Interfaces;
 using Serilog;
 
 namespace FalloutVault.AvaloniaApp.Views;
@@ -29,7 +24,7 @@ public partial class MainWindow : Window
         var lastItem = ((IEnumerable<object>?)LogDataGrid.ItemsSource)?.LastOrDefault();
         LogDataGrid.ScrollIntoView(lastItem, LogDataGrid.Columns.FirstOrDefault());
     }
-    
+
     private void CheckAllZones_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
     {
         if (!IsInitialized || sender is not CheckBox checkBox || DataContext is not MainWindowViewModel viewModel)

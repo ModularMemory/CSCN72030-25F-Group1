@@ -2,19 +2,15 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using FalloutVault.AvaloniaApp.Services;
 using FalloutVault.AvaloniaApp.Services.Interfaces;
 using FalloutVault.AvaloniaApp.ViewModels;
 using FalloutVault.AvaloniaApp.Views;
 using FalloutVault.Devices;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
-using FalloutVault.Eventing.Interfaces;
-using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
 using FalloutVault.Models;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 
 namespace FalloutVault.AvaloniaApp;
 

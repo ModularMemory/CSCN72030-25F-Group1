@@ -2,11 +2,8 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
-using Avalonia.Threading;
-using CommunityToolkit.Mvvm.ComponentModel;
 using FalloutVault.AvaloniaApp.Models;
 using FalloutVault.AvaloniaApp.Services.Interfaces;
-using FalloutVault.Eventing.Models;
 using FalloutVault.AvaloniaApp.ViewModels.Devices;
 using FalloutVault.Interfaces;
 using FalloutVault.Models;
