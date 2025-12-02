@@ -2,7 +2,11 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using FalloutVault.AvaloniaApp.Models;
+using FalloutVault.AvaloniaApp.Services.Interfaces;
+using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
 using FalloutVault.Models;
 
@@ -10,14 +14,23 @@ namespace FalloutVault.AvaloniaApp.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
+    private readonly IDeviceMessageLogger _deviceMessageLogger;
     private readonly List<IDeviceViewModel> _deviceViewModels = [];
 
     public ObservableCollection<ZoneViewModel> Zones { get; } = [];
     public ObservableCollection<IDeviceViewModel> Devices { get; } = [];
-    private ObservableCollection<LogViewModel> LogMessages { get; } = [];
+    public ObservableCollection<LogViewModel> LogMessages { get; } = [];
 
-    public MainWindowViewModel(IDeviceRegistry deviceRegistry, DeviceViewModelFactory deviceViewModelFactory)
+    public MainWindowViewModel(IDeviceRegistry deviceRegistry, IDeviceMessageLogger deviceMessageLogger, DeviceViewModelFactory deviceViewModelFactory)
     {
+        _deviceMessageLogger = deviceMessageLogger;
+        _deviceMessageLogger.DeviceMessageReceived += DeviceMessageLogger_OnDeviceMessageReceived;
+
+        foreach (var message in _deviceMessageLogger.Messages)
+        {
+            DeviceMessageLogger_OnDeviceMessageReceived(null, message);
+        }
+
         foreach (var (id, type, capabilities) in deviceRegistry.Devices)
         {
             _deviceViewModels.Add(deviceViewModelFactory.Create(type, id));
@@ -45,6 +58,15 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 Devices.Add(viewModel);
             }
+        }
+    }
+
+    private void DeviceMessageLogger_OnDeviceMessageReceived(object? sender, DeviceLog e)
+    {
+        LogMessages.Add(new LogViewModel(e.Sender, e.Message));
+        if (LogMessages.Count > 500)
+        {
+            LogMessages.RemoveAt(0);
         }
     }
 }

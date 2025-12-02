@@ -1,9 +1,13 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
+using FalloutVault.AvaloniaApp.Models;
+using FalloutVault.AvaloniaApp.Services.Interfaces;
 using FalloutVault.AvaloniaApp.ViewModels;
 using FalloutVault.Commands;
 using FalloutVault.Devices.Interfaces;
+using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
 using Serilog;
 
@@ -14,12 +18,19 @@ public partial class MainWindow : Window
     private readonly IDeviceController _deviceController;
     private readonly ILogger _logger;
 
-    public MainWindow(IDeviceController deviceController, ILogger logger)
+    public MainWindow(IDeviceController deviceController, IDeviceMessageLogger deviceMessageLogger, ILogger logger)
     {
         _deviceController = deviceController;
         _logger = logger;
+        deviceMessageLogger.DeviceMessageReceived += DeviceMessageLoggerOnDeviceMessageReceived;
 
         InitializeComponent();
+    }
+
+    private void DeviceMessageLoggerOnDeviceMessageReceived(object? sender, DeviceLog e)
+    {
+        var lastItem = ((IEnumerable<object>?)LogDataGrid.ItemsSource)?.LastOrDefault();
+        LogDataGrid.ScrollIntoView(lastItem, LogDataGrid.Columns.FirstOrDefault());
     }
 
     private void SliderDimmer_OnValueChanged(object? sender, RangeBaseValueChangedEventArgs e)

@@ -463,7 +463,8 @@
                                HorizontalAlignment="Center" />
                 </StackPanel>
                 <ScrollViewer Grid.Row="1">
-                    <DataGrid AreRowDetailsFrozen="True"
+                    <DataGrid x:Name="LogDataGrid"
+                        AreRowDetailsFrozen="True"
                               CanUserSortColumns="False"
                               CanUserReorderColumns="False"
                               CanUserResizeColumns="False"
@@ -474,7 +475,7 @@
                                                 Binding="{Binding Sender}" />
                             <DataGridTextColumn Header="Message"
                                                 Binding="{Binding Message}"
-                                                Width="300"/>
+                                                Width="200"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </ScrollViewer>

@@ -3,6 +3,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using FalloutVault.AvaloniaApp.Services;
+using FalloutVault.AvaloniaApp.Services.Interfaces;
 using FalloutVault.AvaloniaApp.ViewModels;
 using FalloutVault.AvaloniaApp.Views;
 using FalloutVault.Devices;
@@ -24,24 +25,13 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
     }
 
-    private static ILogger _logger = null;
-    private static void MessageBusOnMessage(object? sender, DeviceMessage e)
-    {
-
-        var senderString = (sender as IDevice)?.Id.ToString() ?? sender?.ToString();
-        _logger.Information("Device message from {Sender}: {@Message}", senderString, e);
-        // The @ in @Message means to JSON serialize the object rather than use .ToString()
-    }
-
     public override void OnFrameworkInitializationCompleted()
     {
         var services = new ServiceCollection();
         var serviceProvider = Startup.ConfigureServices(services)
             .BuildServiceProvider();
 
-        _logger = serviceProvider.GetRequiredService<ILogger>();
         _ = serviceProvider.GetRequiredService<IDeviceMessageLogger>();
-        serviceProvider.GetRequiredService<IEventBus<DeviceMessage>>().Handler += MessageBusOnMessage;
         AddDevices(serviceProvider);
 
         var controller = serviceProvider.GetRequiredService<IDeviceController>();
