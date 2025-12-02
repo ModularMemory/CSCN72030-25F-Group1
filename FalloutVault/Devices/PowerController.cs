@@ -14,7 +14,6 @@ public class PowerController : Device, IPowerController
     // Fields
     private Watt _totalPowerDraw;
     private Watt _powerGeneration;
-    private bool _isShutdown;
     private readonly Dictionary<DeviceId, Watt> _devicePowerDraws = new();
     private readonly Lock _drawsLock = new();
     private readonly IDeviceController? _deviceController;
@@ -26,21 +25,21 @@ public class PowerController : Device, IPowerController
 
     public Watt PowerGeneration
     {
-        get => _powerGeneration;
+        get;
         private set
         {
-            if (!SetField(ref _powerGeneration, value)) return;
-            PublishMessage(new DeviceMessage.PowerGenerationChanged(_powerGeneration));
+            if (!SetField(ref field, value)) return;
+            PublishMessage(new DeviceMessage.PowerGenerationChanged(field));
         }
     }
 
-    public bool IsShutdown
+    public bool IsOn
     {
-        get => _isShutdown;
+        get;
         private set
         {
-            if (!SetField(ref _isShutdown, value)) return;
-            PublishMessage(new DeviceMessage.PowerOnOffChanged(_isShutdown));
+            if (!SetField(ref field, value)) return;
+            PublishMessage(new DeviceMessage.PowerOnOffChanged(field));
         }
     }
 
@@ -69,7 +68,7 @@ public class PowerController : Device, IPowerController
         StandardGeneration = standardGeneration;
         PowerGeneration = standardGeneration;
         _totalPowerDraw = Watt.Zero;
-        _isShutdown = false;
+        IsOn = false;
         _deviceController = _deviceController;
     }
 
@@ -119,17 +118,14 @@ public class PowerController : Device, IPowerController
                 if (setOn.IsOn)
                     TurnOn();
                 else
-                    Shutdown();
+                    TurnOff();
                 break;
         }
     }
 
-    private void Shutdown()
+    private void TurnOff()
     {
-        if (IsShutdown)
-            return;
-
-        IsShutdown = true;
+        IsOn = false;
         PowerGeneration = Watt.Zero;
 
         //still have to decide how to turn off all devices
@@ -138,16 +134,13 @@ public class PowerController : Device, IPowerController
 
     private void TurnOn()
     {
-        if (!IsShutdown)
-            return;
-
-        IsShutdown = false;
+        IsOn = true;
         PowerGeneration = StandardGeneration;
     }
 
     private Watt ComputePowerGeneration()
     {
-        if (IsShutdown)
+        if (!IsOn)
             return Watt.Zero;
 
         return StandardGeneration;
