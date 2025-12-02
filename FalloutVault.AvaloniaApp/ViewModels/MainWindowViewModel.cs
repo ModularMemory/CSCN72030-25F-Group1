@@ -7,9 +7,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using FalloutVault.AvaloniaApp.Models;
 using FalloutVault.AvaloniaApp.Services.Interfaces;
 using FalloutVault.AvaloniaApp.ViewModels.Devices;
+using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
 using FalloutVault.Models;
-using Serilog;
 
 namespace FalloutVault.AvaloniaApp.ViewModels;
 
@@ -32,9 +32,12 @@ public partial class MainWindowViewModel : ViewModelBase
 
         lock (_logLock)
         {
-            foreach (var message in _deviceMessageLogger.Messages)
+            if (_deviceMessageLogger.Messages.Count > 0)
             {
-                AddLogMessage(message);
+                foreach (var message in _deviceMessageLogger.Messages)
+                {
+                    AddLogMessage(message);
+                }
             }
         }
 
@@ -95,12 +98,17 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void AddLogMessage(DeviceLog log)
     {
+        if (log.Message is DeviceMessage.FanSpeedRpmChanged or DeviceMessage.TotalPowerDrawChanged)
+        {
+            return;
+        }
+
         if (string.IsNullOrWhiteSpace(LogSearch)
             || log.Sender.Name.Contains(LogSearch, StringComparison.OrdinalIgnoreCase)
             || log.Sender.Zone.Contains(LogSearch, StringComparison.OrdinalIgnoreCase)
-            || log.Message.Contains(LogSearch, StringComparison.OrdinalIgnoreCase))
+            || log.Message.Message.Contains(LogSearch, StringComparison.OrdinalIgnoreCase))
         {
-            LogMessages.Add(new LogViewModel(log.Sender, log.Message));
+            LogMessages.Add(new LogViewModel(log.Sender, log.Message.Message));
         }
 
         if (LogMessages.Count > 500)

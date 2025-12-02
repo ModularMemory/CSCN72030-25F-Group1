@@ -94,10 +94,11 @@ public class FanController : PoweredDevice, IFanController
         var delta = deltaL / (double)Stopwatch.Frequency;
 
         var targetSpeed = IsOn && TargetRpm >= 50
-            ? TargetRpm + _rpmStepRandom.Next(-15, 15)
+            ? TargetRpm + _rpmStepRandom.Next(-10, 10)
             : 0;
 
-        var step = _rpmStepRandom.Next(35, 65) * delta * 3;
+        const int AVERAGE_STEP = 50;
+        var step = _rpmStepRandom.Next(AVERAGE_STEP - 15, AVERAGE_STEP + 15) * delta * 3;
 
         SpeedRpm = Math.Max(
             0,

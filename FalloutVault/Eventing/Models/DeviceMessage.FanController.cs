@@ -7,7 +7,7 @@ public partial class DeviceMessage
 {
     public class FanOnOffChanged(bool data) : DeviceOnOffChanged(data)
     {
-        public override string Message => "Fan on changed";
+        public override string Message => "Fan on/off changed";
     }
 
     public class FanMotorWattage(Watt data) : DeviceMessage(data)

@@ -13,7 +13,7 @@ public partial class DeviceMessage
 
     public class LightOnOffChanged(bool data) : DeviceOnOffChanged(data)
     {
-        public override string Message => "Light on changed";
+        public override string Message => "Light on/off changed";
     }
 
     public class LightDimmerLevelChanged(double data) : DeviceMessage(data)

@@ -36,7 +36,7 @@ public class DeviceMessageLogger : IDeviceMessageLogger
         if (senderDevice is null)
             return;
 
-        var newLog = new DeviceLog(senderDevice.Id, e.Message);
+        var newLog = new DeviceLog(senderDevice.Id, e);
         lock (_messageLock)
         {
             _messages.Add(newLog);
