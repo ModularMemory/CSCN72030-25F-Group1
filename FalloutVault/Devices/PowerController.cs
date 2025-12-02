@@ -118,6 +118,11 @@ public class PowerController : Device, IPowerController
                 else
                     TurnOff();
                 break;
+            case DeviceCommand.GetCurrentState:
+                PublishMessage(new DeviceMessage.PowerOnOffChanged(IsOn));
+                PublishMessage(new DeviceMessage.PowerGenerationChanged(PowerGeneration));
+                PublishMessage(new DeviceMessage.TotalPowerDrawChanged(new PowerDraw(_totalPowerDraw, AvailablePower)));
+                break;
         }
     }
 
