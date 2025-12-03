@@ -89,11 +89,12 @@ public class FanControllerTests
         Assert.That(fanController.IsOn, Is.False);
 
         // Assert event bus
-        Assert.That(eventBus.Messages, Has.Count.EqualTo(2));
+        Assert.That(eventBus.Messages, Has.Count.EqualTo(3));
         Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.FanOnOffChanged>());
         Assert.That(eventBus.Messages[0].Data, Is.True);
-        Assert.That(eventBus.Messages[1], Is.TypeOf<DeviceMessage.FanOnOffChanged>());
-        Assert.That(eventBus.Messages[1].Data, Is.False);
+        Assert.That(eventBus.Messages[1], Is.TypeOf<DeviceMessage.FanTimedOnOffChanged>());
+        Assert.That(eventBus.Messages[2], Is.TypeOf<DeviceMessage.FanOnOffChanged>());
+        Assert.That(eventBus.Messages[2].Data, Is.False);
     }
 
     [Test]
@@ -118,10 +119,11 @@ public class FanControllerTests
         Assert.That(fanController.IsOn, Is.True);
 
         // Assert event bus
-        Assert.That(eventBus.Messages, Has.Count.EqualTo(2));
+        Assert.That(eventBus.Messages, Has.Count.EqualTo(3));
         Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.FanOnOffChanged>());
         Assert.That(eventBus.Messages[0].Data, Is.False);
-        Assert.That(eventBus.Messages[1], Is.TypeOf<DeviceMessage.FanOnOffChanged>());
-        Assert.That(eventBus.Messages[1].Data, Is.True);
+        Assert.That(eventBus.Messages[1], Is.TypeOf<DeviceMessage.FanTimedOnOffChanged>());
+        Assert.That(eventBus.Messages[2], Is.TypeOf<DeviceMessage.FanOnOffChanged>());
+        Assert.That(eventBus.Messages[2].Data, Is.True);
     }
 }
