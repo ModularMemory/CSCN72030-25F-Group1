@@ -2,18 +2,16 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using FalloutVault.AvaloniaApp.Services;
+using FalloutVault.AvaloniaApp.Services.Interfaces;
 using FalloutVault.AvaloniaApp.ViewModels;
 using FalloutVault.AvaloniaApp.Views;
+using FalloutVault.Commands;
 using FalloutVault.Devices;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
-using FalloutVault.Eventing.Interfaces;
-using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
 using FalloutVault.Models;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 
 namespace FalloutVault.AvaloniaApp;
 
@@ -24,25 +22,14 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
     }
 
-    private static ILogger _logger = null;
-    private static void MessageBusOnMessage(object? sender, DeviceMessage e)
-    {
-
-        var senderString = (sender as IDevice)?.Id.ToString() ?? sender?.ToString();
-        _logger.Information("Device message from {Sender}: {@Message}", senderString, e);
-        // The @ in @Message means to JSON serialize the object rather than use .ToString()
-    }
-
     public override void OnFrameworkInitializationCompleted()
     {
         var services = new ServiceCollection();
         var serviceProvider = Startup.ConfigureServices(services)
             .BuildServiceProvider();
 
-        _logger = serviceProvider.GetRequiredService<ILogger>();
         _ = serviceProvider.GetRequiredService<IDeviceMessageLogger>();
-        serviceProvider.GetRequiredService<IEventBus<DeviceMessage>>().Handler += MessageBusOnMessage;
-        AddDevices(serviceProvider.GetRequiredService<IDeviceRegistry>());
+        AddDevices(serviceProvider);
 
         var controller = serviceProvider.GetRequiredService<IDeviceController>();
         controller.Start(TimeSpan.FromMilliseconds(250));
@@ -74,8 +61,11 @@ public partial class App : Application
         }
     }
 
-    private static void AddDevices(IDeviceRegistry deviceRegistry)
+    private static void AddDevices(ServiceProvider serviceProvider)
     {
+        var deviceController = serviceProvider.GetRequiredService<IDeviceController>(); // I hate this, it should be a bus
+
+        FanController coreFan;
         IEnumerable<IDevice> devices =
         [
             // Lights
@@ -88,6 +78,7 @@ public partial class App : Application
             new FanController(new DeviceId("Fan-1", "East Hall"), (Watt)50, 2_000),
             new FanController(new DeviceId("Fan-3", "West Hall"), (Watt)75, 1_500),
             new FanController(new DeviceId("Fan-2", "North Hall"), (Watt)100, 4_000),
+            coreFan = new FanController(new DeviceId("Core-Fan", "Generator Room"), (Watt)200, 8_000),
             // Speaker controller
             new SpeakerController(new DeviceId("Speaker-1", "East Hall"), (Watt)100),
             new SpeakerController(new DeviceId("Speaker-2", "West Hall"), (Watt)100),
@@ -102,12 +93,16 @@ public partial class App : Application
             new VentSealController(new DeviceId("VentSeal-3", "North Hall")),
             new VentSealController(new DeviceId("VentSeal-4", "South Hall")),
             // Power Controller
-            new PowerController(new DeviceId("Central-Reactor", "Generator Room"), (Watt)1_000)
+            new PowerController(new DeviceId("Central-Reactor", "Generator Room"), (Watt)1_000, deviceController)
         ];
 
+        var deviceRegistry = serviceProvider.GetRequiredService<IDeviceRegistry>();
         foreach (var device in devices)
         {
             deviceRegistry.RegisterDevice(device);
         }
+
+        coreFan.SendCommand(new DeviceCommand.SetOn(true));
+        coreFan.SendCommand(new DeviceCommand.SetFanTargetRpm(1_000));
     }
 }

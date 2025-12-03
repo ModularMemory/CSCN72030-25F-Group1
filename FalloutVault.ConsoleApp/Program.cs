@@ -115,8 +115,8 @@ internal static class Program
                     controller.SendCommand(device.id, new DeviceCommand.SetVentLocked(locked));
                     break;
                 case DeviceType.PowerController:
-                    //controller.SendCommand(device.id, new DeviceCommand.SetOn(true));
-                    //controller.SendCommand(device.id, new DeviceCommand.SetOn(false));
+                    controller.SendCommand(device.id, new DeviceCommand.SetOn(true));
+                    controller.SendCommand(device.id, new DeviceCommand.SetOn(false));
                     break;
             }
         }

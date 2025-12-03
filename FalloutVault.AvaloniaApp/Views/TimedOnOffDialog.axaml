@@ -1,0 +1,29 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:FalloutVault.AvaloniaApp.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="80"
+        x:Class="FalloutVault.AvaloniaApp.Views.TimedOnOffDialog"
+        Title="TimedButtonDialog"
+        SizeToContent="WidthAndHeight"
+        x:DataType="vm:TimedOnOffDialogViewModel">
+    <StackPanel Margin="10">
+        <TextBlock
+            Text="Duration (Hours / Minutes / Seconds)" />
+        <TimePicker MinuteIncrement="1"
+                    UseSeconds="True"
+                    SecondIncrement="10"
+                    ClockIdentifier="24HourClock"
+                    SelectedTime="{Binding Duration}" />
+        <Grid
+            ColumnDefinitions="*, *">
+            <Button Click="AcceptButton_OnClick"
+                    Content="Accept"
+                    Grid.Column="0" />
+            <Button Click="CancelButton_OnClick"
+                    Content="Cancel"
+                    Grid.Column="1" />
+        </Grid>
+    </StackPanel>
+</Window>

@@ -2,7 +2,7 @@
 
 namespace FalloutVault.Devices.Interfaces;
 
-public interface IPowerController
+public interface IPowerController : IOnOff
 {
     Watt PowerGeneration { get; }
 

@@ -1,5 +1,7 @@
 using FalloutVault.AvaloniaApp.Services;
+using FalloutVault.AvaloniaApp.Services.Interfaces;
 using FalloutVault.AvaloniaApp.ViewModels;
+using FalloutVault.AvaloniaApp.ViewModels.Devices;
 using FalloutVault.AvaloniaApp.Views;
 using FalloutVault.Eventing;
 using FalloutVault.Eventing.Interfaces;
@@ -21,7 +23,7 @@ public static class Startup
             .AddSingleton<ILogger>(provider =>
                 new LoggerConfiguration()
                     .WriteTo.Console()
-                    .WriteTo.File("log.txt")
+                    .WriteTo.File("Log.txt")
                     .CreateLogger());
 
         services

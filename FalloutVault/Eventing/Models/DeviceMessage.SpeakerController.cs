@@ -5,7 +5,7 @@ public partial class DeviceMessage
 {
     public class SpeakerOnOffChanged(bool data) : DeviceOnOffChanged(data)
     {
-        public override string Message => "Speaker on changed";
+        public override string Message => "Speaker on/off changed";
     }
 
     public class VolumeLevelChanged(double data) : DeviceMessage(data)

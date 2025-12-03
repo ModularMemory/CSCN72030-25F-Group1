@@ -4,18 +4,21 @@ using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
 using FalloutVault.Models;
+using Serilog;
 
-namespace FalloutVault.AvaloniaApp.ViewModels;
+namespace FalloutVault.AvaloniaApp.ViewModels.Devices;
 
 public abstract class DeviceViewModel : ViewModelBase, IDeviceViewModel
 {
-    private readonly IDeviceController _deviceController;
+    protected readonly IDeviceController DeviceController;
+    protected readonly ILogger Logger;
     private readonly IEventBus<DeviceMessage> _messageBus;
 
-    protected DeviceViewModel(IDeviceController deviceController, IEventBus<DeviceMessage> messageBus)
+    protected DeviceViewModel(IDeviceController deviceController, IEventBus<DeviceMessage> messageBus, ILogger logger)
     {
-        _deviceController = deviceController;
+        DeviceController = deviceController;
         _messageBus = messageBus;
+        Logger = logger;
         _messageBus.Handler += OnDeviceMessage;
     }
 
@@ -43,7 +46,7 @@ public abstract class DeviceViewModel : ViewModelBase, IDeviceViewModel
 
     public void ForceUpdateCurrentState()
     {
-        _deviceController.SendCommand(Id, new DeviceCommand.GetCurrentState());
+        DeviceController.SendCommand(Id, new DeviceCommand.GetCurrentState());
     }
 
     protected abstract void OnDeviceMessage(object? sender, DeviceMessage message);
