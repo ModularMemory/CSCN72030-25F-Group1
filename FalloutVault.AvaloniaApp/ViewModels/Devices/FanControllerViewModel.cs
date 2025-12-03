@@ -46,7 +46,6 @@ public partial class FanControllerViewModel : DeviceViewModel, IOnOff
     {
         var dialog = new TimedOnOffDialog(IsOn)
         {
-            DataContext = new TimedOnOffDialogViewModel(),
             WindowStartupLocation = WindowStartupLocation.CenterOwner
         };
         TimedOnOffDialogViewModel? dialogViewModel = null;

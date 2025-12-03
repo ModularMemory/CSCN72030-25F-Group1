@@ -24,9 +24,14 @@
         CornerRadius="5"
         Background="#333"
         Margin="10">
-        <Grid ColumnDefinitions="Auto,*,Auto"
-              Margin="10"
+        <Grid Margin="10"
               ColumnSpacing="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" MinWidth="300" />
+                <ColumnDefinition Width="4" />
+                <ColumnDefinition Width="Auto" MinWidth="150" />
+            </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0"
                   RowDefinitions="Auto, *"
@@ -495,19 +500,24 @@
                     </ItemsControl>
                 </ScrollViewer>
             </Grid>
-            <Grid Grid.Column="2"
+
+            <GridSplitter Grid.Column="2" ResizeDirection="Columns" />
+
+            <Grid Grid.Column="3"
+                  Name="LogGrid"
                   RowDefinitions="Auto,*"
                   RowSpacing="10"
                   Margin="10">
-                <StackPanel Grid.Row="0"
-                            HorizontalAlignment="Center"
-                            Spacing="10">
-                    <TextBlock Text="Logs"
+                <Grid Grid.Row="0"
+                      RowDefinitions="*,*"
+                      RowSpacing="10"
+                      HorizontalAlignment="Center">
+                    <TextBlock Grid.Row="0" Text="Logs"
                                HorizontalAlignment="Center" />
-                    <TextBox Watermark="Search messages..."
+                    <TextBox Grid.Row="1" Watermark="Search messages..."
                              Text="{Binding LogSearch}"
-                             Width="400" />
-                </StackPanel>
+                             Width="{Binding #LogGrid.Bounds.Width}" />
+                </Grid>
                 <DataGrid Grid.Row="1" x:Name="LogDataGrid"
                           AreRowDetailsFrozen="True"
                           CanUserSortColumns="False"
