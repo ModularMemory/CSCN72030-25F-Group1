@@ -10,8 +10,23 @@ public sealed class DeviceTimer<TState>
 {
     public TState? State { get; private set; }
 
+    public bool IsRunning { get; private set; }
+
+    public TimeSpan TimeRemaining
+    {
+        get
+        {
+            if (!IsRunning) return TimeSpan.Zero;
+
+            var remaining = _duration - _stopwatch.Elapsed;
+
+            return remaining > TimeSpan.Zero
+                ? remaining
+                : TimeSpan.Zero;
+        }
+    }
+
     private readonly Stopwatch _stopwatch = new();
-    private bool _isRunning;
     private TimeSpan _duration;
 
     /// <summary>
@@ -22,11 +37,11 @@ public sealed class DeviceTimer<TState>
     /// </returns>
     public bool CheckCompleted()
     {
-        if (!_isRunning) return false;
+        if (!IsRunning) return false;
 
         if (_stopwatch.Elapsed < _duration) return false;
 
-        _isRunning = false;
+        IsRunning = false;
         return true;
     }
 
@@ -37,7 +52,7 @@ public sealed class DeviceTimer<TState>
     /// <param name="state">An optional state for the caller to reference after the timer completes.</param>
     public void SetTimer(TimeSpan time, TState? state)
     {
-        _isRunning = true;
+        IsRunning = true;
         State = state;
         _stopwatch.Restart();
         _duration = time;
@@ -48,6 +63,6 @@ public sealed class DeviceTimer<TState>
     /// </summary>
     public void Cancel()
     {
-        _isRunning = false;
+        IsRunning = false;
     }
 }

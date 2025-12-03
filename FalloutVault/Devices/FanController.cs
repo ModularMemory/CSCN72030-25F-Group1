@@ -78,6 +78,11 @@ public class FanController : PoweredDevice, IFanController
     {
         lock (_timerLock)
         {
+            if (_deviceTimer.IsRunning)
+            {
+                // Must come before CheckCompleted to ensure TimeSpan.Zero is sent
+                PublishMessage(new DeviceMessage.FanTimedOnOffChanged(_deviceTimer.TimeRemaining));
+            }
             if (_deviceTimer.CheckCompleted())
             {
                 IsOn = _deviceTimer.State;

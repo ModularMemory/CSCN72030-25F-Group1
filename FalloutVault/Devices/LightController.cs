@@ -60,6 +60,11 @@ public class LightController : PoweredDevice, ILightController
     {
         lock (_timerLock)
         {
+            if (_deviceTimer.IsRunning)
+            {
+                // Must come before CheckCompleted to ensure TimeSpan.Zero is sent
+                PublishMessage(new DeviceMessage.LightTimedOnOffChanged(_deviceTimer.TimeRemaining));
+            }
             if (_deviceTimer.CheckCompleted())
             {
                 IsOn = _deviceTimer.State;

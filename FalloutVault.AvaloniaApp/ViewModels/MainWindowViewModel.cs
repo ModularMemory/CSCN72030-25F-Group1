@@ -98,7 +98,9 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void AddLogMessage(DeviceLog log)
     {
-        if (log.Message is DeviceMessage.FanSpeedRpmChanged or DeviceMessage.TotalPowerDrawChanged)
+        if (log.Message is DeviceMessage.FanSpeedRpmChanged
+            or DeviceMessage.TotalPowerDrawChanged
+            or DeviceMessage.DeviceTimedOnOffChanged)
         {
             return;
         }

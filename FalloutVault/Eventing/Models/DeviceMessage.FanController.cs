@@ -10,6 +10,11 @@ public partial class DeviceMessage
         public override string Message => "Fan on/off changed";
     }
 
+    public class FanTimedOnOffChanged(TimeSpan data) : DeviceTimedOnOffChanged(data)
+    {
+        public override string Message => "Fan timed on/off remaining changed";
+    }
+
     public class FanMotorWattage(Watt data) : DeviceMessage(data)
     {
         public Watt Wattage { get; } = data;
