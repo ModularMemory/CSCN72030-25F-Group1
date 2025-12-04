@@ -1,5 +1,6 @@
 ﻿using FalloutVault.Commands;
 using FalloutVault.Devices;
+using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
 using FalloutVault.Tests.Mocks;
@@ -58,6 +59,39 @@ public class PowerControllerTests
 
         // Assert
         Assert.That(light2.IsOn, Is.False);
+    }
+
+    [Test]
+    public async Task PowerController_UsageExceeded_PublishesShutDownMessage()
+    {
+        // Arrange
+        var registry = new DeviceRegistry(Logger.None);
+        var messageBus = new MockDeviceMessageEventBus();
+        var powerEventBus = new MockPowerEventBus();
+        var controller = new DeviceController(registry, messageBus, powerEventBus, Logger.None);
+        var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)150, controller);
+        var light1 = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)100);
+        var light2 = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)100);
+        registry.RegisterDevice(light1);
+        registry.RegisterDevice(light2);
+
+        powerController.SetEventBus(powerEventBus);
+        powerController.SetEventBus(messageBus);
+        light1.SetEventBus(powerEventBus);
+        light2.SetEventBus(powerEventBus);
+
+        light1.SendCommand(new DeviceCommand.SetOn(true));
+
+        // Act
+        light2.SendCommand(new DeviceCommand.SetOn(true));
+
+        await Task.Delay(50); // Wait the deferred command to get processed
+
+        // Assert
+        Assert.That(messageBus.Messages, Has.Count.GreaterThan(0));
+        var shutdownMessage = messageBus.Messages
+            .OfType<DeviceMessage.DeviceShutDownFromOverload>();
+        Assert.That(shutdownMessage, Is.Not.Null);
     }
 
     [Test]
