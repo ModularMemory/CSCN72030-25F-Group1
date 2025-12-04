@@ -13,6 +13,7 @@ using FalloutVault.Devices.Interfaces;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
+using FalloutVault.Models;
 using Serilog;
 
 namespace FalloutVault.AvaloniaApp.ViewModels.Devices;
@@ -33,6 +34,12 @@ public partial class LightControllerViewModel : DeviceViewModel, IOnOff
 
     [ObservableProperty]
     public partial double Dimmer { get; set; }
+
+    [ObservableProperty]
+    public partial Watt BulbWattage { get; set; }
+
+    [ObservableProperty]
+    public partial TimeSpan? TimedOnOffRemaining { get; set; }
 
     partial void OnDimmerChanged(double value)
     {
@@ -98,6 +105,15 @@ public partial class LightControllerViewModel : DeviceViewModel, IOnOff
                     break;
                 case DeviceMessage.LightDimmerLevelChanged dimmerLevelChanged:
                     Dimmer = dimmerLevelChanged.DimmerLevel * 100;
+                    break;
+                case DeviceMessage.LightBulbWattage lightBulbWattage:
+                    BulbWattage = lightBulbWattage.Wattage;
+                    break;
+                case DeviceMessage.DeviceTimedOnOffChanged timedOnOffChanged:
+                    TimedOnOffRemaining =
+                        timedOnOffChanged.TimeRemaining > TimeSpan.Zero
+                            ? timedOnOffChanged.TimeRemaining
+                            : null;
                     break;
             }
         });

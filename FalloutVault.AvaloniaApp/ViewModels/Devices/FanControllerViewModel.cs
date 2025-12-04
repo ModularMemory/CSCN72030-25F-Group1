@@ -13,6 +13,7 @@ using FalloutVault.Devices.Interfaces;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
+using FalloutVault.Models;
 using Serilog;
 
 namespace FalloutVault.AvaloniaApp.ViewModels.Devices;
@@ -37,10 +38,17 @@ public partial class FanControllerViewModel : DeviceViewModel, IOnOff
     [ObservableProperty]
     public partial SolidColorBrush? ButtonColour { get; set; }
 
+    [ObservableProperty]
+    public partial Watt MotorWattage { get; set; }
+
+    [ObservableProperty]
+    public partial TimeSpan? TimedOnOffRemaining { get; set; }
+
     partial void OnTargetSpeedChanged(int value)
     {
         DeviceController.SendCommand(Id, new DeviceCommand.SetFanTargetRpm(value));
     }
+
     [RelayCommand]
     public async void TimedButton_OnClick()
     {
@@ -102,6 +110,15 @@ public partial class FanControllerViewModel : DeviceViewModel, IOnOff
                     break;
                 case DeviceMessage.FanTargetRpmChanged targetRpmChanged:
                     TargetSpeed = targetRpmChanged.TargetRpm;
+                    break;
+                case DeviceMessage.FanMotorWattage fanMotorWattage:
+                    MotorWattage = fanMotorWattage.Wattage;
+                    break;
+                case DeviceMessage.DeviceTimedOnOffChanged timedOnOffChanged:
+                    TimedOnOffRemaining =
+                        timedOnOffChanged.TimeRemaining > TimeSpan.Zero
+                            ? timedOnOffChanged.TimeRemaining
+                            : null;
                     break;
             }
         });
