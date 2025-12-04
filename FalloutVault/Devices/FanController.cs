@@ -120,7 +120,10 @@ public class FanController : PoweredDevice, IFanController
             case DeviceCommand.SetOn setOn:
                 // Cancel the timer if the light was turned on/off manually
                 lock (_timerLock)
+                {
                     _deviceTimer.Cancel();
+                    PublishMessage(new DeviceMessage.FanTimedOnOffChanged(TimeSpan.Zero));
+                }
 
                 IsOn = setOn.IsOn;
                 break;
