@@ -8,4 +8,5 @@ public enum DeviceCapabilities : ulong
     TemporaryOff = 1 << 1,
     TemporaryOn = 1 << 2,
     Periodic = 1 << 3,
+    OpenClose = 1 << 4,
 }

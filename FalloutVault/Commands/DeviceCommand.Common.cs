@@ -12,6 +12,12 @@ public partial class DeviceCommand
         public bool IsOn { get; } = data;
     }
 
+    // IOpenClose
+    public class SetOpen(bool data) : DeviceCommand(ValueBoxes.BooleanBox(data))
+    {
+        public bool IsOpen { get; } = data;
+    }
+
     // ITemporaryOn
     public class TurnOnFor(TimeSpan data) : DeviceCommand(data)
     {

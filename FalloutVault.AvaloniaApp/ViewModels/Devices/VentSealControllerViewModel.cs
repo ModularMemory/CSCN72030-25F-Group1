@@ -38,7 +38,7 @@ public partial class VentSealControllerViewModel : DeviceViewModel
     [RelayCommand]
     public void SealButton_OnClick()
     {
-        DeviceController.SendCommand(Id, new DeviceCommand.SetVentOpen(!IsOpen));
+        DeviceController.SendCommand(Id, new DeviceCommand.SetOpen(!IsOpen));
     }
 
     [RelayCommand]
