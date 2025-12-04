@@ -235,7 +235,7 @@
                                                 VerticalAlignment="Center">
                                                 <TextBlock Foreground="Black"
                                                            HorizontalAlignment="Right"
-                                                           Text="{Binding BulbWattage, StringFormat={}Motor Wattage\: {0:F0}}" />
+                                                           Text="{Binding BulbWattage, StringFormat={}Bulb Wattage\: {0:F0}}" />
                                                 <TextBlock Foreground="Black"
                                                            HorizontalAlignment="Right"
                                                            Text="{Binding PowerDraw, StringFormat={}Current Power Draw\: {0:F0}}" />
