@@ -51,8 +51,8 @@ public class DoorController : Device, IDoorController
     {
         switch (command)
         {
-            case DeviceCommand.SetOpen setDoorOpen:
-                IsOpen = setDoorOpen.IsOpen;
+            case DeviceCommand.SetOpen setOpen:
+                IsOpen = setOpen.IsOpen;
                 break;
             case DeviceCommand.SetDoorLocked setDoorLocked:
                 IsLocked = setDoorLocked.IsLocked;

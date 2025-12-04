@@ -9,7 +9,6 @@ namespace FalloutVault.Devices;
 public class VentSealController : Device, IVentSealController
 {
     //fields
-    private bool _IsOpen;
     private bool _LockState;
 
     //properties
@@ -30,16 +29,15 @@ public class VentSealController : Device, IVentSealController
 
     public bool IsOpen
     {
-        get => _IsOpen;
-        set
+        get;
+        private set
         {
-            if (LockState)
-                return;
+            if (!SetField(ref field, value)) return;
 
-            _IsOpen = value;
-            PublishMessage(new DeviceMessage.VentOpenChanged(_IsOpen));
+            PublishMessage(new DeviceMessage.VentOpenChanged(field));
         }
     }
+    
 
     public VentSealController(DeviceId id)
     {
@@ -52,8 +50,8 @@ public class VentSealController : Device, IVentSealController
     {
         switch (command)
         {
-            case DeviceCommand.SetVentOpen setVentOpen:
-                IsOpen = setVentOpen.IsOpen;
+            case DeviceCommand.SetOpen setOpen:
+                IsOpen = setOpen.IsOpen;
                 break;
             case DeviceCommand.SetVentLocked setVentLocked:
                 LockState = setVentLocked.IsLocked;
