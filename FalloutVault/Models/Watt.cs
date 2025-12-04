@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 namespace FalloutVault.Models;
 
@@ -25,7 +26,9 @@ public readonly record struct Watt(double W) : IFormattable
 
     public string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format, IFormatProvider? formatProvider)
     {
-        var newFormat = "{0:" + format + "}W";
-        return string.Format(formatProvider, newFormat, W);
+        var handler = new DefaultInterpolatedStringHandler(1, 1, formatProvider);
+        handler.AppendFormatted(W, format);
+        handler.AppendLiteral("W");
+        return handler.ToStringAndClear();
     }
 }
