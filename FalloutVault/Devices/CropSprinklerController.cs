@@ -85,6 +85,7 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
             case GetCurrentState:
                 PublishMessage(new DeviceMessage.CropSprinklerOnOffChanged(IsOn));
                 PublishMessage(new DeviceMessage.CropSprinklerSectionChanged(TargetSection));
+                PublishMessage(new DeviceMessage.CropSprinklerWattChanged(sprinklerWattage));
                 break;
         }
     }
