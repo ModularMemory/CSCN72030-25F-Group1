@@ -732,8 +732,8 @@
                         <DataGridTextColumn Header="Message"
                                             Binding="{Binding Message}"
                                             Width="200" />
-                        <DataGridTextColumn Header="Value"
-                                            Binding="{Binding LogValue}" />
+                        <DataGridTextColumn Header="Data"
+                                            Binding="{Binding DataString}" />
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

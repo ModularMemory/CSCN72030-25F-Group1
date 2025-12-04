@@ -60,6 +60,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             Types.Add(new DeviceNavigationViewModel(type));
         }
+
         UpdateDeviceList();
     }
 
@@ -78,7 +79,7 @@ public partial class MainWindowViewModel : ViewModelBase
         Devices.Clear();
         foreach (var viewModel in _deviceViewModels)
         {
-            if (enabledZones.Contains(viewModel.Id.Zone) &&  enabledTypes.Contains(viewModel.Type))
+            if (enabledZones.Contains(viewModel.Id.Zone) && enabledTypes.Contains(viewModel.Type))
             {
                 Devices.Add(viewModel);
             }
@@ -120,9 +121,10 @@ public partial class MainWindowViewModel : ViewModelBase
         if (string.IsNullOrWhiteSpace(LogSearch)
             || log.Sender.Name.Contains(LogSearch, StringComparison.OrdinalIgnoreCase)
             || log.Sender.Zone.Contains(LogSearch, StringComparison.OrdinalIgnoreCase)
-            || log.Message.Message.Contains(LogSearch, StringComparison.OrdinalIgnoreCase))
+            || log.Message.Message.Contains(LogSearch, StringComparison.OrdinalIgnoreCase)
+            || (log.DataString != null && log.DataString.Contains(LogSearch, StringComparison.OrdinalIgnoreCase)))
         {
-            LogMessages.Add(new LogViewModel(log.Sender, log.Message.Message, log.Message.Data?.ToString()));
+            LogMessages.Add(new LogViewModel(log.Sender, log.Message.Message, log.DataString));
         }
 
         if (LogMessages.Count > 500)
