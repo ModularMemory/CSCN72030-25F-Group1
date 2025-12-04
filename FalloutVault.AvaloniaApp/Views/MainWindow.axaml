@@ -493,7 +493,7 @@
                                 <DataTemplate x:Key="CropSprinklerController"
                                               x:DataType="devices:CropSprinklerControllerViewModel">
                                     <Border
-                                        Height="40"
+                                        Height="48"
                                         BorderBrush="Black"
                                         BorderThickness="2"
                                         Background="SteelBlue"
@@ -554,7 +554,7 @@
                                 <DataTemplate x:Key="VentSealController"
                                               x:DataType="devices:VentSealControllerViewModel">
                                     <Border
-                                        Height="40"
+                                        Height="48"
                                         BorderBrush="Black"
                                         BorderThickness="2"
                                         Background="Brown"
@@ -592,6 +592,66 @@
                                                 <Button.Content>
                                                     <icons:MaterialIcon
                                                         Kind="{Binding VentIcon}"
+                                                        Foreground="{Binding OpenButtonColour}" />
+                                                </Button.Content>
+                                            </Button>
+
+                                            <Button
+                                                Command="{Binding LockButton_OnClick}"
+                                                CornerRadius="20"
+                                                Background="#333"
+                                                Width="40"
+                                                Height="40">
+                                                <Button.Content>
+                                                    <icons:MaterialIcon
+                                                        Kind="{Binding LockIcon}" />
+                                                </Button.Content>
+                                            </Button>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+
+                                <DataTemplate x:Key="DoorController"
+                                              x:DataType="devices:DoorControllerViewModel">
+                                    <Border
+                                        Height="48"
+                                        BorderBrush="Black"
+                                        BorderThickness="2"
+                                        Background="DarkSlateBlue"
+                                        CornerRadius="5"
+                                        Padding="10, 0">
+
+                                        <StackPanel
+                                            Orientation="Horizontal"
+                                            Spacing="10">
+                                            <StackPanel
+                                                Orientation="Vertical"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                Spacing="2">
+
+                                                <TextBlock
+                                                    Text="{Binding Id.Zone}"
+                                                    Foreground="Black"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center" />
+                                                <TextBlock
+                                                    Text="{Binding Id.Name}"
+                                                    Foreground="Black"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center" />
+                                            </StackPanel>
+
+                                            <Button
+                                                Command="{Binding CloseButton_OnClick}"
+                                                CornerRadius="20"
+                                                Background="#333"
+                                                Width="40"
+                                                Height="40"
+                                                IsEnabled="{Binding IsLocked, Converter={x:Static BoolConverters.Not}}">
+                                                <Button.Content>
+                                                    <icons:MaterialIcon
+                                                        Kind="{Binding DoorIcon}"
                                                         Foreground="{Binding OpenButtonColour}" />
                                                 </Button.Content>
                                             </Button>

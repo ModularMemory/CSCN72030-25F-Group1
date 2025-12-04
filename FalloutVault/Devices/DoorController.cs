@@ -12,7 +12,7 @@ public class DoorController : Device, IDoorController
     //Fields
     public override DeviceId Id { get; }
 
-    public override DeviceType Type => DeviceType.VentSealController;
+    public override DeviceType Type => DeviceType.DoorController;
 
     //Properties
     public bool IsOpen

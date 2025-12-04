@@ -30,6 +30,9 @@ public partial class CropSprinklerControllerViewModel : PoweredDeviceViewModel, 
     [ObservableProperty]
     public partial Watt PowerDraw { get; set; }
 
+    [ObservableProperty]
+    public partial int Section { get; set; }
+
     [RelayCommand]
     public void OnOffButton_OnClick()
     {
@@ -50,6 +53,9 @@ public partial class CropSprinklerControllerViewModel : PoweredDeviceViewModel, 
                     ButtonColour = new SolidColorBrush(IsOn
                         ? Color.FromRgb(0, 255, 0)
                         : Color.FromRgb(255, 0, 0));
+                    break;
+                case DeviceMessage.CropSprinklerSectionChanged sectionChanged:
+                    Section = sectionChanged.Section;
                     break;
             }
         });
