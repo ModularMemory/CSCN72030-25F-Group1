@@ -51,6 +51,9 @@ public partial class FanControllerViewModel : PoweredDeviceViewModel, IOnOff
     [ObservableProperty]
     public partial TimeSpan? TimedOnOffRemaining { get; set; }
 
+    [ObservableProperty]
+    public partial int IconSize { get; set; } = 20;
+
     partial void OnTargetSpeedChanged(int value)
     {
         DeviceController.SendCommand(Id, new DeviceCommand.SetFanTargetRpm(value));
@@ -129,6 +132,10 @@ public partial class FanControllerViewModel : PoweredDeviceViewModel, IOnOff
                         timedOnOffChanged.TimeRemaining > TimeSpan.Zero
                             ? timedOnOffChanged.TimeRemaining
                             : null;
+                    IconSize =
+                        timedOnOffChanged.TimeRemaining > TimeSpan.Zero
+                            ? 14
+                            : 20;
                     break;
             }
         });

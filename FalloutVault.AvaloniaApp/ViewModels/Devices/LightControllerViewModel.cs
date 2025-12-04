@@ -45,6 +45,9 @@ public partial class LightControllerViewModel : PoweredDeviceViewModel, IOnOff
     [ObservableProperty]
     public partial TimeSpan? TimedOnOffRemaining { get; set; }
 
+    [ObservableProperty]
+    public partial int IconSize { get; set; } = 20;
+
     partial void OnDimmerChanged(double value)
     {
         DeviceController.SendCommand(Id, new DeviceCommand.SetLightDimmer(value / 100));
@@ -118,6 +121,10 @@ public partial class LightControllerViewModel : PoweredDeviceViewModel, IOnOff
                         timedOnOffChanged.TimeRemaining > TimeSpan.Zero
                             ? timedOnOffChanged.TimeRemaining
                             : null;
+                    IconSize =
+                        timedOnOffChanged.TimeRemaining > TimeSpan.Zero
+                            ? 14
+                            : 20;
                     break;
             }
         });
