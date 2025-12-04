@@ -80,8 +80,10 @@ public class LightController : PoweredDevice, ILightController
                 // Cancel the timer if the light was turned on/off manually
                 lock (_timerLock)
                 {
-                    _deviceTimer.Cancel();
-                    PublishMessage(new DeviceMessage.FanTimedOnOffChanged(TimeSpan.Zero));
+                    if (_deviceTimer.Cancel())
+                    {
+                        PublishMessage(new DeviceMessage.LightTimedOnOffChanged(TimeSpan.Zero));
+                    }
                 }
 
                 IsOn = setOn.IsOn;

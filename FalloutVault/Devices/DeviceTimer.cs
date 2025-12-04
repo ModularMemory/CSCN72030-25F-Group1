@@ -61,8 +61,15 @@ public sealed class DeviceTimer<TState>
     /// <summary>
     /// Cancels the currently running timer.
     /// </summary>
-    public void Cancel()
+    /// <returns>
+    /// <see langword="true"/> is the timer was running before it was canceled, otherwise <see langword="false"/>.
+    /// </returns>
+    public bool Cancel()
     {
+        var wasRunning = IsRunning;
+
         IsRunning = false;
+
+        return wasRunning;
     }
 }
