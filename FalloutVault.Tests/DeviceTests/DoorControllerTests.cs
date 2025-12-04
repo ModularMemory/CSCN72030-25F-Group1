@@ -49,7 +49,7 @@ public class DoorControllerTests
     {
         // Arrange
         var DoorController = new DoorController(DeviceIdGenerator.GetRandomDeviceId());
-        DoorController.SendCommand(new DeviceCommand.SetDoorLocked(false));
+        DoorController.SendCommand(new DeviceCommand.SetDoorLocked(true));
 
         var eventBus = new MockDeviceMessageEventBus();
         DoorController.SetEventBus(eventBus);
