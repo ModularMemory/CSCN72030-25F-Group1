@@ -24,7 +24,13 @@ public partial class PowerControllerViewModel : DeviceViewModel, IOnOff
     public partial bool IsOn { get; set; }
 
     [ObservableProperty]
+    public partial Watt PowerDraw { get; set; }
+
+    [ObservableProperty]
     public partial Watt PowerGeneration { get; set; }
+
+    [ObservableProperty]
+    public partial Watt PowerAvailable { get; set; }
 
     [ObservableProperty]
     public partial SolidColorBrush? ButtonColour { get; set; }
@@ -52,6 +58,10 @@ public partial class PowerControllerViewModel : DeviceViewModel, IOnOff
                     break;
                 case DeviceMessage.PowerGenerationChanged powerGenerationChanged:
                     PowerGeneration = powerGenerationChanged.PowerGeneration;
+                    break;
+                case DeviceMessage.TotalPowerDrawChanged powerDraw:
+                    PowerDraw = powerDraw.PowerDraw.TotalDraw;
+                    PowerAvailable = powerDraw.PowerDraw.Available;
                     break;
             }
         });

@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using FalloutVault.AvaloniaApp.Models;
 using FalloutVault.AvaloniaApp.Services.Interfaces;
 using FalloutVault.AvaloniaApp.ViewModels.Devices;
+using FalloutVault.Eventing;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
 using FalloutVault.Models;

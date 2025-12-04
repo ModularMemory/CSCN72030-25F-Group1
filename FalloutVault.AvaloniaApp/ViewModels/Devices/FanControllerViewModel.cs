@@ -18,13 +18,14 @@ using Serilog;
 
 namespace FalloutVault.AvaloniaApp.ViewModels.Devices;
 
-public partial class FanControllerViewModel : DeviceViewModel, IOnOff
+public partial class FanControllerViewModel : PoweredDeviceViewModel, IOnOff
 {
     public FanControllerViewModel(
         IDeviceController deviceController,
         IEventBus<DeviceMessage> messageBus,
+        IEventBus<Watt> powerBus,
         ILogger logger)
-        : base(deviceController, messageBus, logger) { }
+        : base(deviceController, messageBus, powerBus, logger) { }
 
     [ObservableProperty]
     public partial bool IsOn { get; set; }
@@ -40,6 +41,9 @@ public partial class FanControllerViewModel : DeviceViewModel, IOnOff
 
     [ObservableProperty]
     public partial Watt MotorWattage { get; set; }
+
+    [ObservableProperty]
+    public partial Watt PowerDraw { get; set; }
 
     [ObservableProperty]
     public partial TimeSpan? TimedOnOffRemaining { get; set; }
@@ -122,5 +126,13 @@ public partial class FanControllerViewModel : DeviceViewModel, IOnOff
                     break;
             }
         });
+    }
+
+    protected override void OnPowerMessage(object? sender, Watt watts)
+    {
+        if (sender is not IDevice device || device.Id != Id)
+            return;
+
+        PowerDraw = watts;
     }
 }

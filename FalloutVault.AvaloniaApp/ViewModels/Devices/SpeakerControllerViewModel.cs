@@ -7,17 +7,19 @@ using FalloutVault.Devices.Interfaces;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
+using FalloutVault.Models;
 using Serilog;
 
 namespace FalloutVault.AvaloniaApp.ViewModels.Devices;
 
-public partial class SpeakerControllerViewModel : DeviceViewModel, IOnOff
+public partial class SpeakerControllerViewModel : PoweredDeviceViewModel, IOnOff
 {
     public SpeakerControllerViewModel(
         IDeviceController deviceController,
         IEventBus<DeviceMessage> messageBus,
+        IEventBus<Watt> powerBus,
         ILogger logger)
-        : base(deviceController, messageBus, logger) { }
+        : base(deviceController, messageBus, powerBus, logger) { }
 
     [ObservableProperty]
     public partial bool IsOn { get; set; }
@@ -27,6 +29,9 @@ public partial class SpeakerControllerViewModel : DeviceViewModel, IOnOff
 
     [ObservableProperty]
     public partial double Volume { get; set; }
+
+    [ObservableProperty]
+    public partial Watt PowerDraw { get; set; }
 
     partial void OnVolumeChanged(double value)
     {
@@ -60,4 +65,13 @@ public partial class SpeakerControllerViewModel : DeviceViewModel, IOnOff
             }
         });
     }
+
+    protected override void OnPowerMessage(object? sender, Watt watts)
+    {
+        if (sender is not IDevice device || device.Id != Id)
+            return;
+
+        PowerDraw = watts;
+    }
+
 }
