@@ -201,7 +201,7 @@
                                                                     Foreground="White"
                                                                     HorizontalAlignment="Center"
                                                                     VerticalAlignment="Center"/>
-                                                                <TextBlock Text="{Binding TimedOnOffRemaining, StringFormat=hh\\:mm\\:ss}"
+                                                                <TextBlock Text="{Binding TimedOnOffRemaining, StringFormat=h\\:mm\\:ss}"
                                                                            Foreground="White"
                                                                            VerticalAlignment="Center"
                                                                            HorizontalAlignment="Center"
@@ -317,7 +317,7 @@
                                                                     Foreground="White"
                                                                     HorizontalAlignment="Center"
                                                                     VerticalAlignment="Center"/>
-                                                                <TextBlock Text="{Binding TimedOnOffRemaining, StringFormat=hh\\:mm\\:ss}"
+                                                                <TextBlock Text="{Binding TimedOnOffRemaining, StringFormat=h\\:mm\\:ss}"
                                                                            Foreground="White"
                                                                            VerticalAlignment="Center"
                                                                            HorizontalAlignment="Center"

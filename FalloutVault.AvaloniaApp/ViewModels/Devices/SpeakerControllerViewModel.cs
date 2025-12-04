@@ -30,9 +30,6 @@ public partial class SpeakerControllerViewModel : PoweredDeviceViewModel, IOnOff
     [ObservableProperty]
     public partial double Volume { get; set; }
 
-    [ObservableProperty]
-    public partial Watt PowerDraw { get; set; }
-
     partial void OnVolumeChanged(double value)
     {
         DeviceController.SendCommand(Id, new DeviceCommand.SetSpeakerVolume(value / 100));
@@ -65,13 +62,4 @@ public partial class SpeakerControllerViewModel : PoweredDeviceViewModel, IOnOff
             }
         });
     }
-
-    protected override void OnPowerMessage(object? sender, Watt watts)
-    {
-        if (sender is not IDevice device || device.Id != Id)
-            return;
-
-        PowerDraw = watts;
-    }
-
 }

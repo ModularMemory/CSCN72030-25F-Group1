@@ -46,9 +46,6 @@ public partial class FanControllerViewModel : PoweredDeviceViewModel, IOnOff
     public partial int MaxRpm { get; set; } = int.MaxValue;
 
     [ObservableProperty]
-    public partial Watt PowerDraw { get; set; }
-
-    [ObservableProperty]
     public partial TimeSpan? TimedOnOffRemaining { get; set; }
 
     [ObservableProperty]
@@ -60,7 +57,7 @@ public partial class FanControllerViewModel : PoweredDeviceViewModel, IOnOff
     }
 
     [RelayCommand]
-    public async void TimedButton_OnClick()
+    public async Task TimedButton_OnClick()
     {
         var dialog = new TimedOnOffDialog(IsOn)
         {
@@ -139,13 +136,5 @@ public partial class FanControllerViewModel : PoweredDeviceViewModel, IOnOff
                     break;
             }
         });
-    }
-
-    protected override void OnPowerMessage(object? sender, Watt watts)
-    {
-        if (sender is not IDevice device || device.Id != Id)
-            return;
-
-        PowerDraw = watts;
     }
 }

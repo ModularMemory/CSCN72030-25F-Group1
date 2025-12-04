@@ -40,9 +40,6 @@ public partial class LightControllerViewModel : PoweredDeviceViewModel, IOnOff
     public partial Watt BulbWattage { get; set; }
 
     [ObservableProperty]
-    public partial Watt PowerDraw { get; set; }
-
-    [ObservableProperty]
     public partial TimeSpan? TimedOnOffRemaining { get; set; }
 
     [ObservableProperty]
@@ -60,7 +57,7 @@ public partial class LightControllerViewModel : PoweredDeviceViewModel, IOnOff
     }
 
     [RelayCommand]
-    public async void TimedButton_OnClick()
+    public async Task TimedButton_OnClick()
     {
         var dialog = new TimedOnOffDialog(IsOn)
         {
@@ -128,13 +125,5 @@ public partial class LightControllerViewModel : PoweredDeviceViewModel, IOnOff
                     break;
             }
         });
-    }
-
-    protected override void OnPowerMessage(object? sender, Watt watts)
-    {
-        if (sender is not IDevice device || device.Id != Id)
-            return;
-
-        PowerDraw = watts;
     }
 }

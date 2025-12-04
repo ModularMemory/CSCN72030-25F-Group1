@@ -28,9 +28,6 @@ public partial class CropSprinklerControllerViewModel : PoweredDeviceViewModel, 
     public partial SolidColorBrush? ButtonColour { get; set; }
 
     [ObservableProperty]
-    public partial Watt PowerDraw { get; set; }
-
-    [ObservableProperty]
     public partial int Section { get; set; }
 
     [RelayCommand]
@@ -59,13 +56,5 @@ public partial class CropSprinklerControllerViewModel : PoweredDeviceViewModel, 
                     break;
             }
         });
-    }
-
-    protected override void OnPowerMessage(object? sender, Watt watts)
-    {
-        if (sender is not IDevice device || device.Id != Id)
-            return;
-
-        PowerDraw = watts;
     }
 }
