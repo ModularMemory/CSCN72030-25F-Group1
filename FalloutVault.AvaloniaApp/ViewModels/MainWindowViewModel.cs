@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using FalloutVault.AvaloniaApp.Models;
 using FalloutVault.AvaloniaApp.Services.Interfaces;
 using FalloutVault.AvaloniaApp.ViewModels.Devices;
+using FalloutVault.Eventing;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
 using FalloutVault.Models;
@@ -20,6 +21,8 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly Lock _logLock = new();
 
     public ObservableCollection<ZoneViewModel> Zones { get; } = [];
+
+    public ObservableCollection<DeviceNavigationViewModel> Types { get; } = [];
     public ObservableCollection<IDeviceViewModel> Devices { get; } = [];
     public ObservableCollection<LogViewModel> LogMessages { get; } = [];
 
@@ -53,6 +56,10 @@ public partial class MainWindowViewModel : ViewModelBase
             Zones.Add(new ZoneViewModel(zone));
         }
 
+        foreach (var type in deviceRegistry.Devices.Select(x => x.type).Distinct())
+        {
+            Types.Add(new DeviceNavigationViewModel(type));
+        }
         UpdateDeviceList();
     }
 
@@ -63,10 +70,15 @@ public partial class MainWindowViewModel : ViewModelBase
             .Select(x => x.ZoneName)
             .ToHashSet();
 
+        var enabledTypes = Types
+            .Where(x => x.IsSelected)
+            .Select(x => x.Type)
+            .ToHashSet();
+
         Devices.Clear();
         foreach (var viewModel in _deviceViewModels)
         {
-            if (enabledZones.Contains(viewModel.Id.Zone))
+            if (enabledZones.Contains(viewModel.Id.Zone) &&  enabledTypes.Contains(viewModel.Type))
             {
                 Devices.Add(viewModel);
             }
@@ -98,7 +110,9 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void AddLogMessage(DeviceLog log)
     {
-        if (log.Message is DeviceMessage.FanSpeedRpmChanged or DeviceMessage.TotalPowerDrawChanged)
+        if (log.Message is DeviceMessage.FanSpeedRpmChanged
+            or DeviceMessage.TotalPowerDrawChanged
+            or DeviceMessage.DeviceTimedOnOffChanged)
         {
             return;
         }
@@ -108,7 +122,7 @@ public partial class MainWindowViewModel : ViewModelBase
             || log.Sender.Zone.Contains(LogSearch, StringComparison.OrdinalIgnoreCase)
             || log.Message.Message.Contains(LogSearch, StringComparison.OrdinalIgnoreCase))
         {
-            LogMessages.Add(new LogViewModel(log.Sender, log.Message.Message));
+            LogMessages.Add(new LogViewModel(log.Sender, log.Message.Message, log.Message.Data?.ToString()));
         }
 
         if (LogMessages.Count > 500)

@@ -60,6 +60,11 @@ public class LightController : PoweredDevice, ILightController
     {
         lock (_timerLock)
         {
+            if (_deviceTimer.IsRunning)
+            {
+                // Must come before CheckCompleted to ensure TimeSpan.Zero is sent
+                PublishMessage(new DeviceMessage.LightTimedOnOffChanged(_deviceTimer.TimeRemaining));
+            }
             if (_deviceTimer.CheckCompleted())
             {
                 IsOn = _deviceTimer.State;
@@ -74,7 +79,12 @@ public class LightController : PoweredDevice, ILightController
             case DeviceCommand.SetOn setOn:
                 // Cancel the timer if the light was turned on/off manually
                 lock (_timerLock)
-                    _deviceTimer.Cancel();
+                {
+                    if (_deviceTimer.Cancel())
+                    {
+                        PublishMessage(new DeviceMessage.LightTimedOnOffChanged(TimeSpan.Zero));
+                    }
+                }
 
                 IsOn = setOn.IsOn;
                 break;

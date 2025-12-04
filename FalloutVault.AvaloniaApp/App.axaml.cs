@@ -84,14 +84,20 @@ public partial class App : Application
             new SpeakerController(new DeviceId("Speaker-2", "West Hall"), (Watt)100),
             new SpeakerController(new DeviceId("Speaker-3", "North Hall"), (Watt)100),
             new SpeakerController(new DeviceId("Speaker-4", "Generator Room"), (Watt)100),
-            // Crop sprinkler controller
-            new CropSprinklerController(new DeviceId("CropSprinkler-1", "East Field")),
-            new CropSprinklerController(new DeviceId("CropSprinkler-2", "West Field")),
+            // Doors
+            new DoorController(new DeviceId("Door-1", "East Hall")),
+            new DoorController(new DeviceId("Door-2", "East Hall")),
+            new DoorController(new DeviceId("Door-3", "North Hall")),
+            new DoorController(new DeviceId("Door-4", "West Hall")),
+            new DoorController(new DeviceId("Door-5", "Generator Room")),
             // Vent seal controller
             new VentSealController(new DeviceId("VentSeal-1", "East Hall")),
             new VentSealController(new DeviceId("VentSeal-2", "West Hall")),
             new VentSealController(new DeviceId("VentSeal-3", "North Hall")),
             new VentSealController(new DeviceId("VentSeal-4", "South Hall")),
+            // Crop sprinkler controller
+            new CropSprinklerController(new DeviceId("CropSprinkler-1", "East Field")),
+            new CropSprinklerController(new DeviceId("CropSprinkler-2", "West Field")),
             // Power Controller
             new PowerController(new DeviceId("Central-Reactor", "Generator Room"), (Watt)1_000, deviceController)
         ];

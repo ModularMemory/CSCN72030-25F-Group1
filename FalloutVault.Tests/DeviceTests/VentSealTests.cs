@@ -13,13 +13,13 @@ public class VentSealTests
     {
         // Arrange
         var ventSealController = new VentSealController(DeviceIdGenerator.GetRandomDeviceId());
-        ventSealController.SendCommand(new DeviceCommand.SetVentOpen(false));
+        ventSealController.SendCommand(new DeviceCommand.SetOpen(false));
 
         var eventBus = new MockDeviceMessageEventBus();
         ventSealController.SetEventBus(eventBus);
 
         // Act
-        ventSealController.SendCommand(new DeviceCommand.SetVentOpen(true));
+        ventSealController.SendCommand(new DeviceCommand.SetOpen(true));
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
@@ -31,13 +31,13 @@ public class VentSealTests
     {
         // Arrange
         var ventSealController = new VentSealController(DeviceIdGenerator.GetRandomDeviceId());
-        ventSealController.SendCommand(new DeviceCommand.SetVentOpen(true));
+        ventSealController.SendCommand(new DeviceCommand.SetOpen(true));
 
         var eventBus = new MockDeviceMessageEventBus();
         ventSealController.SetEventBus(eventBus);
 
         // Act
-        ventSealController.SendCommand(new DeviceCommand.SetVentOpen(false));
+        ventSealController.SendCommand(new DeviceCommand.SetOpen(false));
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));

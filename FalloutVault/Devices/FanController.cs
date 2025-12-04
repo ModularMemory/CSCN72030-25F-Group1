@@ -78,6 +78,12 @@ public class FanController : PoweredDevice, IFanController
     {
         lock (_timerLock)
         {
+            if (_deviceTimer.IsRunning)
+            {
+                // Must come before CheckCompleted to ensure TimeSpan.Zero is sent
+                PublishMessage(new DeviceMessage.FanTimedOnOffChanged(_deviceTimer.TimeRemaining));
+            }
+
             if (_deviceTimer.CheckCompleted())
             {
                 IsOn = _deviceTimer.State;
@@ -100,9 +106,14 @@ public class FanController : PoweredDevice, IFanController
         const int AVERAGE_STEP = 50;
         var step = _rpmStepRandom.Next(AVERAGE_STEP - 15, AVERAGE_STEP + 15) * delta * 3;
 
-        SpeedRpm = Math.Max(
+        var newSpeed = Math.Max(
             0,
             SpeedRpm + (SpeedRpm < targetSpeed ? step : -step)
+        );
+
+        SpeedRpm = Math.Min(
+            MaxRpm + AVERAGE_STEP * 3,
+            newSpeed
         );
 
         _lastSpeedUpdate += deltaL;
@@ -115,7 +126,12 @@ public class FanController : PoweredDevice, IFanController
             case DeviceCommand.SetOn setOn:
                 // Cancel the timer if the light was turned on/off manually
                 lock (_timerLock)
-                    _deviceTimer.Cancel();
+                {
+                    if (_deviceTimer.Cancel())
+                    {
+                        PublishMessage(new DeviceMessage.FanTimedOnOffChanged(TimeSpan.Zero));
+                    }
+                }
 
                 IsOn = setOn.IsOn;
                 break;

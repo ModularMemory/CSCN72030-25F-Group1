@@ -16,6 +16,11 @@ public partial class DeviceMessage
         public override string Message => "Light on/off changed";
     }
 
+    public class LightTimedOnOffChanged(TimeSpan data) : DeviceTimedOnOffChanged(data)
+    {
+        public override string Message => "Light timed on/off remaining changed";
+    }
+
     public class LightDimmerLevelChanged(double data) : DeviceMessage(data)
     {
         public double DimmerLevel { get; } = data;

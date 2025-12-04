@@ -5,19 +5,26 @@
         xmlns:vm="clr-namespace:FalloutVault.AvaloniaApp.ViewModels"
         mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="80"
         x:Class="FalloutVault.AvaloniaApp.Views.TimedOnOffDialog"
-        Title="TimedButtonDialog"
+        Title="{Binding Title, StringFormat={}{0}...}"
         SizeToContent="WidthAndHeight"
         x:DataType="vm:TimedOnOffDialogViewModel">
-    <StackPanel Margin="10">
+    <StackPanel Margin="20, 20"
+                Spacing="10">
+
+        <TextBlock Text="{Binding Title, StringFormat={}{0}:}"
+                   FontSize="20"
+                   FontWeight="SemiBold"
+                   Margin="0, 5"/>
+
         <TextBlock
             Text="Duration (Hours / Minutes / Seconds)" />
+
         <TimePicker MinuteIncrement="1"
                     UseSeconds="True"
                     SecondIncrement="10"
                     ClockIdentifier="24HourClock"
                     SelectedTime="{Binding Duration}" />
-        <Grid
-            ColumnDefinitions="*, *">
+        <Grid ColumnDefinitions="*, *">
             <Button Click="AcceptButton_OnClick"
                     Content="Accept"
                     Grid.Column="0" />

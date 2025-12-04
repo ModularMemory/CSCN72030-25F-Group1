@@ -13,17 +13,19 @@ using FalloutVault.Devices.Interfaces;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
+using FalloutVault.Models;
 using Serilog;
 
 namespace FalloutVault.AvaloniaApp.ViewModels.Devices;
 
-public partial class LightControllerViewModel : DeviceViewModel, IOnOff
+public partial class LightControllerViewModel : PoweredDeviceViewModel, IOnOff
 {
     public LightControllerViewModel(
         IDeviceController deviceController,
         IEventBus<DeviceMessage> messageBus,
+        IEventBus<Watt> powerBus,
         ILogger logger)
-        : base(deviceController, messageBus, logger) { }
+        : base(deviceController, messageBus, powerBus, logger) { }
 
     [ObservableProperty]
     public partial bool IsOn { get; set; }
@@ -33,6 +35,15 @@ public partial class LightControllerViewModel : DeviceViewModel, IOnOff
 
     [ObservableProperty]
     public partial double Dimmer { get; set; }
+
+    [ObservableProperty]
+    public partial Watt BulbWattage { get; set; }
+
+    [ObservableProperty]
+    public partial TimeSpan? TimedOnOffRemaining { get; set; }
+
+    [ObservableProperty]
+    public partial int IconSize { get; set; } = 20;
 
     partial void OnDimmerChanged(double value)
     {
@@ -46,11 +57,10 @@ public partial class LightControllerViewModel : DeviceViewModel, IOnOff
     }
 
     [RelayCommand]
-    public async void TimedButton_OnClick()
+    public async Task TimedButton_OnClick()
     {
         var dialog = new TimedOnOffDialog(IsOn)
         {
-            DataContext = new TimedOnOffDialogViewModel(),
             WindowStartupLocation = WindowStartupLocation.CenterOwner
         };
 
@@ -99,6 +109,19 @@ public partial class LightControllerViewModel : DeviceViewModel, IOnOff
                     break;
                 case DeviceMessage.LightDimmerLevelChanged dimmerLevelChanged:
                     Dimmer = dimmerLevelChanged.DimmerLevel * 100;
+                    break;
+                case DeviceMessage.LightBulbWattage lightBulbWattage:
+                    BulbWattage = lightBulbWattage.Wattage;
+                    break;
+                case DeviceMessage.DeviceTimedOnOffChanged timedOnOffChanged:
+                    TimedOnOffRemaining =
+                        timedOnOffChanged.TimeRemaining > TimeSpan.Zero
+                            ? timedOnOffChanged.TimeRemaining
+                            : null;
+                    IconSize =
+                        timedOnOffChanged.TimeRemaining > TimeSpan.Zero
+                            ? 14
+                            : 20;
                     break;
             }
         });

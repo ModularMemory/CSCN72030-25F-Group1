@@ -12,9 +12,9 @@ using Serilog;
 
 namespace FalloutVault.AvaloniaApp.ViewModels.Devices;
 
-public partial class VentSealControllerViewModel : DeviceViewModel
+public partial class DoorControllerViewModel : DeviceViewModel
 {
-    public VentSealControllerViewModel(
+    public DoorControllerViewModel(
         IDeviceController deviceController,
         IEventBus<DeviceMessage> messageBus,
         ILogger logger)
@@ -30,13 +30,13 @@ public partial class VentSealControllerViewModel : DeviceViewModel
     public partial SolidColorBrush? OpenButtonColour { get; set; }
 
     [ObservableProperty]
-    public partial MaterialIconKind VentIcon { get; set; }
+    public partial MaterialIconKind DoorIcon { get; set; }
 
     [ObservableProperty]
     public partial MaterialIconKind LockIcon { get; set; }
 
     [RelayCommand]
-    public void SealButton_OnClick()
+    public void CloseButton_OnClick()
     {
         DeviceController.SendCommand(Id, new DeviceCommand.SetOpen(!IsOpen));
     }
@@ -44,7 +44,7 @@ public partial class VentSealControllerViewModel : DeviceViewModel
     [RelayCommand]
     public void LockButton_OnClick()
     {
-        DeviceController.SendCommand(Id, new DeviceCommand.SetVentLocked(!IsLocked));
+        DeviceController.SendCommand(Id, new DeviceCommand.SetDoorLocked(!IsLocked));
     }
 
     protected override void OnDeviceMessage(object? sender, DeviceMessage message)
@@ -56,16 +56,16 @@ public partial class VentSealControllerViewModel : DeviceViewModel
         {
             switch (message)
             {
-                case DeviceMessage.VentOpenChanged openChanged:
+                case DeviceMessage.DoorOpenCloseChanged openChanged:
                     IsOpen = openChanged.IsOpen;
                     OpenButtonColour = new SolidColorBrush(IsOpen
                         ? Color.FromRgb(0, 255, 0)
                         : Color.FromRgb(255, 0, 0));
-                    VentIcon = IsOpen
-                        ? MaterialIconKind.Hvac
-                        : MaterialIconKind.HvacOff;
+                    DoorIcon = IsOpen
+                        ? MaterialIconKind.DoorOpen
+                        : MaterialIconKind.Door;
                     break;
-                case DeviceMessage.VentLockedChanged lockedChanged:
+                case DeviceMessage.DoorLockChanged lockedChanged:
                     IsLocked = lockedChanged.IsLocked;
                     LockIcon = IsLocked
                         ? MaterialIconKind.Lock

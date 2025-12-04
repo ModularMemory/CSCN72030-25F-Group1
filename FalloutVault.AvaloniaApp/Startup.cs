@@ -49,6 +49,7 @@ public static class Startup
             .AddKeyedTransient<IDeviceViewModel, PowerControllerViewModel>(DeviceType.PowerController)
             .AddKeyedTransient<IDeviceViewModel, CropSprinklerControllerViewModel>(DeviceType.CropSprinklerController)
             .AddKeyedTransient<IDeviceViewModel, VentSealControllerViewModel>(DeviceType.VentSealController)
+            .AddKeyedTransient<IDeviceViewModel, DoorControllerViewModel>(DeviceType.DoorController)
             .AddSingleton<DeviceViewModelFactory>();
 
         return services;

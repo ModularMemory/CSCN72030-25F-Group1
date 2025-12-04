@@ -1,10 +1,10 @@
 ﻿using FalloutVault.Commands;
 using FalloutVault.Devices;
-using FalloutVault.Eventing;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
 using FalloutVault.Tests.Mocks;
 using FalloutVault.Tests.Utils;
+using Serilog.Core;
 
 namespace FalloutVault.Tests.DeviceTests;
 public class PowerControllerTests
@@ -32,14 +32,19 @@ public class PowerControllerTests
     }
 
     [Test]
-    public void PowerController_UsageExceeded_ShutsDownDevice()
+    public async Task PowerController_UsageExceeded_ShutsDownDevice()
     {
         // Arrange
-        var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)150);
+        var registry = new DeviceRegistry(Logger.None);
+        var messageBus = new MockDeviceMessageEventBus();
+        var powerEventBus = new MockPowerEventBus();
+        var controller = new DeviceController(registry, messageBus, powerEventBus, Logger.None);
+        var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)150, controller);
         var light1 = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)100);
         var light2 = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)100);
+        registry.RegisterDevice(light1);
+        registry.RegisterDevice(light2);
 
-        var powerEventBus = new MockPowerEventBus();
         powerController.SetEventBus(powerEventBus);
         light1.SetEventBus(powerEventBus);
         light2.SetEventBus(powerEventBus);
@@ -48,6 +53,8 @@ public class PowerControllerTests
 
         // Act
         light2.SendCommand(new DeviceCommand.SetOn(true));
+
+        await Task.Delay(50); // Wait the deferred command to get processed
 
         // Assert
         Assert.That(light2.IsOn, Is.False);
@@ -120,9 +127,9 @@ public class PowerControllerTests
 
         var powerEventBus = new MockPowerEventBus();
         var messageEventBus = new MockDeviceMessageEventBus();
-        var registry = new DeviceRegistry(Serilog.Core.Logger.None);
+        var registry = new DeviceRegistry(Logger.None);
         
-        var deviceController = new DeviceController(registry, messageEventBus, powerEventBus, Serilog.Core.Logger.None);
+        var deviceController = new DeviceController(registry, messageEventBus, powerEventBus, Logger.None);
         var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)1000, deviceController);
 
         registry.RegisterDevice(lightController);

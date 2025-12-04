@@ -2,8 +2,6 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using FalloutVault.AvaloniaApp.Models;
 using FalloutVault.AvaloniaApp.ViewModels;
-using FalloutVault.AvaloniaApp.ViewModels.Devices;
-using FalloutVault.Devices.Interfaces;
 
 namespace FalloutVault.AvaloniaApp.Views;
 
@@ -13,6 +11,14 @@ public partial class TimedOnOffDialog : Window
 
     public TimedOnOffDialog(bool sourceIsOn)
     {
+        var vm = new TimedOnOffDialogViewModel
+        {
+            Title = sourceIsOn
+                ? "Turn Device Off For"
+                : "Turn Device On For",
+        };
+
+        DataContext = vm;
         _sourceIsOn = sourceIsOn;
 
         InitializeComponent();

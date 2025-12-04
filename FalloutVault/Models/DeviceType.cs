@@ -9,4 +9,5 @@ public enum DeviceType
     SpeakerController,
     CropSprinklerController,
     VentSealController,
+    DoorController,
 }

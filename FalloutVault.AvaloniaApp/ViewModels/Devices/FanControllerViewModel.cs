@@ -13,17 +13,19 @@ using FalloutVault.Devices.Interfaces;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Interfaces;
+using FalloutVault.Models;
 using Serilog;
 
 namespace FalloutVault.AvaloniaApp.ViewModels.Devices;
 
-public partial class FanControllerViewModel : DeviceViewModel, IOnOff
+public partial class FanControllerViewModel : PoweredDeviceViewModel, IOnOff
 {
     public FanControllerViewModel(
         IDeviceController deviceController,
         IEventBus<DeviceMessage> messageBus,
+        IEventBus<Watt> powerBus,
         ILogger logger)
-        : base(deviceController, messageBus, logger) { }
+        : base(deviceController, messageBus, powerBus, logger) { }
 
     [ObservableProperty]
     public partial bool IsOn { get; set; }
@@ -37,16 +39,28 @@ public partial class FanControllerViewModel : DeviceViewModel, IOnOff
     [ObservableProperty]
     public partial SolidColorBrush? ButtonColour { get; set; }
 
+    [ObservableProperty]
+    public partial Watt MotorWattage { get; set; }
+
+    [ObservableProperty]
+    public partial int MaxRpm { get; set; } = int.MaxValue;
+
+    [ObservableProperty]
+    public partial TimeSpan? TimedOnOffRemaining { get; set; }
+
+    [ObservableProperty]
+    public partial int IconSize { get; set; } = 20;
+
     partial void OnTargetSpeedChanged(int value)
     {
         DeviceController.SendCommand(Id, new DeviceCommand.SetFanTargetRpm(value));
     }
+
     [RelayCommand]
-    public async void TimedButton_OnClick()
+    public async Task TimedButton_OnClick()
     {
         var dialog = new TimedOnOffDialog(IsOn)
         {
-            DataContext = new TimedOnOffDialogViewModel(),
             WindowStartupLocation = WindowStartupLocation.CenterOwner
         };
         TimedOnOffDialogViewModel? dialogViewModel = null;
@@ -103,6 +117,22 @@ public partial class FanControllerViewModel : DeviceViewModel, IOnOff
                     break;
                 case DeviceMessage.FanTargetRpmChanged targetRpmChanged:
                     TargetSpeed = targetRpmChanged.TargetRpm;
+                    break;
+                case DeviceMessage.FanMotorWattage motorWattage:
+                    MotorWattage = motorWattage.Wattage;
+                    break;
+                case DeviceMessage.FanMaxRpm maxRpm:
+                    MaxRpm = maxRpm.MaxRpm;
+                    break;
+                case DeviceMessage.DeviceTimedOnOffChanged timedOnOffChanged:
+                    TimedOnOffRemaining =
+                        timedOnOffChanged.TimeRemaining > TimeSpan.Zero
+                            ? timedOnOffChanged.TimeRemaining
+                            : null;
+                    IconSize =
+                        timedOnOffChanged.TimeRemaining > TimeSpan.Zero
+                            ? 14
+                            : 20;
                     break;
             }
         });

@@ -110,7 +110,7 @@ internal static class Program
                     break;
                 case DeviceType.VentSealController:
                     var open = random.Next(0, 2) == 0;
-                    controller.SendCommand(device.id, new DeviceCommand.SetVentOpen(open));
+                    controller.SendCommand(device.id, new DeviceCommand.SetOpen(open));
                     var locked = random.Next(0, 5) == 0;
                     controller.SendCommand(device.id, new DeviceCommand.SetVentLocked(locked));
                     break;

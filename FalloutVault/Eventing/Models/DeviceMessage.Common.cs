@@ -9,6 +9,11 @@ public partial class DeviceMessage
         public bool IsOn { get; } = data;
     }
 
+    public abstract class DeviceTimedOnOffChanged(TimeSpan data) : DeviceMessage(data)
+    {
+        public TimeSpan TimeRemaining { get; } = data;
+    }
+
     public abstract class DeviceOpenCloseChanged(bool data) : DeviceMessage(ValueBoxes.BooleanBox(data))
     {
         public bool IsOpen { get; } = data;

@@ -1,6 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+
 namespace FalloutVault.Models;
 
-public readonly record struct Watt(double W)
+public readonly record struct Watt(double W) : IFormattable
 {
     // Constants
     public static readonly Watt Zero = new(0);
@@ -19,5 +22,13 @@ public readonly record struct Watt(double W)
     public static Watt operator *(Watt a, Watt b) => a * b.W;
     public static Watt operator /(Watt a, Watt b) => a / b.W;
 
-    public override string ToString() => $"{W}W";
+    public override string ToString() => ToString(null, null);
+
+    public string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format, IFormatProvider? formatProvider)
+    {
+        var handler = new DefaultInterpolatedStringHandler(1, 1, formatProvider);
+        handler.AppendFormatted(W, format);
+        handler.AppendLiteral("W");
+        return handler.ToStringAndClear();
+    }
 }
