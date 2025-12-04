@@ -1,4 +1,5 @@
 using FalloutVault.Models;
+using FalloutVault.Devices.Models;
 
 namespace FalloutVault.Eventing.Models;
 
@@ -21,5 +22,11 @@ public partial class DeviceMessage
         public PowerDraw PowerDraw { get; } = data;
 
         public override string Message => "Total power draw changed";
+    }
+
+    public class DeviceShutDownFromOverload(DeviceId data) : DeviceMessage(data)
+    {
+        public DeviceId DeviceId { get; } = data;
+        public override string Message => "Device shut down due to power overload";
     }
 }

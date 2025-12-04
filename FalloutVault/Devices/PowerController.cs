@@ -90,6 +90,7 @@ public class PowerController : Device, IPowerController
         if (_totalPowerDraw.W > PowerGeneration.W)
         {
             _deviceController?.SendCommandIn(device.Id, new DeviceCommand.SetOn(false), TimeSpan.FromMilliseconds(1));
+            PublishMessage(new DeviceMessage.DeviceShutDownFromOverload(device.Id));
         }
     }
 
