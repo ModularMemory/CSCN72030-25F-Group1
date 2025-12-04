@@ -43,6 +43,9 @@ public partial class FanControllerViewModel : PoweredDeviceViewModel, IOnOff
     public partial Watt MotorWattage { get; set; }
 
     [ObservableProperty]
+    public partial int MaxRpm { get; set; } = int.MaxValue;
+
+    [ObservableProperty]
     public partial Watt PowerDraw { get; set; }
 
     [ObservableProperty]
@@ -115,8 +118,11 @@ public partial class FanControllerViewModel : PoweredDeviceViewModel, IOnOff
                 case DeviceMessage.FanTargetRpmChanged targetRpmChanged:
                     TargetSpeed = targetRpmChanged.TargetRpm;
                     break;
-                case DeviceMessage.FanMotorWattage fanMotorWattage:
-                    MotorWattage = fanMotorWattage.Wattage;
+                case DeviceMessage.FanMotorWattage motorWattage:
+                    MotorWattage = motorWattage.Wattage;
+                    break;
+                case DeviceMessage.FanMaxRpm maxRpm:
+                    MaxRpm = maxRpm.MaxRpm;
                     break;
                 case DeviceMessage.DeviceTimedOnOffChanged timedOnOffChanged:
                     TimedOnOffRemaining =
