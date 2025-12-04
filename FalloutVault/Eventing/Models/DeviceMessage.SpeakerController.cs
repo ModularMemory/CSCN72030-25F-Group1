@@ -1,4 +1,6 @@
 
+using FalloutVault.Models;
+
 namespace FalloutVault.Eventing.Models;
 
 public partial class DeviceMessage
@@ -13,6 +15,13 @@ public partial class DeviceMessage
         public double Volume { get; } = data;
 
         public override string Message => "Speaker volume level changed";
+    }
+
+    public class SpeakerWattage(Watt data) : DeviceMessage(data)
+    {
+        public Watt wattage { get; } = data;
+
+        public override string Message => "Speaker wattage";
     }
     
 }

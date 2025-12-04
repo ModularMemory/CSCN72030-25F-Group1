@@ -9,6 +9,4 @@ public interface ISpeakerController : IOnOff, ITemporaryOn, ITemporaryOff
     double Volume { get; set; }
 
     Watt SpeakerWattage { get; }
-
-    Watt PowerGeneration {  get; }
 }

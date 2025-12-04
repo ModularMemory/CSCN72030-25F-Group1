@@ -15,26 +15,12 @@ public class SpeakerController : PoweredDevice, ISpeakerController
     // Fields
     private readonly DeviceTimer<bool> _deviceTimer = new();
     private readonly Lock _timerLock = new();
-    private readonly Lock _drawsLock = new();
-    private readonly IDeviceController? _deviceController;
-    private readonly Dictionary<DeviceId, Watt> _devicePowerDraws = new();
-    private Watt _totalPowerDraw;
 
     // Properties
 
     public override DeviceId Id { get; }
     public override DeviceType Type => DeviceType.SpeakerController;
     public Watt SpeakerWattage { get; }
-
-    public Watt PowerGeneration
-    {
-        get;
-        private set
-        {
-            if (!SetField(ref field, value)) return;
-            PublishMessage(new DeviceMessage.PowerGenerationChanged(field));
-        }
-    }
 
     public bool IsOn
     {
@@ -73,33 +59,6 @@ public class SpeakerController : PoweredDevice, ISpeakerController
 
     // Methods
 
-    private void PowerMessageReceived(object? sender, Watt totalPowerDraw)
-    {
-        if (sender is not IDevice device) return;
-
-        lock (_drawsLock)
-        {
-            _devicePowerDraws[device.Id] = totalPowerDraw;
-            _totalPowerDraw = new Watt(_devicePowerDraws.Values.Sum(x => x.W));
-        }
-
-        PublishMessage(new DeviceMessage.TotalPowerDrawChanged(
-            new PowerDraw(_totalPowerDraw, SpeakerWattage)
-        ));
-
-        if (_totalPowerDraw.W > PowerGeneration.W && sender is IDevice triggeringDevice)
-        {
-            try
-            {
-                triggeringDevice.SendCommand(new DeviceCommand.SetOn(false));
-            }
-            catch
-            {
-
-            }
-        }
-    }
-
     public override void Update()
     {
         lock (_timerLock)
@@ -135,6 +94,7 @@ public class SpeakerController : PoweredDevice, ISpeakerController
             case DeviceCommand.GetCurrentState:
                 PublishMessage(new DeviceMessage.SpeakerOnOffChanged(IsOn));
                 PublishMessage(new DeviceMessage.VolumeLevelChanged(Volume));
+                PublishMessage(new DeviceMessage.SpeakerWattage(SpeakerWattage));
                 break;
         }
     }
