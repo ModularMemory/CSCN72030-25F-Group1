@@ -190,10 +190,24 @@
                                                         Height="40"
                                                         HorizontalAlignment="Center">
                                                         <Button.Content>
-                                                            <icons:MaterialIcon
-                                                                Kind="Timer"
-                                                                IconSize="20"
-                                                                Foreground="White" />
+                                                            <StackPanel
+                                                                Orientation="Horizontal"
+                                                                Spacing="2"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center">
+                                                                <icons:MaterialIcon
+                                                                    Kind="Timer"
+                                                                    IconSize="18"
+                                                                    Foreground="White"
+                                                                    HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"/>
+                                                                           <!-- vvv Bind time remaining here -->
+                                                                <TextBlock Text="0:00:00"
+                                                                           Foreground="White"
+                                                                           VerticalAlignment="Center"
+                                                                           HorizontalAlignment="Center"
+                                                                           FontSize="10"/>
+                                                            </StackPanel>
                                                         </Button.Content>
                                                     </Button>
                                                 </StackPanel>
@@ -401,10 +415,10 @@
                                                            HorizontalAlignment="Right" />
                                                 <TextBlock Foreground="Black"
                                                            Text="{Binding PowerDraw, StringFormat={}Total Power Draw: {0:F0}}"
-                                                           HorizontalAlignment="Right"/>
+                                                           HorizontalAlignment="Right" />
                                                 <TextBlock Foreground="Black"
                                                            Text="{Binding PowerAvailable, StringFormat={}Power Available: {0:F0}}"
-                                                           HorizontalAlignment="Right"/>
+                                                           HorizontalAlignment="Right" />
                                             </StackPanel>
 
                                         </DockPanel>
