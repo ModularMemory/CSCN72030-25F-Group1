@@ -83,6 +83,7 @@ public class FanController : PoweredDevice, IFanController
                 // Must come before CheckCompleted to ensure TimeSpan.Zero is sent
                 PublishMessage(new DeviceMessage.FanTimedOnOffChanged(_deviceTimer.TimeRemaining));
             }
+
             if (_deviceTimer.CheckCompleted())
             {
                 IsOn = _deviceTimer.State;
@@ -105,9 +106,14 @@ public class FanController : PoweredDevice, IFanController
         const int AVERAGE_STEP = 50;
         var step = _rpmStepRandom.Next(AVERAGE_STEP - 15, AVERAGE_STEP + 15) * delta * 3;
 
-        SpeedRpm = Math.Max(
+        var newSpeed = Math.Max(
             0,
             SpeedRpm + (SpeedRpm < targetSpeed ? step : -step)
+        );
+
+        SpeedRpm = Math.Min(
+            MaxRpm + AVERAGE_STEP * 3,
+            newSpeed
         );
 
         _lastSpeedUpdate += deltaL;

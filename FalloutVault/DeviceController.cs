@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using FalloutVault.Commands;
 using FalloutVault.Devices.Interfaces;
@@ -16,6 +17,7 @@ public sealed class DeviceController : IDeviceController, IDisposable
     private readonly IDeviceRegistry _deviceRegistry;
     private readonly IEventBus<DeviceMessage> _messageBus;
     private readonly IEventBus<Watt> _powerEventBus;
+    private readonly ConcurrentDictionary<long, Timer> _deferredCommands = [];
 
     private Timer? _pollTimer;
 
@@ -116,6 +118,19 @@ public sealed class DeviceController : IDeviceController, IDisposable
         }
 
         return success;
+    }
+
+    public void SendCommandIn(DeviceId targetDevice, DeviceCommand command, TimeSpan timeout)
+    {
+        var timerKey = Stopwatch.GetTimestamp();
+
+        var timer = new Timer(_ =>
+        {
+            _deferredCommands.TryRemove(timerKey, out var _);
+            SendCommand(targetDevice, command);
+        }, null, timeout, Timeout.InfiniteTimeSpan);
+
+        _deferredCommands.TryAdd(timerKey, timer);
     }
 
     public void Dispose()

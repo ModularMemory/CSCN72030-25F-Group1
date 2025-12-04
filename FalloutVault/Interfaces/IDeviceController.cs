@@ -42,4 +42,12 @@ public interface IDeviceController
     /// <param name="command">The command to send.</param>
     /// <returns>True if the command was successfully sent to one or more devices, otherwise false.</returns>
     bool SendBroadcastCommand(DeviceCommand command);
+
+    /// <summary>
+    /// Sends a command to the specified device after at least <paramref name="timeout"/> has passed.
+    /// </summary>
+    /// <param name="targetDevice">The device to send the command to.</param>
+    /// <param name="command">The command to send.</param>
+    /// <param name="timeout">The minimum time before the command should be sent.</param>
+    void SendCommandIn(DeviceId targetDevice, DeviceCommand command, TimeSpan timeout);
 }

@@ -3,9 +3,8 @@ using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Interfaces;
 using FalloutVault.Eventing.Models;
-using FalloutVault.Models;
-using System.Linq;
 using FalloutVault.Interfaces;
+using FalloutVault.Models;
 
 namespace FalloutVault.Devices;
 
@@ -28,6 +27,7 @@ public class PowerController : Device, IPowerController
         private set
         {
             if (!SetField(ref field, value)) return;
+
             PublishMessage(new DeviceMessage.PowerGenerationChanged(field));
         }
     }
@@ -38,6 +38,7 @@ public class PowerController : Device, IPowerController
         private set
         {
             if (!SetField(ref field, value)) return;
+
             PublishMessage(new DeviceMessage.PowerOnOffChanged(field));
         }
     }
@@ -48,26 +49,21 @@ public class PowerController : Device, IPowerController
         {
             if (StandardGeneration.W <= 0)
                 return 0;
+
             return Math.Clamp((double)(PowerGeneration / StandardGeneration), 0, 1);
         }
     }
 
-    public Watt AvailablePower
-    {
-        get
-        {
-            return new Watt(Math.Max(0, PowerGeneration.W - _totalPowerDraw.W));
-        }
-    }
+    public Watt AvailablePower => new(Math.Max(0, PowerGeneration.W - _totalPowerDraw.W));
 
     public PowerController(DeviceId id, Watt standardGeneration, IDeviceController? deviceController = null)
     {
         Id = id;
         StandardGeneration = standardGeneration;
         PowerGeneration = standardGeneration;
+        _deviceController = deviceController;
         _totalPowerDraw = Watt.Zero;
         IsOn = true;
-        _deviceController = deviceController;
     }
 
     // Methods
@@ -77,29 +73,23 @@ public class PowerController : Device, IPowerController
         base.SetEventBus(eventBus);
     }
 
-    private void PowerMessageReceived(object? sender, Watt totalPowerDraw)
+    private void PowerMessageReceived(object? sender, Watt powerDraw)
     {
         if (sender is not IDevice device) return;
 
-        lock(_drawsLock)
+        lock (_drawsLock)
         {
-            _devicePowerDraws[device.Id] = totalPowerDraw;
+            _devicePowerDraws[device.Id] = powerDraw;
             _totalPowerDraw = new Watt(_devicePowerDraws.Values.Sum(x => x.W));
         }
 
         PublishMessage(new DeviceMessage.TotalPowerDrawChanged(
-           new PowerDraw(_totalPowerDraw, AvailablePower)
+            new PowerDraw(_totalPowerDraw, AvailablePower)
         ));
 
-        if (_totalPowerDraw.W > PowerGeneration.W && sender is IDevice triggeringDevice)
+        if (_totalPowerDraw.W > PowerGeneration.W)
         {
-            try
-            {
-                triggeringDevice.SendCommand(new DeviceCommand.SetOn(false));
-            }
-            catch
-            {
-            }
+            _deviceController?.SendCommandIn(device.Id, new DeviceCommand.SetOn(false), TimeSpan.FromMilliseconds(1));
         }
     }
 
