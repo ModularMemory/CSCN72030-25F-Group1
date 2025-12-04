@@ -7,4 +7,5 @@ using System.Threading.Tasks;
 namespace FalloutVault.Devices.Interfaces;
 internal interface IDoorController : IOpenClose
 {
+    bool IsLocked { get; }
 }

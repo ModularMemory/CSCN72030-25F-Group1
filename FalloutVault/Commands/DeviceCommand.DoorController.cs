@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace FalloutVault.Commands;
-public class DeviceCommand
+
+public partial class DeviceCommand
 {
+    public class SetDoorLocked(bool data) : DeviceCommand(data)
+    {
+        public bool IsLocked { get; } = data;
+    }
 }
