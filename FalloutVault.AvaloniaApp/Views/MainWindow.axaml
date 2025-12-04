@@ -11,6 +11,7 @@
         x:Class="FalloutVault.AvaloniaApp.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         WindowStartupLocation="CenterScreen"
+        DataContextChanged="OnDataContextChanged"
         Icon="/Assets/avalonia-logo.ico"
         Title="FalloutVault.AvaloniaApp">
 
@@ -32,7 +33,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" MinWidth="300" />
                 <ColumnDefinition Width="4" />
-                <ColumnDefinition Width="Auto" MinWidth="150" />
+                <ColumnDefinition Width="400" MinWidth="150" />
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0"
@@ -726,7 +727,7 @@
                           CanUserSortColumns="False"
                           CanUserReorderColumns="False"
                           CanUserResizeColumns="False"
-                          HorizontalScrollBarVisibility="Disabled"
+                          HorizontalScrollBarVisibility="Auto"
                           ItemsSource="{Binding LogMessages}">
                     <DataGrid.Styles>
                         <Style Selector="DataGridRow">

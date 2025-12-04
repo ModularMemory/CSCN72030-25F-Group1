@@ -1,8 +1,7 @@
+using System.Collections.Specialized;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using FalloutVault.AvaloniaApp.Models;
-using FalloutVault.AvaloniaApp.Services.Interfaces;
 using FalloutVault.AvaloniaApp.ViewModels;
 using Serilog;
 
@@ -12,25 +11,30 @@ public partial class MainWindow : Window
 {
     private readonly ILogger _logger;
 
-    public MainWindow(IDeviceMessageLogger deviceMessageLogger, ILogger logger)
+    public MainWindow(ILogger logger)
     {
         _logger = logger;
-        deviceMessageLogger.DeviceMessageReceived += DeviceMessageLoggerOnDeviceMessageReceived;
 
         InitializeComponent();
     }
 
-    private void DeviceMessageLoggerOnDeviceMessageReceived(object? sender, DeviceLog e)
+    private async void OnDataContextChanged(object? sender, EventArgs e)
     {
-        Dispatcher.UIThread.InvokeAsync(Callback);
-        return;
+        await Task.Yield();
+        if (DataContext is not MainWindowViewModel vm)
+            return;
 
-        async Task Callback()
+        vm.LogMessages.CollectionChanged += LogMessages_OnCollectionChanged;
+        LogMessages_OnCollectionChanged(null, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+    }
+
+    private void LogMessages_OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        Dispatcher.UIThread.Invoke(() =>
         {
-            await Task.Yield(); // Try to run after any other event subscribes
             var lastItem = ((IEnumerable<object>?)LogDataGrid.ItemsSource)?.LastOrDefault();
             LogDataGrid.ScrollIntoView(lastItem, LogDataGrid.Columns.FirstOrDefault());
-        }
+        });
     }
 
     private void CheckAllZones_OnIsCheckedChanged(object? sender, RoutedEventArgs e)

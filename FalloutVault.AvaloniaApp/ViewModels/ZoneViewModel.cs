@@ -14,7 +14,4 @@ public partial class ZoneViewModel : ViewModelBase
 
     [ObservableProperty]
     public partial bool IsSelected { get; set; }
-
-    [ObservableProperty]
-    public partial bool AllZonesSelected { get; set; } = true;
 }
