@@ -4,6 +4,8 @@ namespace FalloutVault.Eventing.Models;
 
 public partial class DeviceMessage
 {
+    public abstract class Alert(object data) : DeviceMessage(data);
+
     public abstract class DeviceOnOffChanged(bool data) : DeviceMessage(ValueBoxes.BooleanBox(data))
     {
         public bool IsOn { get; } = data;

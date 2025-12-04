@@ -6,6 +6,7 @@
         xmlns:avaloniaApp="clr-namespace:FalloutVault.AvaloniaApp"
         xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         xmlns:devices="clr-namespace:FalloutVault.AvaloniaApp.ViewModels.Devices"
+        xmlns:converters="clr-namespace:FalloutVault.AvaloniaApp.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="FalloutVault.AvaloniaApp.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -201,12 +202,12 @@
                                                                     IconSize="{Binding IconSize}"
                                                                     Foreground="White"
                                                                     HorizontalAlignment="Center"
-                                                                    VerticalAlignment="Center"/>
+                                                                    VerticalAlignment="Center" />
                                                                 <TextBlock Text="{Binding TimedOnOffRemaining, StringFormat=h\\:mm\\:ss}"
                                                                            Foreground="White"
                                                                            VerticalAlignment="Center"
                                                                            HorizontalAlignment="Center"
-                                                                           FontSize="10"/>
+                                                                           FontSize="10" />
                                                             </StackPanel>
                                                         </Button.Content>
                                                     </Button>
@@ -317,12 +318,12 @@
                                                                     IconSize="{Binding IconSize}"
                                                                     Foreground="White"
                                                                     HorizontalAlignment="Center"
-                                                                    VerticalAlignment="Center"/>
+                                                                    VerticalAlignment="Center" />
                                                                 <TextBlock Text="{Binding TimedOnOffRemaining, StringFormat=h\\:mm\\:ss}"
                                                                            Foreground="White"
                                                                            VerticalAlignment="Center"
                                                                            HorizontalAlignment="Center"
-                                                                           FontSize="10"/>
+                                                                           FontSize="10" />
                                                             </StackPanel>
                                                         </Button.Content>
                                                     </Button>
@@ -727,12 +728,20 @@
                           CanUserResizeColumns="False"
                           HorizontalScrollBarVisibility="Disabled"
                           ItemsSource="{Binding LogMessages}">
+                    <DataGrid.Styles>
+                        <Style Selector="DataGridRow">
+                            <Style.Resources>
+                                <converters:LogDataGridRowConverter x:Key="LogDataGridRowConverter" />
+                            </Style.Resources>
+                            <Setter Property="Foreground" Value="{Binding Converter={StaticResource LogDataGridRowConverter}}" />
+                        </Style>
+                    </DataGrid.Styles>
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Sender"
                                             Binding="{Binding Sender}" />
                         <DataGridTextColumn Header="Message"
                                             Binding="{Binding Message}"
-                                            Width="200" />
+                                            MinWidth="200" />
                         <DataGridTextColumn Header="Data"
                                             Binding="{Binding DataString}" />
                     </DataGrid.Columns>

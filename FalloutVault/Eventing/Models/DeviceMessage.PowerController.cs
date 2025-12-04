@@ -24,7 +24,7 @@ public partial class DeviceMessage
         public override string Message => "Total power draw changed";
     }
 
-    public class DeviceShutDownFromOverload(DeviceId data) : DeviceMessage(data)
+    public class DeviceShutDownFromOverload(DeviceId data) : Alert(data)
     {
         public DeviceId DeviceId { get; } = data;
         public override string Message => "Device shut down due to power overload";

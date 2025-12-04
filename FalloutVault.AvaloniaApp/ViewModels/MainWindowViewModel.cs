@@ -124,7 +124,7 @@ public partial class MainWindowViewModel : ViewModelBase
             || log.Message.Message.Contains(LogSearch, StringComparison.OrdinalIgnoreCase)
             || (log.DataString != null && log.DataString.Contains(LogSearch, StringComparison.OrdinalIgnoreCase)))
         {
-            LogMessages.Add(new LogViewModel(log.Sender, log.Message.Message, log.DataString));
+            LogMessages.Add(new LogViewModel(log));
         }
 
         if (LogMessages.Count > 500)
