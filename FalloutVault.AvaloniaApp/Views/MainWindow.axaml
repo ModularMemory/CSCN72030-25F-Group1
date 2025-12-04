@@ -88,7 +88,7 @@
                               ItemsSource="{Binding Types}">
                         <DataGrid.Columns>
                             <DataGridTextColumn
-                                Header="Zone"
+                                Header="Type"
                                 Binding="{Binding Type}" />
                             <DataGridTemplateColumn>
                                 <DataGridTemplateColumn.CellTemplate>
