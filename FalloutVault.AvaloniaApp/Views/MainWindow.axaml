@@ -9,6 +9,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="FalloutVault.AvaloniaApp.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
+        WindowStartupLocation="CenterScreen"
         Icon="/Assets/avalonia-logo.ico"
         Title="FalloutVault.AvaloniaApp">
 
@@ -101,8 +102,7 @@
                                         CornerRadius="5"
                                         Padding="10, 0"
                                         Height="100">
-                                        <Grid
-                                            ColumnDefinitions="*, *">
+                                        <DockPanel>
                                             <StackPanel
                                                 Orientation="Horizontal"
                                                 Spacing="10">
@@ -182,7 +182,6 @@
                                             </StackPanel>
 
                                             <StackPanel
-                                                Grid.Column="1"
                                                 HorizontalAlignment="Right"
                                                 VerticalAlignment="Center">
                                                 <TextBlock Foreground="Black"
@@ -192,7 +191,7 @@
                                                            HorizontalAlignment="Right"
                                                            Text="{Binding PowerDraw, StringFormat={}Current Power Draw\: {0:F0}}" />
                                             </StackPanel>
-                                        </Grid>
+                                        </DockPanel>
                                     </Border>
                                 </DataTemplate>
 
@@ -205,11 +204,8 @@
                                         Background="Silver"
                                         CornerRadius="5"
                                         Padding="10, 0">
-                                        <Grid
-                                            ColumnDefinitions="*, *">
-
+                                        <DockPanel>
                                             <StackPanel
-                                                Grid.Column="0"
                                                 Orientation="Horizontal"
                                                 Spacing="10">
                                                 <StackPanel
@@ -278,9 +274,9 @@
                                                         HorizontalAlignment="Center"
                                                         VerticalAlignment="Center" />
                                                     <NumericUpDown Value="{Binding TargetSpeed}"
+                                                                   Maximum="{Binding MaxRpm}"
                                                                    Increment="200"
-                                                                   Minimum="0">
-                                                    </NumericUpDown>
+                                                                   Minimum="0" />
                                                 </StackPanel>
 
                                                 <StackPanel
@@ -300,7 +296,6 @@
                                             </StackPanel>
 
                                             <StackPanel
-                                                Grid.Column="1"
                                                 HorizontalAlignment="Right"
                                                 VerticalAlignment="Center">
                                                 <TextBlock Foreground="Black"
@@ -310,7 +305,7 @@
                                                            HorizontalAlignment="Right"
                                                            Text="{Binding PowerDraw, StringFormat={}Current Power Draw\: {0:F0}}" />
                                             </StackPanel>
-                                        </Grid>
+                                        </DockPanel>
                                     </Border>
                                 </DataTemplate>
 
@@ -324,8 +319,7 @@
                                         CornerRadius="5"
                                         Padding="10, 0">
 
-                                        <Grid
-                                            ColumnDefinitions="*, *">
+                                        <DockPanel>
                                             <StackPanel
                                                 Orientation="Horizontal"
                                                 Spacing="10">
@@ -364,7 +358,7 @@
 
                                             </StackPanel>
                                             <StackPanel
-                                                Grid.Column="1"
+                                                HorizontalAlignment="Right"
                                                 VerticalAlignment="Center">
                                                 <TextBlock Foreground="Black"
                                                            Text="{Binding PowerGeneration, StringFormat={}Power Generated: {0}}"
@@ -377,7 +371,7 @@
                                                            HorizontalAlignment="Right"/>
                                             </StackPanel>
 
-                                        </Grid>
+                                        </DockPanel>
                                     </Border>
                                 </DataTemplate>
 
@@ -390,8 +384,7 @@
                                         CornerRadius="5"
                                         Padding="10, 0"
                                         Height="100">
-                                        <Grid
-                                            ColumnDefinitions="*, *">
+                                        <DockPanel>
                                             <StackPanel
                                                 Orientation="Horizontal"
                                                 Spacing="10">
@@ -448,7 +441,6 @@
                                             </StackPanel>
 
                                             <StackPanel
-                                                Grid.Column="1"
                                                 HorizontalAlignment="Right"
                                                 VerticalAlignment="Center">
                                                 <TextBlock Foreground="Black"
@@ -458,7 +450,7 @@
                                                            HorizontalAlignment="Right"
                                                            Text="{Binding PowerDraw, StringFormat={}Current Power Draw\: {0:F0}}" />
                                             </StackPanel>
-                                        </Grid>
+                                        </DockPanel>
                                     </Border>
                                 </DataTemplate>
 
@@ -471,8 +463,7 @@
                                         Background="SteelBlue"
                                         CornerRadius="5"
                                         Padding="10, 0">
-                                        <Grid
-                                            ColumnDefinitions="*, *">
+                                        <DockPanel>
                                             <StackPanel
                                                 Orientation="Horizontal"
                                                 Spacing="10">
@@ -511,7 +502,6 @@
                                             </StackPanel>
 
                                             <StackPanel
-                                                Grid.Column="1"
                                                 HorizontalAlignment="Right"
                                                 VerticalAlignment="Center">
                                                 <TextBlock Foreground="Black"
@@ -521,7 +511,7 @@
                                                            HorizontalAlignment="Right"
                                                            Text="{Binding PowerDraw, StringFormat={}Current Power Draw\: {0:F0}}" />
                                             </StackPanel>
-                                        </Grid>
+                                        </DockPanel>
                                     </Border>
                                 </DataTemplate>
 
