@@ -121,7 +121,8 @@
 
                 <ScrollViewer Grid.Row="1"
                               VerticalScrollBarVisibility="Visible">
-                    <ItemsControl ItemsSource="{Binding Devices}">
+                    <ItemsControl ItemsSource="{Binding Devices}"
+                                  Margin="0, 0, 8, 0">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Spacing="3" />
@@ -507,7 +508,7 @@
                                                 VerticalAlignment="Center">
                                                 <TextBlock Foreground="Black"
                                                            HorizontalAlignment="Right"
-                                                           Text="TBA" />
+                                                           Text="{Binding SpeakerWattage, StringFormat={}Speaker Wattage\: {0:F0}}" />
                                                 <TextBlock Foreground="Black"
                                                            HorizontalAlignment="Right"
                                                            Text="{Binding PowerDraw, StringFormat={}Current Power Draw\: {0:F0}}" />
@@ -732,8 +733,8 @@
                         <DataGridTextColumn Header="Message"
                                             Binding="{Binding Message}"
                                             Width="200" />
-                        <DataGridTextColumn Header="Value"
-                                            Binding="{Binding LogValue}" />
+                        <DataGridTextColumn Header="Data"
+                                            Binding="{Binding DataString}" />
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

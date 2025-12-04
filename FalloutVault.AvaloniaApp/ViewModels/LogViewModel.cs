@@ -6,12 +6,12 @@ public class LogViewModel : ViewModelBase
 {
     public DeviceId Sender { get; }
     public string Message { get; }
-    public string? LogValue { get; }
+    public string? DataString { get; }
 
-    public LogViewModel(DeviceId sender, string message, string? logValue)
+    public LogViewModel(DeviceId sender, string message, string? dataString)
     {
         Sender = sender;
         Message = message;
-        LogValue = logValue;
+        DataString = dataString;
     }
 }

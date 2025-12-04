@@ -90,6 +90,7 @@ public class SpeakerController : PoweredDevice, ISpeakerController
             case DeviceCommand.GetCurrentState:
                 PublishMessage(new DeviceMessage.SpeakerOnOffChanged(IsOn));
                 PublishMessage(new DeviceMessage.VolumeLevelChanged(Volume));
+                PublishMessage(new DeviceMessage.SpeakerWattage(SpeakerWattage));
                 break;
         }
     }

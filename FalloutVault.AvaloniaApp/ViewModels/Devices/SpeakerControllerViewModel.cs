@@ -30,6 +30,9 @@ public partial class SpeakerControllerViewModel : PoweredDeviceViewModel, IOnOff
     [ObservableProperty]
     public partial double Volume { get; set; }
 
+    [ObservableProperty]
+    public partial Watt SpeakerWattage { get; set; }
+
     partial void OnVolumeChanged(double value)
     {
         DeviceController.SendCommand(Id, new DeviceCommand.SetSpeakerVolume(value / 100));
@@ -58,6 +61,9 @@ public partial class SpeakerControllerViewModel : PoweredDeviceViewModel, IOnOff
                     break;
                 case DeviceMessage.VolumeLevelChanged volumeLevelChanged:
                     Volume = volumeLevelChanged.Volume * 100;
+                    break;
+                case DeviceMessage.SpeakerWattage speakerWattage:
+                    SpeakerWattage = speakerWattage.Wattage;
                     break;
             }
         });

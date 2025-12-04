@@ -22,11 +22,15 @@ public partial class MainWindow : Window
 
     private void DeviceMessageLoggerOnDeviceMessageReceived(object? sender, DeviceLog e)
     {
-        Dispatcher.UIThread.Invoke(() =>
+        Dispatcher.UIThread.InvokeAsync(Callback);
+        return;
+
+        async Task Callback()
         {
+            await Task.Yield(); // Try to run after any other event subscribes
             var lastItem = ((IEnumerable<object>?)LogDataGrid.ItemsSource)?.LastOrDefault();
             LogDataGrid.ScrollIntoView(lastItem, LogDataGrid.Columns.FirstOrDefault());
-        });
+        }
     }
 
     private void CheckAllZones_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
