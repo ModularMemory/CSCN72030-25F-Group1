@@ -122,7 +122,7 @@ public partial class MainWindowViewModel : ViewModelBase
             || log.Sender.Zone.Contains(LogSearch, StringComparison.OrdinalIgnoreCase)
             || log.Message.Message.Contains(LogSearch, StringComparison.OrdinalIgnoreCase))
         {
-            LogMessages.Add(new LogViewModel(log.Sender, log.Message.Message));
+            LogMessages.Add(new LogViewModel(log.Sender, log.Message.Message, log.Message.Data?.ToString()));
         }
 
         if (LogMessages.Count > 500)
