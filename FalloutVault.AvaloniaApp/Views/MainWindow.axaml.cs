@@ -49,4 +49,25 @@ public partial class MainWindow : Window
 
         viewModel.UpdateDeviceList();
     }
+
+    private void CheckAllTypes_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
+    {
+        if (!IsInitialized || sender is not CheckBox checkBox || DataContext is not MainWindowViewModel viewModel)
+            return;
+
+        foreach (var deviceNavigationViewModel in viewModel.Types)
+        {
+            deviceNavigationViewModel.IsSelected = checkBox.IsChecked.GetValueOrDefault();
+        }
+    }
+
+    private async void CheckType_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
+    {
+        if (!IsInitialized || sender is not CheckBox checkBox || DataContext is not MainWindowViewModel viewModel)
+            return;
+
+        await Task.Yield();
+
+        viewModel.UpdateDeviceList();
+    }
 }

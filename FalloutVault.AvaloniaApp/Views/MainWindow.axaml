@@ -35,7 +35,7 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0"
-                  RowDefinitions="Auto, *"
+                  RowDefinitions="Auto, *, *"
                   RowSpacing="10">
                 <TextBlock Grid.Row="0" Text="Navigation"
                            HorizontalAlignment="Center"
@@ -69,6 +69,42 @@
                                         <CheckBox
                                             IsChecked="True"
                                             IsCheckedChanged="CheckAllZones_OnIsCheckedChanged"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.HeaderTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+                <StackPanel Grid.Row="2"
+                            Orientation="Vertical"
+                            Spacing="5">
+                    <DataGrid AreRowDetailsFrozen="True"
+                              CanUserSortColumns="False"
+                              CanUserReorderColumns="False"
+                              CanUserResizeColumns="False"
+                              HorizontalScrollBarVisibility="Disabled"
+                              ItemsSource="{Binding Types}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Header="Zone"
+                                Binding="{Binding Type}" />
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox
+                                            IsChecked="{Binding IsSelected}"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            IsCheckedChanged="CheckType_OnIsCheckedChanged" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.HeaderTemplate>
+                                    <DataTemplate>
+                                        <CheckBox
+                                            IsChecked="True"
+                                            IsCheckedChanged="CheckAllTypes_OnIsCheckedChanged"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center" />
                                     </DataTemplate>
