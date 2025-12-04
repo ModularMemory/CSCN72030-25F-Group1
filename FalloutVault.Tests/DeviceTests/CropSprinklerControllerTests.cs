@@ -1,6 +1,7 @@
 ﻿using FalloutVault.Commands;
 using FalloutVault.Devices;
 using FalloutVault.Eventing.Models;
+using FalloutVault.Models;
 using FalloutVault.Tests.Mocks;
 using FalloutVault.Tests.Utils;
 
@@ -12,7 +13,7 @@ internal class CropSprinklerControllerTests
     public void CropSprinkler_TurnOn_PublishesStateChangeMessage()
     {
         // Arrange
-        var cropSprinklerController = new CropSprinklerController(DeviceIdGenerator.GetRandomDeviceId());
+        var cropSprinklerController = new CropSprinklerController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)0);
         cropSprinklerController.SendCommand(new DeviceCommand.SetOn(false));
 
         var eventBus = new MockDeviceMessageEventBus();
@@ -32,7 +33,7 @@ internal class CropSprinklerControllerTests
     public void CropSprinkler_TurnOff_PublishesStateChangeMessage()
     {
         // Arrange
-        var cropSprinklerController = new CropSprinklerController(DeviceIdGenerator.GetRandomDeviceId());
+        var cropSprinklerController = new CropSprinklerController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)0);
         cropSprinklerController.SendCommand(new DeviceCommand.SetOn(true));
 
         var eventBus = new MockDeviceMessageEventBus();
@@ -51,7 +52,7 @@ internal class CropSprinklerControllerTests
     public void CropSprinkler_SectionChange_PublishesSectionChangeMessage()
     {
         // Arrange
-        var cropSprinklerController = new CropSprinklerController(DeviceIdGenerator.GetRandomDeviceId());
+        var cropSprinklerController = new CropSprinklerController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)0);
         cropSprinklerController.SendCommand(new DeviceCommand.CurrentCropSection(1));
 
         var eventBus = new MockDeviceMessageEventBus();

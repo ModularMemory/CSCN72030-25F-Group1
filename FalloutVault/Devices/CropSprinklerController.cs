@@ -13,6 +13,8 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
     private int _TargetSection;
     private int _TargetLitres;
     private TimeSpan _TimeSpanOn;
+    public Watt sprinklerWattage { get; }
+
 
     public override DeviceId Id { get; }
     public override DeviceType Type => DeviceType.CropSprinklerController;
@@ -51,15 +53,19 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
     }
 
 
-    public CropSprinklerController(DeviceId id)
+    public CropSprinklerController(DeviceId id, Watt SprinklerWattage)
     {
         Id = id;
+        sprinklerWattage = SprinklerWattage;
     }
 
     protected override Watt ComputePowerDraw()
     {
         if (!IsOn)
+        {
+            PublishMessage(new DeviceMessage.CropSprinklerWattChanged(sprinklerWattage));
             return Watt.Zero;
+        }
 
         return (Watt)50;
     }

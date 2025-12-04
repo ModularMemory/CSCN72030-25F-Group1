@@ -1,5 +1,6 @@
-﻿namespace FalloutVault.Eventing.Models;
+﻿using FalloutVault.Models;
 
+namespace FalloutVault.Eventing.Models;
 public partial class DeviceMessage
 {
     public class CropSprinklerOnOffChanged(bool data) : DeviceOnOffChanged(data)
@@ -13,4 +14,12 @@ public partial class DeviceMessage
 
         public override string Message => "Crop Sprinkler Target Section changed";
     }
+    public class CropSprinklerWattChanged(Watt data) : DeviceMessage(data)
+    {
+        public Watt Section { get; } = data;
+
+        public override string Message => "Crop Sprinkler Watt changed";
+    }
+
+
 }
