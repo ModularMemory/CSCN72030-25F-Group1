@@ -561,7 +561,7 @@
                                 <DataTemplate x:Key="CropSprinklerController"
                                               x:DataType="devices:CropSprinklerControllerViewModel">
                                     <Border
-                                        Height="48"
+                                        Height="64"
                                         BorderBrush="Black"
                                         BorderThickness="2"
                                         Background="SteelBlue"
@@ -602,11 +602,39 @@
                                                             Foreground="{Binding ButtonColour}" />
                                                     </Button.Content>
                                                 </Button>
-
-                                                <ComboBox SelectedItem="{Binding SelectedSection}"
-                                                          ItemsSource="{Binding SprinklerSections}"
-                                                          VerticalAlignment="Center">
-                                                </ComboBox>
+                                                <StackPanel
+                                                    VerticalAlignment="Center"
+                                                    Spacing="2">
+                                                    <TextBlock Text="Time On:"
+                                                               Foreground="Black"
+                                                               HorizontalAlignment="Center" />
+                                                    <TextBlock Text="{Binding TimeOn, StringFormat=h\\:mm\\:ss}"
+                                                               Foreground="Black"
+                                                               HorizontalAlignment="Center" />
+                                                </StackPanel>
+                                                <StackPanel
+                                                    Spacing="3"
+                                                    VerticalAlignment="Center">
+                                                    <TextBlock Text="Target Section:"
+                                                               Foreground="Black"
+                                                               HorizontalAlignment="Center" />
+                                                    <ComboBox SelectedItem="{Binding SelectedSection}"
+                                                              ItemsSource="{Binding SprinklerSections}"
+                                                              VerticalAlignment="Center" />
+                                                </StackPanel>
+                                                <StackPanel
+                                                    Spacing="4"
+                                                    VerticalAlignment="Center">
+                                                    <TextBlock
+                                                        Text="Target Litres:"
+                                                        Foreground="Black"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center" />
+                                                    <NumericUpDown Value="{Binding TargetLitres}"
+                                                                   Maximum="1000"
+                                                                   Increment="10"
+                                                                   Minimum="0" />
+                                                </StackPanel>
                                             </StackPanel>
 
                                             <StackPanel

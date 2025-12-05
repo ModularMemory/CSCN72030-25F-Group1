@@ -52,17 +52,17 @@ public partial class MainWindowViewModel : ViewModelBase
 
         _deviceMessageLogger.DeviceMessageReceived += DeviceMessageLogger_OnDeviceMessageReceived;
 
-        foreach (var (id, type, capabilities) in deviceRegistry.Devices)
+        foreach (var (id, type, capabilities) in deviceRegistry.Devices.OrderBy(x => x.type).ThenBy(x => x.id.Zone))
         {
             _deviceViewModels.Add(deviceViewModelFactory.Create(type, id));
         }
 
-        foreach (var zone in deviceRegistry.Devices.Select(x => x.id.Zone).Distinct())
+        foreach (var zone in deviceRegistry.Devices.Select(x => x.id.Zone).Distinct().Order())
         {
             Zones.Add(new ZoneViewModel(zone));
         }
 
-        foreach (var type in deviceRegistry.Devices.Select(x => x.type).Distinct())
+        foreach (var type in deviceRegistry.Devices.Select(x => x.type).Distinct().Order())
         {
             Types.Add(new DeviceNavigationViewModel(type));
         }
