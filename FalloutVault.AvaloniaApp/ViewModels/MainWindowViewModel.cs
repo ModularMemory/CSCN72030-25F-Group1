@@ -20,7 +20,6 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly Lock _logLock = new();
 
     public ObservableCollection<ZoneViewModel> Zones { get; } = [];
-
     public ObservableCollection<DeviceNavigationViewModel> Types { get; } = [];
     public ObservableCollection<IDeviceViewModel> Devices { get; } = [];
     public ObservableCollection<LogViewModel> LogMessages { get; } = [];
@@ -28,8 +27,16 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     public partial string LogSearch { get; set; }
 
-    public MainWindowViewModel(IDeviceRegistry deviceRegistry, IDeviceMessageLogger deviceMessageLogger, DeviceViewModelFactory deviceViewModelFactory)
+    [ObservableProperty]
+    public partial PowerBarViewModel PowerBar { get; set; }
+
+    public MainWindowViewModel(
+        IDeviceRegistry deviceRegistry,
+        IDeviceMessageLogger deviceMessageLogger,
+        DeviceViewModelFactory deviceViewModelFactory,
+        PowerBarViewModel powerBarViewModel)
     {
+        PowerBar = powerBarViewModel;
         _deviceMessageLogger = deviceMessageLogger;
 
         lock (_logLock)

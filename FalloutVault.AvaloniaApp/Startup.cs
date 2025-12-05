@@ -40,7 +40,8 @@ public static class Startup
     private static IServiceCollection AddViewModels(IServiceCollection services)
     {
         services
-            .AddTransient<MainWindowViewModel>();
+            .AddTransient<MainWindowViewModel>()
+            .AddTransient<PowerBarViewModel>();
 
         services
             .AddKeyedTransient<IDeviceViewModel, LightControllerViewModel>(DeviceType.LightController)
