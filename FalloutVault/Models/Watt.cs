@@ -21,6 +21,8 @@ public readonly record struct Watt(double W) : IFormattable
     public static Watt operator -(Watt a, Watt b) => new(a.W - b.W);
     public static Watt operator *(Watt a, Watt b) => a * b.W;
     public static Watt operator /(Watt a, Watt b) => a / b.W;
+    public static bool operator <(Watt a, Watt b) => a.W < b.W;
+    public static bool operator >(Watt a, Watt b) => a.W > b.W;
 
     public override string ToString() => ToString(null, null);
 
