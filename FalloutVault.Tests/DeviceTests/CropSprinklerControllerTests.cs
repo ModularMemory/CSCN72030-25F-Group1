@@ -26,7 +26,6 @@ internal class CropSprinklerControllerTests
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
         Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.CropSprinklerOnOffChanged>());
         Assert.That(eventBus.Messages[0].Data, Is.True);
-
     }
 
     [Test]
@@ -66,4 +65,23 @@ internal class CropSprinklerControllerTests
         Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.CropSprinklerSectionChanged>());
         Assert.That(eventBus.Messages[0].Data, Is.EqualTo(SprinklerSection.NorthWest));
     }
+
+    [Test]
+    public void CropSprinkler_TargetLitresChange_PublishesTargetLitresChangeMessage()
+    {
+        // Arrange
+        var cropSprinklerController = new CropSprinklerController(DeviceIdGenerator.GetRandomDeviceId(), Watt.Zero);
+        cropSprinklerController.SendCommand(new DeviceCommand.SetCropTargetLitres(0));
+
+        var eventBus = new MockDeviceMessageEventBus();
+        cropSprinklerController.SetEventBus(eventBus);
+
+        // Act
+        cropSprinklerController.SendCommand(new DeviceCommand.SetCropTargetLitres(50));
+
+        // Assert
+        Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
+        Assert.That(eventBus.Messages[0], Is.TypeOf<DeviceMessage.CropSprinklerTargetLitresChanged>());
+        Assert.That(eventBus.Messages[0].Data, Is.EqualTo(50));
     }
+}
