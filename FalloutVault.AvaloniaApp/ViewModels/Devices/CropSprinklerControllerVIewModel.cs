@@ -28,7 +28,16 @@ public partial class CropSprinklerControllerViewModel : PoweredDeviceViewModel, 
     public partial SolidColorBrush? ButtonColour { get; set; }
 
     [ObservableProperty]
-    public partial int Section { get; set; }
+    public partial SprinklerSection Section { get; set; }
+
+    [ObservableProperty]
+    public partial int TargetLitres { get; set; }
+
+    [ObservableProperty]
+    public partial TimeSpan? TimeOn { get; set; }
+
+    [ObservableProperty]
+    public partial Watt SprinklerWattage { get; set; }
 
     [RelayCommand]
     public void OnOffButton_OnClick()
@@ -53,6 +62,18 @@ public partial class CropSprinklerControllerViewModel : PoweredDeviceViewModel, 
                     break;
                 case DeviceMessage.CropSprinklerSectionChanged sectionChanged:
                     Section = sectionChanged.Section;
+                    break;
+                case DeviceMessage.CropSprinklerTargetLitresChanged targetLitresChanged:
+                    TargetLitres = targetLitresChanged.TargetLitres;
+                    break;
+                case DeviceMessage.CropSprinklerTimeOnChanged timeOnChanged:
+                    TimeOn =
+                        timeOnChanged.TimeOn > TimeSpan.Zero
+                            ? timeOnChanged.TimeOn
+                            : null;
+                    break;
+                case DeviceMessage.CropSprinklerWattage sprinklerWattage:
+                    SprinklerWattage = sprinklerWattage.Wattage;
                     break;
             }
         });

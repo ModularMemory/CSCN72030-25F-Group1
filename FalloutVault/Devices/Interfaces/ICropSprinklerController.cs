@@ -1,8 +1,11 @@
-﻿namespace FalloutVault.Devices.Interfaces;
+﻿using FalloutVault.Models;
+
+namespace FalloutVault.Devices.Interfaces;
 
 public interface ICropSprinklerController : IOnOff
 {
-    int TargetSection { get; }
+    Watt Wattage { get; }
+    SprinklerSection TargetSection { get; }
     int TargetLitres { get;}
-    TimeSpan TimeSpanOn { get; }
+    TimeSpan TimeOn { get; }
 }

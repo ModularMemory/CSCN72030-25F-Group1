@@ -1,4 +1,5 @@
-﻿using FalloutVault.Commands;
+﻿using System.Diagnostics;
+using FalloutVault.Commands;
 using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Models;
@@ -9,51 +10,64 @@ namespace FalloutVault.Devices;
 
 public class CropSprinklerController : PoweredDevice, ICropSprinklerController
 {
-    private bool _IsOn;
-    private int _TargetSection;
-    private int _TargetLitres;
-    private TimeSpan _TimeSpanOn;
+    private long _timeTurnedOn;
 
     public override DeviceId Id { get; }
     public override DeviceType Type => DeviceType.CropSprinklerController;
 
+    public Watt Wattage { get; }
+
     public bool IsOn
     {
-        get => _IsOn;
-        set
+        get;
+        private set
         {
-            _IsOn = value;
-            PublishMessage(new DeviceMessage.CropSprinklerOnOffChanged(_IsOn));
+            if (!SetField(ref field, value)) return;
+
+            _timeTurnedOn = Stopwatch.GetTimestamp();
+            PublishMessage(new DeviceMessage.CropSprinklerOnOffChanged(field));
         }
     }
 
-    public int TargetSection
+    public SprinklerSection TargetSection
     {
-        get => _TargetSection;
-        set
+        get;
+        private set
         {
-            _TargetSection = value;
-            PublishMessage(new DeviceMessage.CropSprinklerSectionChanged(_TargetSection));
+            if (!SetFieldEnum(ref field, value)) return;
+
+            PublishMessage(new DeviceMessage.CropSprinklerSectionChanged(field));
         }
     }
 
 
     public int TargetLitres
     {
-        get => _TargetLitres;
-        set => _TargetLitres = value;
+        get;
+        private set
+        {
+            if (!SetField(ref field, value)) return;
+
+            PublishMessage(new DeviceMessage.CropSprinklerTargetLitresChanged(field));
+        }
     }
 
-    public TimeSpan TimeSpanOn
+    public TimeSpan TimeOn
     {
-        get => _TimeSpanOn;
-        set => _TimeSpanOn = value;
+        get;
+        private set
+        {
+            if (!SetField(ref field, value)) return;
+
+            PublishMessage(new DeviceMessage.CropSprinklerTimeOnChanged(field));
+        }
     }
 
 
-    public CropSprinklerController(DeviceId id)
+    public CropSprinklerController(DeviceId id, Watt wattage)
     {
         Id = id;
+        Wattage = wattage;
     }
 
     protected override Watt ComputePowerDraw()
@@ -61,10 +75,15 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
         if (!IsOn)
             return Watt.Zero;
 
-        return (Watt)50;
+        return Wattage;
     }
 
-    public override void Update() { }
+    public override void Update()
+    {
+        TimeOn = IsOn
+            ? Stopwatch.GetElapsedTime(_timeTurnedOn)
+            : TimeSpan.Zero;
+    }
 
     public override void SendCommand(DeviceCommand command)
     {
@@ -73,12 +92,17 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
             case SetOn setOn:
                 IsOn = setOn.IsOn;
                 break;
-            case CurrentCropSection currentCropSection:
-                TargetSection = currentCropSection.Section;
+            case SetCropSection setCropSection:
+                TargetSection = setCropSection.Section;
+                break;
+            case SetCropTargetLitres setCropTargetLitres:
+                TargetLitres = setCropTargetLitres.Litres;
                 break;
             case GetCurrentState:
+                PublishMessage(new DeviceMessage.CropSprinklerWattage(Wattage));
                 PublishMessage(new DeviceMessage.CropSprinklerOnOffChanged(IsOn));
                 PublishMessage(new DeviceMessage.CropSprinklerSectionChanged(TargetSection));
+                PublishMessage(new DeviceMessage.CropSprinklerTargetLitresChanged(TargetLitres));
                 break;
         }
     }

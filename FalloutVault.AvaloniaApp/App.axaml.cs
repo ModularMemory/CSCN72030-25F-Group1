@@ -96,8 +96,8 @@ public partial class App : Application
             new VentSealController(new DeviceId("VentSeal-3", "North Hall")),
             new VentSealController(new DeviceId("VentSeal-4", "South Hall")),
             // Crop sprinkler controller
-            new CropSprinklerController(new DeviceId("CropSprinkler-1", "East Field")),
-            new CropSprinklerController(new DeviceId("CropSprinkler-2", "West Field")),
+            new CropSprinklerController(new DeviceId("CropSprinkler-1", "East Field"), (Watt)50),
+            new CropSprinklerController(new DeviceId("CropSprinkler-2", "West Field"), (Watt)50),
             // Power Controller
             new PowerController(new DeviceId("Central-Reactor", "Generator Room"), (Watt)1_000, deviceController)
         ];

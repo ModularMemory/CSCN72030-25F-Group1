@@ -105,8 +105,8 @@ internal static class Program
                     controller.SendCommand(device.id, new DeviceCommand.SetSpeakerVolume(volume));
                     break;
                 case DeviceType.CropSprinklerController:
-                    var targetSection = random.Next(0, 4);
-                    controller.SendCommand(device.id, new DeviceCommand.CurrentCropSection(targetSection));
+                    var targetSection = (SprinklerSection)random.Next(0, Enum.GetValues<SprinklerSection>().Length);
+                    controller.SendCommand(device.id, new DeviceCommand.SetCropSection(targetSection));
                     break;
                 case DeviceType.VentSealController:
                     var open = random.Next(0, 2) == 0;
@@ -142,8 +142,8 @@ internal static class Program
             new SpeakerController(new DeviceId("Speaker-3", "North Hall"), (Watt)100),
             new SpeakerController(new DeviceId("Speaker-4", "Generator Room"), (Watt)100),
             // Crop sprinkler controller
-            new CropSprinklerController(new DeviceId("CropSprinkler-1", "East Field")),
-            new CropSprinklerController(new DeviceId("CropSprinkler-2", "West Field")),
+            new CropSprinklerController(new DeviceId("CropSprinkler-1", "East Field"), (Watt)50),
+            new CropSprinklerController(new DeviceId("CropSprinkler-2", "West Field"), (Watt)50),
             // Vent seal controller
             new VentSealController(new DeviceId("VentSeal-1", "East Hall")),
             new VentSealController(new DeviceId("VentSeal-2", "West Hall")),
