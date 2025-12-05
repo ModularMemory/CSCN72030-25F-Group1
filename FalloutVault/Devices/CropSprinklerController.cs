@@ -26,6 +26,8 @@ public class CropSprinklerController : PoweredDevice, ICropSprinklerController
 
             _timeTurnedOn = Stopwatch.GetTimestamp();
             PublishMessage(new DeviceMessage.CropSprinklerOnOffChanged(field));
+
+            PowerDraw = ComputePowerDraw();
         }
     }
 
