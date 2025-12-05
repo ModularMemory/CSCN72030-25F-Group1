@@ -112,7 +112,8 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (log.Message is DeviceMessage.FanSpeedRpmChanged
             or DeviceMessage.TotalPowerDrawChanged
-            or DeviceMessage.DeviceTimedOnOffChanged)
+            or DeviceMessage.DeviceTimedOnOffChanged
+            or DeviceMessage.CropSprinklerTimeOnChanged)
         {
             return;
         }

@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -19,7 +21,16 @@ public partial class CropSprinklerControllerViewModel : PoweredDeviceViewModel, 
         IEventBus<DeviceMessage> messageBus,
         IEventBus<Watt> powerBus,
         ILogger logger)
-        : base(deviceController, messageBus, powerBus, logger) { }
+        : base(deviceController, messageBus, powerBus, logger)
+    {
+        var sections = Enum.GetValues<SprinklerSection>()
+            .Select(x => new ComboBoxItem { Content = x });
+
+        foreach (var item in sections)
+        {
+            SprinklerSections.Add(item);
+        }
+    }
 
     [ObservableProperty]
     public partial bool IsOn { get; set; }
@@ -27,8 +38,10 @@ public partial class CropSprinklerControllerViewModel : PoweredDeviceViewModel, 
     [ObservableProperty]
     public partial SolidColorBrush? ButtonColour { get; set; }
 
+    public ObservableCollection<ComboBoxItem> SprinklerSections { get; } = [];
+
     [ObservableProperty]
-    public partial SprinklerSection Section { get; set; }
+    public partial ComboBoxItem? SelectedSection { get; set; }
 
     [ObservableProperty]
     public partial int TargetLitres { get; set; }
@@ -38,6 +51,14 @@ public partial class CropSprinklerControllerViewModel : PoweredDeviceViewModel, 
 
     [ObservableProperty]
     public partial Watt SprinklerWattage { get; set; }
+
+    partial void OnSelectedSectionChanged(ComboBoxItem? value)
+    {
+        if (value is null)
+            return;
+
+        DeviceController.SendCommand(Id, new DeviceCommand.SetCropSection((SprinklerSection)value.Content!));
+    }
 
     [RelayCommand]
     public void OnOffButton_OnClick()
@@ -61,7 +82,7 @@ public partial class CropSprinklerControllerViewModel : PoweredDeviceViewModel, 
                         : Color.FromRgb(255, 0, 0));
                     break;
                 case DeviceMessage.CropSprinklerSectionChanged sectionChanged:
-                    Section = sectionChanged.Section;
+                    SelectedSection = SprinklerSections.FirstOrDefault(x => ((SprinklerSection)x.Content!) == sectionChanged.Section);
                     break;
                 case DeviceMessage.CropSprinklerTargetLitresChanged targetLitresChanged:
                     TargetLitres = targetLitresChanged.TargetLitres;

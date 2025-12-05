@@ -558,12 +558,16 @@
                                                     Width="40"
                                                     Height="40">
                                                     <Button.Content>
-
                                                         <icons:MaterialIcon
                                                             Kind="Power"
                                                             Foreground="{Binding ButtonColour}" />
                                                     </Button.Content>
                                                 </Button>
+
+                                                <ComboBox SelectedItem="{Binding SelectedSection}"
+                                                          ItemsSource="{Binding SprinklerSections}"
+                                                          VerticalAlignment="Center">
+                                                </ComboBox>
                                             </StackPanel>
 
                                             <StackPanel
