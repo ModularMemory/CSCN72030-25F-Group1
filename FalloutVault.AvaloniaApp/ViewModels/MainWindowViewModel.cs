@@ -30,6 +30,30 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     public partial PowerBarViewModel PowerBar { get; set; }
 
+    [ObservableProperty]
+    public partial bool OrderByDevice { get; set; } = true;
+
+    [ObservableProperty]
+    public partial bool OrderByZone { get; set; }
+
+    partial void OnOrderByDeviceChanged(bool value)
+    {
+        if (value)
+        {
+            OrderByZone = false;
+            UpdateDeviceList();
+        }
+    }
+
+    partial void OnOrderByZoneChanged(bool value)
+    {
+        if (value)
+        {
+            OrderByDevice = false;
+            UpdateDeviceList();
+        }
+    }
+
     public MainWindowViewModel(
         IDeviceRegistry deviceRegistry,
         IDeviceMessageLogger deviceMessageLogger,
@@ -52,7 +76,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         _deviceMessageLogger.DeviceMessageReceived += DeviceMessageLogger_OnDeviceMessageReceived;
 
-        foreach (var (id, type, capabilities) in deviceRegistry.Devices.OrderBy(x => x.type).ThenBy(x => x.id.Zone))
+        foreach (var (id, type, capabilities) in deviceRegistry.Devices)
         {
             _deviceViewModels.Add(deviceViewModelFactory.Create(type, id));
         }
@@ -82,8 +106,18 @@ public partial class MainWindowViewModel : ViewModelBase
             .Select(x => x.Type)
             .ToHashSet();
 
+
+        var devices =
+            OrderByDevice
+                ? _deviceViewModels
+                    .OrderBy(x => x.Type)
+                    .ThenBy(x => x.Id.Zone)
+                : _deviceViewModels
+                    .OrderBy(x => x.Id.Zone)
+                    .ThenBy(x => x.Type);
+
         Devices.Clear();
-        foreach (var viewModel in _deviceViewModels)
+        foreach (var viewModel in devices)
         {
             if (enabledZones.Contains(viewModel.Id.Zone) && enabledTypes.Contains(viewModel.Type))
             {

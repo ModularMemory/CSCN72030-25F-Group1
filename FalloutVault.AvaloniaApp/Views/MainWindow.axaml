@@ -37,91 +37,108 @@
               ColumnSpacing="10">
 
             <!-- Navigation -->
-            <Grid Grid.Column="0"
-                  RowDefinitions="Auto, Auto"
-                  RowSpacing="30">
+            <ScrollViewer Grid.Column="0">
+                <Grid RowDefinitions="Auto, Auto, Auto"
+                      RowSpacing="20">
 
-                <StackPanel Grid.Row="0"
-                            Orientation="Vertical"
-                            Spacing="5">
+                    <StackPanel Grid.Row="0"
+                                Orientation="Vertical"
+                                Spacing="5">
 
-                    <TextBlock Text="Filter By Zone"
-                               HorizontalAlignment="Center"/>
+                        <TextBlock Text="Order By"
+                                   HorizontalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center">
+                            <ToggleButton Content="Device"
+                                          IsChecked="{Binding OrderByDevice}" />
+                            <ToggleButton Content="Zone"
+                                          IsChecked="{Binding OrderByZone}" />
+                        </StackPanel>
 
-                    <DataGrid AreRowDetailsFrozen="True"
-                              CanUserSortColumns="False"
-                              CanUserReorderColumns="False"
-                              CanUserResizeColumns="False"
-                              HorizontalScrollBarVisibility="Disabled"
-                              ItemsSource="{Binding Zones}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn
-                                Header="Zone"
-                                Binding="{Binding ZoneName}" />
-                            <DataGridTemplateColumn>
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox
-                                            IsChecked="{Binding IsSelected}"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            IsCheckedChanged="CheckZone_OnIsCheckedChanged" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                                <DataGridTemplateColumn.HeaderTemplate>
-                                    <DataTemplate>
-                                        <CheckBox
-                                            IsChecked="True"
-                                            IsCheckedChanged="CheckAllZones_OnIsCheckedChanged"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.HeaderTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
-                <StackPanel Grid.Row="1"
-                            Orientation="Vertical"
-                            Spacing="5">
+                    </StackPanel>
 
-                    <TextBlock Text="Filter By Device"
-                               HorizontalAlignment="Center"/>
+                    <StackPanel Grid.Row="1"
+                                Orientation="Vertical"
+                                Spacing="5">
 
-                    <DataGrid AreRowDetailsFrozen="True"
-                              CanUserSortColumns="False"
-                              CanUserReorderColumns="False"
-                              CanUserResizeColumns="False"
-                              HorizontalScrollBarVisibility="Disabled"
-                              ItemsSource="{Binding Types}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn
-                                Header="Type"
-                                Binding="{Binding Type}" />
-                            <DataGridTemplateColumn>
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox
-                                            IsChecked="{Binding IsSelected}"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            IsCheckedChanged="CheckType_OnIsCheckedChanged" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                                <DataGridTemplateColumn.HeaderTemplate>
-                                    <DataTemplate>
-                                        <CheckBox
-                                            IsChecked="True"
-                                            IsCheckedChanged="CheckAllTypes_OnIsCheckedChanged"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.HeaderTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
-            </Grid>
+                        <TextBlock Text="Filter By Zone"
+                                   HorizontalAlignment="Center" />
+
+                        <DataGrid AreRowDetailsFrozen="True"
+                                  CanUserSortColumns="False"
+                                  CanUserReorderColumns="False"
+                                  CanUserResizeColumns="False"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  ItemsSource="{Binding Zones}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn
+                                    Header="Zone"
+                                    Binding="{Binding ZoneName}" />
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox
+                                                IsChecked="{Binding IsSelected}"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                IsCheckedChanged="CheckZone_OnIsCheckedChanged" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <CheckBox
+                                                IsChecked="True"
+                                                IsCheckedChanged="CheckAllZones_OnIsCheckedChanged"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.HeaderTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Orientation="Vertical"
+                                Spacing="5">
+
+                        <TextBlock Text="Filter By Device"
+                                   HorizontalAlignment="Center" />
+
+                        <DataGrid AreRowDetailsFrozen="True"
+                                  CanUserSortColumns="False"
+                                  CanUserReorderColumns="False"
+                                  CanUserResizeColumns="False"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  ItemsSource="{Binding Types}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn
+                                    Header="Type"
+                                    Binding="{Binding Type}" />
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox
+                                                IsChecked="{Binding IsSelected}"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                IsCheckedChanged="CheckType_OnIsCheckedChanged" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <CheckBox
+                                                IsChecked="True"
+                                                IsCheckedChanged="CheckAllTypes_OnIsCheckedChanged"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.HeaderTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
 
             <!-- Devices & Log -->
             <Grid Grid.Column="1"
