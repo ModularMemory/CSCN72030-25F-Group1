@@ -3,9 +3,9 @@ namespace FalloutVault.Models;
 public enum DeviceType
 {
     Unknown,
+    PowerController,
     LightController,
     FanController,
-    PowerController,
     SpeakerController,
     CropSprinklerController,
     VentSealController,
