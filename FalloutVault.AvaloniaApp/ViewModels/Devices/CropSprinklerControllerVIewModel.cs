@@ -47,7 +47,7 @@ public partial class CropSprinklerControllerViewModel : PoweredDeviceViewModel, 
     public partial int TargetLitres { get; set; }
 
     [ObservableProperty]
-    public partial TimeSpan? TimeOn { get; set; }
+    public partial TimeSpan TimeOn { get; set; }
 
     [ObservableProperty]
     public partial Watt SprinklerWattage { get; set; }
@@ -88,10 +88,7 @@ public partial class CropSprinklerControllerViewModel : PoweredDeviceViewModel, 
                     TargetLitres = targetLitresChanged.TargetLitres;
                     break;
                 case DeviceMessage.CropSprinklerTimeOnChanged timeOnChanged:
-                    TimeOn =
-                        timeOnChanged.TimeOn > TimeSpan.Zero
-                            ? timeOnChanged.TimeOn
-                            : null;
+                    TimeOn = timeOnChanged.TimeOn;
                     break;
                 case DeviceMessage.CropSprinklerWattage sprinklerWattage:
                     SprinklerWattage = sprinklerWattage.Wattage;
