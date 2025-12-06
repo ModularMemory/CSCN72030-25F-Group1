@@ -10,12 +10,14 @@ namespace FalloutVault.AvaloniaApp.Services;
 
 public static class DeviceFactory
 {
+    private static FanController? _coreFan;
+    private static IDevice[] _devices = [];
+
     public static void AddDevices(IServiceProvider serviceProvider)
     {
         var deviceController = serviceProvider.GetRequiredService<IDeviceController>(); // I hate this, it should be a bus
 
-        FanController coreFan;
-        IDevice[] devices =
+        _devices =
         [
             // Lights
             new LightController(new DeviceId("Light-1", "East Hall"), (Watt)50),
@@ -32,7 +34,7 @@ public static class DeviceFactory
             new FanController(new DeviceId("Fan-3", "West Hall"), (Watt)50, 1_600),
             new FanController(new DeviceId("Fan-2", "North Hall"), (Watt)60, 1_800),
             new FanController(new DeviceId("Fan-4", "South Hall"), (Watt)100, 4_000),
-            coreFan = new FanController(new DeviceId("Core-Fan", "Generator Room"), (Watt)200, 8_000),
+            _coreFan = new FanController(new DeviceId("Core-Fan", "Generator Room"), (Watt)200, 8_000),
             // Speaker controller
             new SpeakerController(new DeviceId("Speaker-1", "East Hall"), (Watt)100),
             new SpeakerController(new DeviceId("Speaker-2", "West Hall"), (Watt)100),
@@ -62,32 +64,35 @@ public static class DeviceFactory
             new PowerController(new DeviceId("Central-Reactor", "Generator Room"), (Watt)1_500, deviceController)
         ];
 
-        InitializeDevices(devices, coreFan);
-
         var deviceRegistry = serviceProvider.GetRequiredService<IDeviceRegistry>();
-        foreach (var device in devices)
+        foreach (var device in _devices)
         {
             deviceRegistry.RegisterDevice(device);
         }
     }
 
-    private static void InitializeDevices(IDevice[] devices, FanController coreFan)
+    public static void InitializeDevices()
     {
         var sprinklerSections = Enum.GetValues<SprinklerSection>();
 
         var random = new Random(69);
-        foreach (var device in devices)
+        foreach (var device in _devices)
         {
             if (device is IOnOff) device.SendCommand(new DeviceCommand.SetOn(random.Next(0, 3) > 0));
             if (device is IOpenClose) device.SendCommand(new DeviceCommand.SetOpen(random.Next(0, 2) > 0));
             if (device is ILockable) device.SendCommand(new DeviceCommand.SetLocked(random.Next(0, 2) > 0));
             if (device is IFanController) device.SendCommand(new DeviceCommand.SetFanTargetRpm(random.Next(0, 25) * 200));
-            if (device is ICropSprinklerController) device.SendCommand(new DeviceCommand.SetCropSection(random.GetItems(sprinklerSections, 1)[0]));
+            if (device is ICropSprinklerController)
+            {
+                device.SendCommand(new DeviceCommand.SetCropSection(random.GetItems(sprinklerSections, 1)[0]));
+                device.SendCommand(new DeviceCommand.SetCropTargetLitres(random.Next(0, 30) * 10));
+            }
+
             if (device is ILightController) device.SendCommand(new DeviceCommand.SetLightDimmer(Math.Sqrt(random.NextDouble()))); // sqrt to bias towards larger numbers
             if (device is ISpeakerController) device.SendCommand(new DeviceCommand.SetSpeakerVolume(Math.Sqrt(random.NextDouble()))); // sqrt to bias towards larger numbers
         }
 
-        coreFan.SendCommand(new DeviceCommand.SetOn(true));
-        coreFan.SendCommand(new DeviceCommand.SetFanTargetRpm(1_000));
+        _coreFan?.SendCommand(new DeviceCommand.SetOn(true));
+        _coreFan?.SendCommand(new DeviceCommand.SetFanTargetRpm(1_000));
     }
 }
