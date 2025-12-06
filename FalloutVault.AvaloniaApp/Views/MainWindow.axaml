@@ -13,7 +13,7 @@
         WindowStartupLocation="CenterScreen"
         DataContextChanged="OnDataContextChanged"
         Icon="/Assets/avalonia-logo.ico"
-        Title="FalloutVault.AvaloniaApp">
+        Title="Vault Manager">
 
     <Window.Resources>
         <converters:DivideByConverter x:Key="DivideByConverter" />
