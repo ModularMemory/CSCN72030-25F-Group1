@@ -151,14 +151,6 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void AddLogMessage(DeviceLog log)
     {
-        if (log.Message is DeviceMessage.FanSpeedRpmChanged
-            or DeviceMessage.TotalPowerDrawChanged
-            or DeviceMessage.DeviceTimedOnOffChanged
-            or DeviceMessage.CropSprinklerTimeOnChanged)
-        {
-            return;
-        }
-
         if (string.IsNullOrWhiteSpace(LogSearch)
             || log.Sender.Name.Contains(LogSearch, StringComparison.OrdinalIgnoreCase)
             || log.Sender.Zone.Contains(LogSearch, StringComparison.OrdinalIgnoreCase)

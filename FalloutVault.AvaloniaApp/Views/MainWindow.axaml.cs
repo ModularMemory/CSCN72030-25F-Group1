@@ -27,8 +27,13 @@ public partial class MainWindow : Window
         if (DataContext is not MainWindowViewModel vm)
             return;
 
-        var senderVm = vm.Devices.FirstOrDefault(x => x.Id == logViewModel.Sender);
-        ItemsDevices.ScrollIntoView(senderVm!);
+        Dispatcher.UIThread.Invoke(() =>
+        {
+            var senderVm = vm.Devices.FirstOrDefault(x => x.Id == logViewModel.Sender);
+            if (senderVm is null)
+                return;
+            ItemsDevices.ScrollIntoView(senderVm!);
+        });
     }
 
     private async void OnDataContextChanged(object? sender, EventArgs e)
@@ -46,6 +51,8 @@ public partial class MainWindow : Window
         Dispatcher.UIThread.Invoke(() =>
         {
             var lastItem = ((IEnumerable<object>?)LogDataGrid.ItemsSource)?.LastOrDefault();
+            if (lastItem is null)
+                return;
             LogDataGrid.ScrollIntoView(lastItem, LogDataGrid.Columns.FirstOrDefault());
         });
     }

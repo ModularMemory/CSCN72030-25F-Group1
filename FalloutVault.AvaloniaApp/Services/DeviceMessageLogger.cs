@@ -33,8 +33,14 @@ public class DeviceMessageLogger : IDeviceMessageLogger
         _logger.Information("Device message from {Sender}: {@Message}", senderString, e);
         // The @ in @Message means to JSON serialize the object rather than use .ToString()
 
-        if (senderDevice is null)
+        if (senderDevice is null ||
+            e is DeviceMessage.FanSpeedRpmChanged
+                or DeviceMessage.TotalPowerDrawChanged
+                or DeviceMessage.DeviceTimedOnOffChanged
+                or DeviceMessage.CropSprinklerTimeOnChanged)
+        {
             return;
+        }
 
         var newLog = new DeviceLog(senderDevice.Id, e);
         lock (_messageLock)
