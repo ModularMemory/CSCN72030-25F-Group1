@@ -1,6 +1,6 @@
 ﻿namespace FalloutVault.Devices.Interfaces;
 
-internal interface IVentSealController : IOpenClose
+public interface IVentSealController : IOpenClose, ILockable
 {
-    bool LockState { get;}
+
 }

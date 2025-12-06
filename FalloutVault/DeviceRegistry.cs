@@ -61,6 +61,8 @@ public sealed class DeviceRegistry : IDeviceRegistry
         if (device is ITemporaryOff) capabilities |= DeviceCapabilities.TemporaryOff;
         if (device is ITemporaryOn) capabilities |= DeviceCapabilities.TemporaryOn;
         if (device is IPeriodic) capabilities |= DeviceCapabilities.Periodic;
+        if (device is IOpenClose) capabilities |= DeviceCapabilities.OpenClose;
+        if (device is ILockable) capabilities |= DeviceCapabilities.Lockable;
 
         return capabilities;
     }

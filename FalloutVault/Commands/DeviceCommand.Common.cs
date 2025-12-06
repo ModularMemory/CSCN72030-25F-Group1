@@ -18,6 +18,12 @@ public partial class DeviceCommand
         public bool IsOpen { get; } = data;
     }
 
+    // ILockable
+    public class SetLocked(bool data): DeviceCommand(ValueBoxes.BooleanBox(data))
+    {
+        public bool IsLocked { get; } = data;
+    }
+
     // ITemporaryOn
     public class TurnOnFor(TimeSpan data) : DeviceCommand(data)
     {

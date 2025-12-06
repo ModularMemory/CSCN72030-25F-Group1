@@ -89,6 +89,18 @@ internal static class Program
                 controller.SendCommand(device.id, new DeviceCommand.SetOn(isOn));
             }
 
+            if (device.capabilities.HasFlag(DeviceCapabilities.OpenClose))
+            {
+                var isOpen = random.Next(0, 2) == 0;
+                controller.SendCommand(device.id, new DeviceCommand.SetOpen(isOpen));
+            }
+
+            if (device.capabilities.HasFlag(DeviceCapabilities.Lockable))
+            {
+                var isLocked = random.Next(0, 2) == 0;
+                controller.SendCommand(device.id, new DeviceCommand.SetLocked(isLocked));
+            }
+
             // Modify it (type)
             switch (device.type)
             {
@@ -109,10 +121,6 @@ internal static class Program
                     controller.SendCommand(device.id, new DeviceCommand.SetCropSection(targetSection));
                     break;
                 case DeviceType.VentSealController:
-                    var open = random.Next(0, 2) == 0;
-                    controller.SendCommand(device.id, new DeviceCommand.SetOpen(open));
-                    var locked = random.Next(0, 5) == 0;
-                    controller.SendCommand(device.id, new DeviceCommand.SetVentLocked(locked));
                     break;
                 case DeviceType.PowerController:
                     controller.SendCommand(device.id, new DeviceCommand.SetOn(true));

@@ -3,10 +3,9 @@ using FalloutVault.Devices.Interfaces;
 using FalloutVault.Devices.Models;
 using FalloutVault.Eventing.Models;
 using FalloutVault.Models;
-using static FalloutVault.Eventing.Models.DeviceMessage;
-
 
 namespace FalloutVault.Devices;
+
 public class DoorController : Device, IDoorController
 {
     //Fields
@@ -20,6 +19,8 @@ public class DoorController : Device, IDoorController
         get;
         private set
         {
+            if (IsLocked) return;
+
             if (!SetField(ref field, value)) return;
 
             PublishMessage(new DeviceMessage.DoorOpenCloseChanged(field));
@@ -54,7 +55,7 @@ public class DoorController : Device, IDoorController
             case DeviceCommand.SetOpen setOpen:
                 IsOpen = setOpen.IsOpen;
                 break;
-            case DeviceCommand.SetDoorLocked setDoorLocked:
+            case DeviceCommand.SetLocked setDoorLocked:
                 IsLocked = setDoorLocked.IsLocked;
                 break;
             case DeviceCommand.GetCurrentState:

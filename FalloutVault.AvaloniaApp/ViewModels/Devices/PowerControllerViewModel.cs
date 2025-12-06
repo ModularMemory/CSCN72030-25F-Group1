@@ -12,7 +12,7 @@ using Serilog;
 
 namespace FalloutVault.AvaloniaApp.ViewModels.Devices;
 
-public partial class PowerControllerViewModel : DeviceViewModel, IOnOff
+public partial class PowerControllerViewModel : DeviceViewModel
 {
     public PowerControllerViewModel(
         IDeviceController deviceController,

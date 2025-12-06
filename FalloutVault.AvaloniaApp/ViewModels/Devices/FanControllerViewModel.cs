@@ -18,7 +18,7 @@ using Serilog;
 
 namespace FalloutVault.AvaloniaApp.ViewModels.Devices;
 
-public partial class FanControllerViewModel : PoweredDeviceViewModel, IOnOff
+public partial class FanControllerViewModel : PoweredDeviceViewModel
 {
     public FanControllerViewModel(
         IDeviceController deviceController,

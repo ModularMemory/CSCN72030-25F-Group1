@@ -44,7 +44,7 @@ public partial class DoorControllerViewModel : DeviceViewModel
     [RelayCommand]
     public void LockButton_OnClick()
     {
-        DeviceController.SendCommand(Id, new DeviceCommand.SetDoorLocked(!IsLocked));
+        DeviceController.SendCommand(Id, new DeviceCommand.SetLocked(!IsLocked));
     }
 
     protected override void OnDeviceMessage(object? sender, DeviceMessage message)

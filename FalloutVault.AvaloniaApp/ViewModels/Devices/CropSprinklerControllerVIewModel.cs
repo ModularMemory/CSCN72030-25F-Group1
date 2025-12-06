@@ -14,7 +14,7 @@ using Serilog;
 
 namespace FalloutVault.AvaloniaApp.ViewModels.Devices;
 
-public partial class CropSprinklerControllerViewModel : PoweredDeviceViewModel, IOnOff
+public partial class CropSprinklerControllerViewModel : PoweredDeviceViewModel
 {
     public CropSprinklerControllerViewModel(
         IDeviceController deviceController,

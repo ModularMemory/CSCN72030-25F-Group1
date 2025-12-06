@@ -20,4 +20,9 @@ public partial class DeviceMessage
     {
         public bool IsOpen { get; } = data;
     }
+
+    public abstract class DeviceLockedChanged(bool data) : DeviceMessage(ValueBoxes.BooleanBox(data))
+    {
+        public bool IsLocked { get; } = data;
+    }
 }

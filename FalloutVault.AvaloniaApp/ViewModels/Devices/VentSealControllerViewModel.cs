@@ -44,7 +44,7 @@ public partial class VentSealControllerViewModel : DeviceViewModel
     [RelayCommand]
     public void LockButton_OnClick()
     {
-        DeviceController.SendCommand(Id, new DeviceCommand.SetVentLocked(!IsLocked));
+        DeviceController.SendCommand(Id, new DeviceCommand.SetLocked(!IsLocked));
     }
 
     protected override void OnDeviceMessage(object? sender, DeviceMessage message)

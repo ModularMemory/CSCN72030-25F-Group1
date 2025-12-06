@@ -12,14 +12,14 @@ public class DoorControllerTests
     public void DoorController_TurnOn_PublishesStateChangeMessage()
     {
         // Arrange
-        var DoorController = new DoorController(DeviceIdGenerator.GetRandomDeviceId());
-        DoorController.SendCommand(new DeviceCommand.SetOpen(false));
+        var doorController = new DoorController(DeviceIdGenerator.GetRandomDeviceId());
+        doorController.SendCommand(new DeviceCommand.SetOpen(false));
 
         var eventBus = new MockDeviceMessageEventBus();
-        DoorController.SetEventBus(eventBus);
+        doorController.SetEventBus(eventBus);
 
         // Act
-        DoorController.SendCommand(new DeviceCommand.SetOpen(true));
+        doorController.SendCommand(new DeviceCommand.SetOpen(true));
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
@@ -30,14 +30,14 @@ public class DoorControllerTests
     public void DoorController_TurnOff_PublishesStateChangeMessage()
     {
         // Arrange
-        var DoorController = new DoorController(DeviceIdGenerator.GetRandomDeviceId());
-        DoorController.SendCommand(new DeviceCommand.SetOpen(true));
+        var doorController = new DoorController(DeviceIdGenerator.GetRandomDeviceId());
+        doorController.SendCommand(new DeviceCommand.SetOpen(true));
 
         var eventBus = new MockDeviceMessageEventBus();
-        DoorController.SetEventBus(eventBus);
+        doorController.SetEventBus(eventBus);
 
         // Act
-        DoorController.SendCommand(new DeviceCommand.SetOpen(false));
+        doorController.SendCommand(new DeviceCommand.SetOpen(false));
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
@@ -48,14 +48,14 @@ public class DoorControllerTests
     public void DoorController_LockStateChange_PublishesLockChangedMessage()
     {
         // Arrange
-        var DoorController = new DoorController(DeviceIdGenerator.GetRandomDeviceId());
-        DoorController.SendCommand(new DeviceCommand.SetDoorLocked(true));
+        var doorController = new DoorController(DeviceIdGenerator.GetRandomDeviceId());
+        doorController.SendCommand(new DeviceCommand.SetLocked(true));
 
         var eventBus = new MockDeviceMessageEventBus();
-        DoorController.SetEventBus(eventBus);
+        doorController.SetEventBus(eventBus);
 
         // Act
-        DoorController.SendCommand(new DeviceCommand.SetDoorLocked(false));
+        doorController.SendCommand(new DeviceCommand.SetLocked(false));
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));

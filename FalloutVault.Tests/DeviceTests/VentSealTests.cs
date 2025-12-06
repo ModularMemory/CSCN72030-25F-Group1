@@ -49,13 +49,13 @@ public class VentSealTests
     {
         // Arrange
         var ventSealController = new VentSealController(DeviceIdGenerator.GetRandomDeviceId());
-        ventSealController.SendCommand(new DeviceCommand.SetVentLocked(false));
+        ventSealController.SendCommand(new DeviceCommand.SetLocked(false));
 
         var eventBus = new MockDeviceMessageEventBus();
         ventSealController.SetEventBus(eventBus);
 
         // Act
-        ventSealController.SendCommand(new DeviceCommand.SetVentLocked(false));
+        ventSealController.SendCommand(new DeviceCommand.SetLocked(false));
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
