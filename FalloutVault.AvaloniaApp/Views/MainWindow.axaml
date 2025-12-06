@@ -837,6 +837,7 @@
                               CanUserReorderColumns="False"
                               CanUserResizeColumns="False"
                               HorizontalScrollBarVisibility="Auto"
+                              DoubleTapped="LogDataGrid_OnDoubleTapped"
                               ItemsSource="{Binding LogMessages}">
                         <DataGrid.Styles>
                             <Style Selector="DataGridRow">

@@ -1,5 +1,6 @@
 using System.Collections.Specialized;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using FalloutVault.AvaloniaApp.ViewModels;
@@ -16,6 +17,18 @@ public partial class MainWindow : Window
         _logger = logger;
 
         InitializeComponent();
+    }
+
+    private void LogDataGrid_OnDoubleTapped(object? sender, TappedEventArgs e)
+    {
+        if (e.Source is not Control { DataContext: LogViewModel logViewModel })
+            return;
+
+        if (DataContext is not MainWindowViewModel vm)
+            return;
+
+        var senderVm = vm.Devices.FirstOrDefault(x => x.Id == logViewModel.Sender);
+        ItemsDevices.ScrollIntoView(senderVm!);
     }
 
     private async void OnDataContextChanged(object? sender, EventArgs e)
