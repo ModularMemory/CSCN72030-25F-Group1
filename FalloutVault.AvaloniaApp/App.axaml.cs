@@ -2,11 +2,10 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using FalloutVault.AvaloniaApp.Services;
+using FalloutVault.AvaloniaApp.Extensions;
 using FalloutVault.AvaloniaApp.Services.Interfaces;
 using FalloutVault.AvaloniaApp.ViewModels;
 using FalloutVault.AvaloniaApp.Views;
-using FalloutVault.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FalloutVault.AvaloniaApp;
@@ -20,15 +19,15 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        // Setup services
         var services = new ServiceCollection();
         var serviceProvider = Startup.ConfigureServices(services)
             .BuildServiceProvider();
 
-        _ = serviceProvider.GetRequiredService<IDeviceMessageLogger>();
-        DeviceFactory.AddDevices(serviceProvider);
-
-        var controller = serviceProvider.GetRequiredService<IDeviceController>();
-        controller.Start(TimeSpan.FromMilliseconds(250));
+        serviceProvider
+            .StartDeviceMessageLogger()
+            .AddDevices()
+            .StartDeviceController(TimeSpan.FromMilliseconds(250));
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
@@ -36,11 +35,13 @@ public partial class App : Application
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
 
+            // Create main window
             desktop.MainWindow = serviceProvider.GetRequiredService<MainWindow>();
             desktop.MainWindow.DataContext = serviceProvider.GetRequiredService<MainWindowViewModel>();
         }
 
-        DeviceFactory.InitializeDevices();
+        // Initialize device values
+        serviceProvider.InitializeDevices();
 
         base.OnFrameworkInitializationCompleted();
     }

@@ -32,6 +32,7 @@ public static class Startup
             .AddSingleton<IDeviceController, DeviceController>()
             .AddSingleton<IDeviceRegistry, DeviceRegistry>()
             .AddSingleton<IDeviceMessageLogger, DeviceMessageLogger>()
+            .AddSingleton<IDeviceFactory, FakeDeviceFactory>()
             .AddSingleton<MainWindow>();
 
         return services;

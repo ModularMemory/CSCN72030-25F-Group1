@@ -1,3 +1,4 @@
+using FalloutVault.AvaloniaApp.Services.Interfaces;
 using FalloutVault.Commands;
 using FalloutVault.Devices;
 using FalloutVault.Devices.Interfaces;
@@ -8,14 +9,20 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FalloutVault.AvaloniaApp.Services;
 
-public static class DeviceFactory
+public sealed class FakeDeviceFactory : IDeviceFactory
 {
-    private static FanController? _coreFan;
-    private static IDevice[] _devices = [];
+    private readonly IServiceProvider _serviceProvider;
+    private FanController? _coreFan;
+    private IDevice[] _devices = [];
 
-    public static void AddDevices(IServiceProvider serviceProvider)
+    public FakeDeviceFactory(IServiceProvider serviceProvider)
     {
-        var deviceController = serviceProvider.GetRequiredService<IDeviceController>(); // I hate this, it should be a bus
+        _serviceProvider = serviceProvider;
+    }
+
+    public void AddDevices()
+    {
+        var deviceController = _serviceProvider.GetRequiredService<IDeviceController>(); // I hate this, it should be a bus
 
         _devices =
         [
@@ -64,14 +71,14 @@ public static class DeviceFactory
             new PowerController(new DeviceId("Central-Reactor", "Generator Room"), (Watt)1_500, deviceController)
         ];
 
-        var deviceRegistry = serviceProvider.GetRequiredService<IDeviceRegistry>();
+        var deviceRegistry = _serviceProvider.GetRequiredService<IDeviceRegistry>();
         foreach (var device in _devices)
         {
             deviceRegistry.RegisterDevice(device);
         }
     }
 
-    public static void InitializeDevices()
+    public void InitializeDevices()
     {
         var sprinklerSections = Enum.GetValues<SprinklerSection>();
 
