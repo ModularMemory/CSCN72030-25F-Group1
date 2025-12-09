@@ -15,17 +15,15 @@ public class PowerControllerTests
     {
         // Arrange
         var powerController = new PowerController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)1000);
-        var lightController = new LightController(DeviceIdGenerator.GetRandomDeviceId(), (Watt)100);
 
         var powerEventBus = new MockPowerEventBus();
         powerController.SetEventBus(powerEventBus);
-        lightController.SetEventBus(powerEventBus);
 
         var eventBus = new MockDeviceMessageEventBus();
         powerController.SetEventBus(eventBus);
 
         // Act
-        lightController.SendCommand(new DeviceCommand.SetOn(true));
+        powerEventBus.Publish(powerController, (Watt)50);
 
         // Assert
         Assert.That(eventBus.Messages, Has.Count.EqualTo(1));
