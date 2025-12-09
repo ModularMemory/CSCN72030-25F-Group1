@@ -8,22 +8,6 @@
     * [Expected Result](#expected-result-1)
 <!-- TOC -->
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # System Tests
 
 ## Test 1: Power Button
