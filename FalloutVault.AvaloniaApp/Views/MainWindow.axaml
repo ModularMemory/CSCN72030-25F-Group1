@@ -816,6 +816,13 @@
 
                 <GridSplitter Grid.Column="1"
                               ResizeDirection="Columns" />
+                <StackPanel Grid.Column="1"
+                            IsHitTestVisible="False"
+                            Orientation="Vertical"
+                            VerticalAlignment="Center">
+                    <icons:MaterialIcon Kind="DragVerticalVariant" />
+                    <icons:MaterialIcon Kind="DragVerticalVariant" />
+                </StackPanel>
 
                 <Grid Grid.Column="2"
                       Name="LogGrid"
