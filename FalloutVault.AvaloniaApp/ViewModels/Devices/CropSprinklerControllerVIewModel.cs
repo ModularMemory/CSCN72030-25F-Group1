@@ -60,6 +60,11 @@ public partial class CropSprinklerControllerViewModel : PoweredDeviceViewModel
         DeviceController.SendCommand(Id, new DeviceCommand.SetCropSection((SprinklerSection)value.Content!));
     }
 
+    partial void OnTargetLitresChanged(int value)
+    {
+        DeviceController.SendCommand(Id, new DeviceCommand.SetCropTargetLitres(value));
+    }
+
     [RelayCommand]
     public void OnOffButton_OnClick()
     {
