@@ -10,7 +10,7 @@
     * [Prerequisites](#prerequisites-1)
     * [Steps](#steps-1)
     * [Expected Result](#expected-result-1)
-  * [Test 3: Timed on off button](#test-3-timed-on-off-button)
+  * [Test 3: Timed On/Off Button](#test-3-timed-onoff-button)
     * [Prerequisites](#prerequisites-2)
     * [Steps](#steps-2)
     * [Expected Result](#expected-result-2)
@@ -18,19 +18,19 @@
     * [Prerequisites](#prerequisites-3)
     * [Steps](#steps-3)
     * [Expected Result](#expected-result-3)
-  * [Test 5: Numeric up/down](#test-5-numeric-updown)
+  * [Test 5: Numeric Up/Down](#test-5-numeric-updown)
     * [Prerequisites](#prerequisites-4)
     * [Steps](#steps-4)
     * [Expected Result](#expected-result-4)
-  * [Test 6: Dropdown selector](#test-6-dropdown-selector)
+  * [Test 6: Dropdown Selector](#test-6-dropdown-selector)
     * [Prerequisites](#prerequisites-5)
     * [Steps](#steps-5)
     * [Expected Result](#expected-result-5)
-  * [Test 7: Vent/Door toggle](#test-7-ventdoor-toggle)
+  * [Test 7: Vent/Door Toggle](#test-7-ventdoor-toggle)
     * [Prerequisites](#prerequisites-6)
     * [Steps](#steps-6)
     * [Expected Result](#expected-result-6)
-  * [Test 8: Vent/Door lock](#test-8-ventdoor-lock)
+  * [Test 8: Vent/Door Lock](#test-8-ventdoor-lock)
     * [Prerequisites](#prerequisites-7)
     * [Steps](#steps-7)
     * [Expected Result](#expected-result-7)
@@ -99,7 +99,7 @@
 
 ---
 
-## Test 3: Timed on off button
+## Test 3: Timed On/Off Button
 
 ### Prerequisites
 
@@ -133,7 +133,7 @@
 
 ---
 
-## Test 5: Numeric up/down
+## Test 5: Numeric Up/Down
 
 ### Prerequisites
 
@@ -150,7 +150,7 @@
 
 ---
 
-## Test 6: Dropdown selector
+## Test 6: Dropdown Selector
 
 ### Prerequisites
 
@@ -167,37 +167,45 @@
 
 ---
 
-## Test 7: Vent/Door toggle
+## Test 7: Vent/Door Toggle
 
 ### Prerequisites
 
--
+- At least 1 vent seal controller is visible in the devices list and unlocked.
+- At least 1 door controller is visible in the devices list and unlocked.
 
 ### Steps
 
-1. Step 1
-2. Step 2
+1. Repeat the following steps for 1 vent and 1 door:
+   1. Open the device.
+   2. Close the device.
 
 ### Expected Result
 
-
+- True for each device:
+  1. The device was successfully opened (green icon).
+  2. The device was successfully closed (red icon).
 
 ---
 
-## Test 8: Vent/Door lock
+## Test 8: Vent/Door Lock
 
 ### Prerequisites
 
--
+- At least 1 vent seal controller is visible in the devices list.
+- At least 1 door controller is visible in the devices list.
 
 ### Steps
 
-1. Step 1
-2. Step 2
+1. Repeat the following steps for 1 vent and 1 door:
+    1. Lock the device.
+    2. Unlock the device.
 
 ### Expected Result
 
-
+- True for each device:
+    1. The device was successfully locked.
+    2. The device was successfully unlocked.
 
 ---
 
