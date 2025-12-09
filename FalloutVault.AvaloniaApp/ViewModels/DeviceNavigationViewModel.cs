@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using FalloutVault.Devices.Models;
 using FalloutVault.Models;
+using Humanizer;
 
 namespace FalloutVault.AvaloniaApp.ViewModels;
 
@@ -9,14 +9,14 @@ public partial class DeviceNavigationViewModel : ViewModelBase
     public DeviceNavigationViewModel(DeviceType type)
     {
         Type = type;
+        Name = type.Humanize(LetterCasing.Title);
         IsSelected = true;
     }
 
     public DeviceType Type { get; }
 
-    [ObservableProperty]
-    public partial bool IsSelected { get; set; }
+    public string Name { get; }
 
     [ObservableProperty]
-    public partial bool AllZonesSelected { get; set; } = true;
+    public partial bool IsSelected { get; set; }
 }
