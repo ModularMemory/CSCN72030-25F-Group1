@@ -3,7 +3,7 @@
              x:Class="FalloutVault.AvaloniaApp.App"
              xmlns:local="using:FalloutVault.AvaloniaApp"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             RequestedThemeVariant="Default">
+             RequestedThemeVariant="Dark">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
