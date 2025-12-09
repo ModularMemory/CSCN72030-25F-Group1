@@ -69,16 +69,17 @@
 ## Test 1: Power Button
 ### Prerequisites
 
-- 
+- At least one device visible
+- Generator turned on, and power available
 
 ### Steps
 
-1. Step 1
-2. Step 2
+1. click power button
 
 ### Expected Result
 
-
+1. Power button will change colour (red -> green or vice versa)
+2. A log will be made indicating the change in state
 
 ---
 
@@ -86,15 +87,19 @@
 
 ### Prerequisites
 
--
+- Generator is visible and turned on
+- Other powered devices are on
 
 ### Steps
 
-1. Step 1
-2. Step 2
+1. Click the power button
 
 ### Expected Result
 
+1. The change in state  is logged
+2. All other powered devices are turned off
+3. All those devices' change in state is logged
+4. Warnings for devices being turned off for lack of power are logged
 
 
 ---
@@ -103,16 +108,23 @@
 
 ### Prerequisites
 
--
+- A Light device or Fan device is visible
+- Generator is turned on, and power available
 
 ### Steps
 
-1. Step 1
-2. Step 2
+1. Click timed on/off button
+2. Click the time selection in the dialog window
+2. Select 10 seconds
+3. Click the check mark
+4. Click accept
 
 ### Expected Result
 
-
+1. The change in state is logged as the device is turned on or off
+2. The button shows a countdown timer for 10 seconds
+3. After 10 seconds passes, the device changes back to the original state
+4. The change in state is logged
 
 ---
 
@@ -120,16 +132,16 @@
 
 ### Prerequisites
 
--
+- A device that inplements a slider is visible
 
 ### Steps
 
-1. Step 1
-2. Step 2
+1. Adjust the slider
 
 ### Expected Result
 
-
+1. The text above the slider changes to show the current value
+2. Each new value is logged in the log viewer
 
 ---
 
@@ -137,16 +149,24 @@
 
 ### Prerequisites
 
--
+- A Fan device is visible
+- The device is powered on
+- The generator is on, and there is power available
 
 ### Steps
 
-1. Step 1
-2. Step 2
+1. Click and hold the up arrow until the number stops increasing
+2. Wait for the Current speed to stop increasing
+2. Click into the box and type the number zero
 
 ### Expected Result
 
-
+1. The target speed will cap at a value set by the controller
+2. A log is made showing the change
+2. The current speed will linearly approach the target and hover near that value
+3. The target speed will be set back to zero
+4. A log is made showing the change
+4. The current speed will linearly decrease until it reaches zero and stops changing
 
 ---
 
@@ -154,16 +174,18 @@
 
 ### Prerequisites
 
--
+- A sprinkler device is visible
+- The generator is on, and power is available
 
 ### Steps
 
-1. Step 1
-2. Step 2
+1. Click the target section drop down
+2. Select new value
 
 ### Expected Result
 
-
+1. The new target will be shown in the dropdown button
+2. A log is made showing the change
 
 ---
 
