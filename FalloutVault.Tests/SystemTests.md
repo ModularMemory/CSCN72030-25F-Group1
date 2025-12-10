@@ -115,9 +115,9 @@
 
 1. Click timed on/off button
 2. Click the time selection in the dialog window
-2. Select 10 seconds
-3. Click the check mark
-4. Click accept
+3. Select 10 seconds
+4. Click the check mark
+5. Click accept
 
 ### Expected Result
 
@@ -132,7 +132,7 @@
 
 ### Prerequisites
 
-- A device that inplements a slider is visible
+- A device that implements a slider is visible
 
 ### Steps
 
@@ -157,16 +157,16 @@
 
 1. Click and hold the up arrow until the number stops increasing
 2. Wait for the Current speed to stop increasing
-2. Click into the box and type the number zero
+3. Click into the box and type the number zero
 
 ### Expected Result
 
 1. The target speed will cap at a value set by the controller
 2. A log is made showing the change
-2. The current speed will linearly approach the target and hover near that value
-3. The target speed will be set back to zero
-4. A log is made showing the change
-4. The current speed will linearly decrease until it reaches zero and stops changing
+3. The current speed will linearly approach the target and hover near that value
+4. The target speed will be set back to zero
+5. A log is made showing the change
+6. The current speed will linearly decrease until it reaches zero and stops changing
 
 ---
 
